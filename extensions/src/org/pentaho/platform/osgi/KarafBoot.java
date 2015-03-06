@@ -18,14 +18,19 @@
 package org.pentaho.platform.osgi;
 
 import org.apache.karaf.main.Main;
+import org.apache.tika.io.IOUtils;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IPentahoSystemListener;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.UUID;
 
 /**
@@ -37,6 +42,7 @@ public class KarafBoot implements IPentahoSystemListener {
   private Main main;
   Logger logger = LoggerFactory.getLogger( getClass() );
   private static boolean initialized;
+  public static final String ORG_OSGI_FRAMEWORK_SYSTEM_PACKAGES_EXTRA = "org.osgi.framework.system.packages.extra";
 
   @Override public boolean startup( IPentahoSession session ) {
     try {
@@ -62,6 +68,9 @@ public class KarafBoot implements IPentahoSystemListener {
       // Setting ignoreTCL to true such that the OSGI classloader used to initialize log4j will be the
       // same one used when instatiating appenders.
       System.setProperty( "log4j.ignoreTCL", "true" );
+
+      expandSystemPackages( root + "/etc/custom.properties");
+
 
 
       // Wrap the startup of Karaf in a child thread which has explicitly set a bogus authentication. This is
@@ -91,6 +100,41 @@ public class KarafBoot implements IPentahoSystemListener {
       logger.error( "Error starting Karaf", e );
     }
     return main != null;
+  }
+
+  void expandSystemPackages( String s ) {
+
+    File customFile = new File( s );
+    if( !customFile.exists() ){
+      logger.warn( "No custom.properties file for in karaf distribution.");
+      return;
+    }
+    Properties properties = new Properties();
+    FileInputStream inStream = null;
+    try {
+      inStream = new FileInputStream( customFile );
+      properties.load( inStream );
+    } catch ( IOException e ) {
+      logger.error( "Not able to expand system.packages.extra properties due to an error loading custom.properties", e );
+      return;
+    } finally {
+      IOUtils.closeQuietly( inStream );
+    }
+
+    properties = new SystemPackageExtrapolator().expandProperties( properties );
+    System.setProperty( ORG_OSGI_FRAMEWORK_SYSTEM_PACKAGES_EXTRA,
+        properties.getProperty( ORG_OSGI_FRAMEWORK_SYSTEM_PACKAGES_EXTRA ) );
+
+//    FileOutputStream out = null;
+//    try {
+//      out = new FileOutputStream( customFile );
+//      properties.store( out, "expanding osgi properties" );
+//    } catch ( IOException e ) {
+//      logger.error( "Not able to expand system.packages.extra properties due error saving custom.properties", e );
+//    } finally {
+//      IOUtils.closeQuietly( out );
+//    }
+
   }
 
   @Override public void shutdown() {

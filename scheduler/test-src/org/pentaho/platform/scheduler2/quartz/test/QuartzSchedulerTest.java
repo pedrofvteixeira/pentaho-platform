@@ -17,15 +17,7 @@
 
 package org.pentaho.platform.scheduler2.quartz.test;
 
-import java.io.Serializable;
-import java.security.Principal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
 import junit.framework.TestCase;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,11 +25,7 @@ import org.junit.Test;
 import org.pentaho.platform.api.action.IAction;
 import org.pentaho.platform.api.engine.IAuditEntry;
 import org.pentaho.platform.api.engine.IUserRoleListService;
-import org.pentaho.platform.api.scheduler2.ComplexJobTrigger;
-import org.pentaho.platform.api.scheduler2.Job;
-import org.pentaho.platform.api.scheduler2.JobTrigger;
-import org.pentaho.platform.api.scheduler2.SchedulerException;
-import org.pentaho.platform.api.scheduler2.SimpleJobTrigger;
+import org.pentaho.platform.api.scheduler2.*;
 import org.pentaho.platform.api.scheduler2.recur.ITimeRecurrence;
 import org.pentaho.platform.engine.core.TestAuditEntry;
 import org.pentaho.platform.engine.core.system.boot.PlatformInitializationException;
@@ -49,7 +37,14 @@ import org.pentaho.platform.scheduler2.recur.RecurrenceList;
 import org.pentaho.platform.scheduler2.recur.SequentialRecurrence;
 import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceTest.TestQuartzScheduler;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.io.Serializable;
+import java.security.Principal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings( "nls" )
 public class QuartzSchedulerTest {

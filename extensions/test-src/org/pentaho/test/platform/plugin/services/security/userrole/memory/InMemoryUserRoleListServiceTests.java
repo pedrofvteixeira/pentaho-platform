@@ -26,10 +26,10 @@ import org.pentaho.platform.engine.security.DefaultUsernameComparator;
 import org.pentaho.platform.plugin.services.security.userrole.memory.InMemoryUserRoleListService;
 import org.pentaho.platform.plugin.services.security.userrole.memory.UserRoleListEnhancedUserMap;
 import org.pentaho.platform.plugin.services.security.userrole.memory.UserRoleListEnhancedUserMapEditor;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.memory.InMemoryDaoImpl;
-import org.springframework.security.userdetails.memory.UserMap;
-import org.springframework.security.userdetails.memory.UserMapEditor;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.memory.InMemoryDaoImpl;
+import org.springframework.security.core.userdetails.memory.UserMap;
+import org.springframework.security.core.userdetails.memory.UserMapEditor;
 
 import java.util.Arrays;
 import java.util.List;

@@ -74,6 +74,7 @@ public class StandaloneSpringPentahoObjectFactory extends AbstractSpringPentahoO
       appCtx.getBeanFactory().registerScope( "session", sessionScope );
 
       XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader( appCtx );
+      appCtx.refresh();
       xmlReader.loadBeanDefinitions( fsr );
 
       beanFactory = appCtx;
@@ -147,6 +148,12 @@ public class StandaloneSpringPentahoObjectFactory extends AbstractSpringPentahoO
 
     public String getConversationId() {
       return SpringScopeSessionHolder.SESSION.get().getId();
+    }
+
+    @Override
+    public Object resolveContextualObject( String arg0 ) {
+      // TODO Auto-generated method stub
+      return null;
     }
 
   }

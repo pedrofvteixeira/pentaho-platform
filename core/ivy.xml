@@ -30,10 +30,16 @@
 		<dependency org="jaxen"               name="jaxen"               rev="1.1"   transitive="false"/>
 		<dependency org="jfree" name="jcommon"        rev="1.0.14" transitive="false"/>
 		<dependency org="jfree"               name="jfreechart"           rev="1.0.13" transitive="false"/>
-		
-		<dependency org="org.springframework"          name="spring"               rev="2.5.6"         transitive="false"/>
-		<dependency org="org.springframework.security" name="spring-security-core" rev="2.0.5.RELEASE" transitive="false"/>
-        <dependency org="org.springframework.ldap" name="spring-ldap-core" rev="1.3.0.RELEASE" transitive="false" />
+		<dependency org="org.springframework" name="spring-core" rev="4.1.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework" name="spring-tx" rev="4.1.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework" name="spring-jdbc" rev="4.1.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework" name="spring-aop" rev="4.1.5.RELEASE" transitive="true"/>
+		<dependency org="org.springframework" name="spring-expression" rev="4.1.5.RELEASE" transitive="true"/>
+		<dependency org="org.springframework.security" name="spring-security-core" rev="3.2.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework.security" name="spring-security-acl" rev="3.2.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework.security" name="spring-security-ldap" rev="3.2.5.RELEASE" transitive="false"/>
+		<dependency org="org.springframework"          name="spring-context"         rev="4.1.5.RELEASE"         transitive="false"/>
+		<dependency org="org.springframework.ldap" name="spring-ldap-core" rev="2.0.2.RELEASE" transitive="false"/>
 
     <dependency org="org.slf4j" name="slf4j-api" rev="1.7.3"/>
     <dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.3"/>
@@ -82,7 +88,16 @@
     	<dependency org="org.jmock" name="jmock-legacy" rev="2.5.1" conf="test->default" />
 		<dependency org="hsqldb" name="hsqldb" rev="1.8.0.7" conf="test->default" />
     	<dependency org="log4j" name="log4j" rev="1.2.16" conf="test->default" />
-    	<dependency org="org.springframework" name="spring-mock" rev="2.0.2" transitive="false" conf="test->default" />
+    	<dependency org="org.springframework" name="spring-mock" rev="2.0.8" transitive="false" conf="test->default" />
+    			<dependency org="org.springframework" name="spring-core" rev="4.1.5.RELEASE" transitive="false" conf="test->default"/>
+		<dependency org="org.springframework" name="spring-tx" rev="4.1.5.RELEASE" transitive="false" conf="test->default"/>
+		<dependency org="org.springframework" name="spring-jdbc" rev="4.1.5.RELEASE" transitive="false" conf="test->default"/>
+		<dependency org="org.springframework" name="spring-aop" rev="4.1.5.RELEASE" transitive="true" conf="test->default"/>
+		<dependency org="org.springframework" name="spring-expression" rev="4.1.5.RELEASE" transitive="true" conf="test->default"/>
+		<dependency org="org.springframework.security" name="spring-security-core" rev="3.2.5.RELEASE" transitive="false" conf="test->default"/>
+		<dependency org="org.springframework.security" name="spring-security-acl" rev="3.2.5.RELEASE" transitive="false" conf="test->default"/>
+		<dependency org="org.springframework"          name="spring-context"         rev="4.1.5.RELEASE"         transitive="false" conf="test->default"/>
+    	
     	<dependency org="org.codehaus.jettison" name="jettison" rev="1.2" conf="test->default"/>
         <dependency org="org.mockito" name="mockito-all" rev="1.8.4" transitive="false" conf="test->default"/>
 

@@ -21,18 +21,13 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.tree.DefaultElement;
-import org.pentaho.platform.api.engine.IPentahoAclEntry;
 import org.pentaho.platform.api.engine.IUserRoleListService;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.pentaho.platform.engine.security.acls.PentahoAclEntry;
 import org.pentaho.platform.web.http.api.resources.utils.SystemUtils;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service class for System endpoints
@@ -139,7 +134,7 @@ public class SystemService {
    */
   public Document getPermissions() throws ServletException, IOException {
     Map<?, ?> validPermissionsNameMap =
-        PentahoAclEntry.getValidPermissionsNameMap( IPentahoAclEntry.PERMISSIONS_LIST_ALL );
+        /* PentahoAclEntry.getValidPermissionsNameMap( IPentahoAclEntry.PERMISSIONS_LIST_ALL ) TODO */ new HashMap<String,String>();
     Element rootElement = new DefaultElement( "acls" ); //$NON-NLS-1$
     Document doc = DocumentHelper.createDocument( rootElement );
     if ( validPermissionsNameMap != null ) {

@@ -27,9 +27,9 @@ import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.Ordered;
-import org.springframework.security.Authentication;
-import org.springframework.security.event.authentication.AbstractAuthenticationEvent;
-import org.springframework.security.event.authentication.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.util.Assert;
 
 /**

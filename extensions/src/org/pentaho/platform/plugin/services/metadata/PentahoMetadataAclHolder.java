@@ -21,18 +21,14 @@ import org.pentaho.metadata.model.concept.Concept;
 import org.pentaho.metadata.model.concept.IConcept;
 import org.pentaho.metadata.model.concept.security.Security;
 import org.pentaho.metadata.model.concept.security.SecurityOwner;
-import org.pentaho.platform.api.engine.IAclHolder;
-import org.pentaho.platform.api.engine.IPentahoAclEntry;
-import org.pentaho.platform.engine.security.acls.PentahoAclEntry;
-import org.springframework.security.GrantedAuthorityImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PentahoMetadataAclHolder implements IAclHolder {
+public class PentahoMetadataAclHolder /* implements IAclHolder TODO */ {
 
-  private List<IPentahoAclEntry> accessControls = new ArrayList<IPentahoAclEntry>();
+  private List /* <IPentahoAclEntry> TODO */ accessControls = new ArrayList /* <IPentahoAclEntry> TODO */ ();
 
   public PentahoMetadataAclHolder( final IConcept aclHolder ) {
     try {
@@ -45,9 +41,9 @@ public class PentahoMetadataAclHolder implements IAclHolder {
           secOwn = entry.getKey();
           int rights = entry.getValue().intValue();
           if ( secOwn.getOwnerType() == SecurityOwner.OwnerType.USER ) {
-            accessControls.add( new PentahoAclEntry( secOwn.getOwnerName(), rights ) );
+            /* accessControls.add( new PentahoAclEntry( secOwn.getOwnerName(), rights ) ) TODO */;
           } else {
-            accessControls.add( new PentahoAclEntry( new GrantedAuthorityImpl( secOwn.getOwnerName() ), rights ) );
+            /* accessControls.add( new PentahoAclEntry( new GrantedAuthorityImpl( secOwn.getOwnerName() ), rights ) ) TODO */;
           }
         }
       }
@@ -57,19 +53,19 @@ public class PentahoMetadataAclHolder implements IAclHolder {
 
   }
 
-  public List<IPentahoAclEntry> getAccessControls() {
+  public List /* <IPentahoAclEntry> TODO */ getAccessControls() {
     return accessControls;
   }
 
-  public List<IPentahoAclEntry> getEffectiveAccessControls() {
+  public List /* <IPentahoAclEntry> TODO */ getEffectiveAccessControls() {
     return accessControls;
   }
 
-  public void resetAccessControls( final List<IPentahoAclEntry> acls ) {
+  public void resetAccessControls( final List /* <IPentahoAclEntry> TODO */ acls ) {
     throw new UnsupportedOperationException( "Cannot set Metadata Acls yet" ); //$NON-NLS-1$
   }
 
-  public void setAccessControls( final List<IPentahoAclEntry> acls ) {
+  public void setAccessControls( final List /* <IPentahoAclEntry> TODO */ acls ) {
     throw new UnsupportedOperationException( "Cannot set Metadata Acls yet" ); //$NON-NLS-1$
   }
 

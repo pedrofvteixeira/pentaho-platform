@@ -22,12 +22,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.platform.api.data.IDBDatasourceService;
-import org.pentaho.platform.api.engine.IConnectionUserRoleMapper;
+import org.pentaho.platform.api.engine.*;
 import org.pentaho.platform.api.engine.IPentahoDefinableObjectFactory.Scope;
-import org.pentaho.platform.api.engine.IPentahoSession;
-import org.pentaho.platform.api.engine.ISolutionEngine;
-import org.pentaho.platform.api.engine.IUserRoleListService;
-import org.pentaho.platform.api.engine.PentahoAccessControlException;
 import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.api.repository2.unified.IUnifiedRepository;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
@@ -48,19 +44,15 @@ import org.pentaho.platform.plugin.services.connections.sql.SQLConnection;
 import org.pentaho.platform.repository2.unified.fs.FileSystemBackedUnifiedRepository;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 @SuppressWarnings( "nls" )
@@ -133,7 +125,7 @@ public class UserRoleMapperTest {
       public Void call() throws Exception {
         Authentication auth = SecurityHelper.getInstance().getAuthentication();
         Assert.assertNotNull( auth );
-        GrantedAuthority[] gAuths = auth.getAuthorities();
+        GrantedAuthority[] gAuths = auth.getAuthorities().toArray( new GrantedAuthority[]{} );
         Assert.assertNotNull( gAuths );
         Assert.assertEquals( 3, gAuths.length );
         Assert.assertEquals( "ceo", gAuths[0].getAuthority() );
@@ -377,17 +369,17 @@ public class UserRoleMapperTest {
           return "password";
         }
 
-        public GrantedAuthority[] getAuthorities() {
+        public Collection<? extends GrantedAuthority> getAuthorities() {
           if ( username == null ) {
-            return new GrantedAuthority[0];
+            return Arrays.asList( new GrantedAuthority[0] );
           }
           if ( username.equals( "admin" ) ) {
-            return new GrantedAuthority[] { new GrantedAuthorityImpl( "ceo" ), new GrantedAuthorityImpl( "Admin" ),
-              new GrantedAuthorityImpl( "Authenticated" ) };
+            return Arrays.asList( new GrantedAuthority[] { new GrantedAuthorityImpl( "ceo" ), new GrantedAuthorityImpl( "Admin" ),
+              new GrantedAuthorityImpl( "Authenticated" ) } );
           } else if ( username.equals( "simplebob" ) ) {
-            return new GrantedAuthority[] { new GrantedAuthorityImpl( "Role1" ), new GrantedAuthorityImpl( "Role2" ) };
+            return Arrays.asList( new GrantedAuthority[] { new GrantedAuthorityImpl( "Role1" ), new GrantedAuthorityImpl( "Role2" ) } );
           }
-          return new GrantedAuthority[0];
+          return Arrays.asList( new GrantedAuthority[0] );
         }
       };
     }

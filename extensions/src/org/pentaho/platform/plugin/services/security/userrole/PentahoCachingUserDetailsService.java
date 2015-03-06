@@ -20,11 +20,11 @@ package org.pentaho.platform.plugin.services.security.userrole;
 import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.api.mt.ITenantedPrincipleNameResolver;
 import org.pentaho.platform.repository2.unified.jcr.JcrTenantUtils;
-import org.springframework.security.providers.dao.UserCache;
-import org.springframework.security.providers.dao.cache.NullUserCache;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserCache;
+import org.springframework.security.core.userdetails.cache.NullUserCache;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * User: nbaker Date: 8/7/13

@@ -18,20 +18,6 @@
 
 package org.pentaho.platform.engine.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Callable;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,8 +30,18 @@ import org.pentaho.platform.api.engine.IUserRoleListService;
 import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.core.system.boot.PentahoSystemBoot;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 public class SecurityHelperTest {
 
@@ -88,7 +84,7 @@ public class SecurityHelperTest {
   @Test
   public void createAuthentificationTest() {
     Authentication authentication = getAuthorizedSecurityHelper().createAuthentication( DEF_USERNAME );
-    GrantedAuthority[] autorities = authentication.getAuthorities();
+    Collection<? extends GrantedAuthority> autorities = authentication.getAuthorities();
 
     // check for the all inner roles from ALL_ROLES_ARRAY that they are present in authentication authorities
     for ( String sourceRole : ALL_ROLES_ARRAY ) {

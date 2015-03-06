@@ -20,9 +20,9 @@ package org.pentaho.test.platform.engine.security;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.pentaho.platform.engine.security.SecurityHelper;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.anonymous.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
 import java.util.concurrent.Callable;
 

@@ -10,14 +10,14 @@ You can intialize any listeners properties, as shown in the QuartzSystemListener
 VersionCheckSystemListener.
 -->
 
-<beans>
+<beans default-lazy-init="true">
 	<bean id="systemListenersList" class="java.util.ArrayList">
 		<constructor-arg>
 			<list>
 				<bean class="org.pentaho.platform.plugin.action.jfreereport.JFreeReportSystemListener"/>
 				<bean class="org.pentaho.platform.plugin.action.kettle.KettleSystemListener"/>
 				<bean class="org.pentaho.platform.plugin.action.mondrian.MondrianSystemListener"/>
-				<bean class="org.pentaho.platform.scheduler.QuartzSystemListener">
+				<bean class="org.pentaho.platform.scheduler2.quartz.StandaloneQuartzSystemListener">
 					<property name="quartzProperties">
 						<props>
 							<prop key="hsqldb.cache_file_scale">1</prop>
@@ -41,7 +41,7 @@ VersionCheckSystemListener.
 						</props>
 					</property>
 				</bean>
-				<bean class="org.pentaho.platform.scheduler.versionchecker.VersionCheckSystemListener">
+				<bean class="org.pentaho.platform.scheduler2.versionchecker.EmbeddedVersionCheckSystemListener">
 					<property name="repeatIntervalSeconds">
 						<value>86400</value>
 					</property>

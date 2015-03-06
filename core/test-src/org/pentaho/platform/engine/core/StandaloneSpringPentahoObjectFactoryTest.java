@@ -18,6 +18,7 @@
 
 package org.pentaho.platform.engine.core;
 
+import junit.framework.TestCase;
 import org.pentaho.platform.api.engine.IContentInfo;
 import org.pentaho.platform.api.engine.IPentahoObjectReference;
 import org.pentaho.platform.api.engine.ObjectFactoryException;
@@ -33,8 +34,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 @SuppressWarnings( { "all" } )
 public class StandaloneSpringPentahoObjectFactoryTest extends TestCase {
@@ -232,6 +231,7 @@ public class StandaloneSpringPentahoObjectFactoryTest extends TestCase {
     File f = new File( "test-res/solution/system/pentahoObjects.spring.xml" );
     FileSystemResource fsr = new FileSystemResource( f );
     GenericApplicationContext appCtx = new GenericApplicationContext();
+    appCtx.refresh();
     XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader( appCtx );
     xmlReader.loadBeanDefinitions( fsr );
 

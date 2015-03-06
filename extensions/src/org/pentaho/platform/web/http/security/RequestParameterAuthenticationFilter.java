@@ -34,13 +34,13 @@ import org.pentaho.di.core.encryption.Encr;
 import org.pentaho.platform.web.http.messages.Messages;
 import org.pentaho.platform.web.http.request.MultiReadHttpServletRequest;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.AuthenticationManager;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.ui.AuthenticationEntryPoint;
-import org.springframework.security.ui.WebAuthenticationDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.util.Assert;
 
 /**
@@ -155,7 +155,7 @@ public class RequestParameterAuthenticationFilter implements Filter, Initializin
           if ( ignoreFailure ) {
             chain.doFilter( wrapper, response );
           } else {
-            authenticationEntryPoint.commence( wrapper, response, failed );
+            authenticationEntryPoint.commence( wrapper, ( HttpServletResponse ) response, failed );
           }
 
           return;

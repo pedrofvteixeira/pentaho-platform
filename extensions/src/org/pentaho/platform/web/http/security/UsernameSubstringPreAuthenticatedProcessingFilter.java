@@ -20,7 +20,7 @@ package org.pentaho.platform.web.http.security;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.ui.preauth.j2ee.J2eePreAuthenticatedProcessingFilter;
+import org.springframework.security.web.authentication.preauth.j2ee.J2eePreAuthenticatedProcessingFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
