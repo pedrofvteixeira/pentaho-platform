@@ -295,24 +295,6 @@
     </property>    
   </bean>
 
-  <bean id="roleAuthorizationPolicyRoleBindingDaoMethodInterceptor"
-        class="org.springframework.security.access.intercept.aopalliance.MethodSecurityInterceptor">
-    <property name="validateConfigAttributes">
-      <value>true</value>
-    </property>
-    <property name="authenticationManager">
-      <ref bean="authenticationManager"/>
-    </property>
-    <property name="accessDecisionManager">
-      <ref bean="businessAccessDecisionManager"/>
-    </property>
-    <property name="securityMetadataSource">
-    	<sec:method-security-metadata-source>
-      		<sec:protect method="org.pentaho.platform.security.policy.rolebased.IRoleAuthorizationPolicyRoleBindingDao.getRoleBindingStruct" access="VOTE_AUTHZ_POLICY_org.pentaho.security.administerSecurity"/>
-      		<sec:protect method="org.pentaho.platform.security.policy.rolebased.IRoleAuthorizationPolicyRoleBindingDao.setRoleBindings" access="VOTE_AUTHZ_POLICY_org.pentaho.security.administerSecurity"/>
-    	</sec:method-security-metadata-source>        
-    </property>
-  </bean>
   <!-- 
     This bean defines how jcr transactions are propogated when methods in ITenantManager or IUnifiedRepository are called.
   -->
