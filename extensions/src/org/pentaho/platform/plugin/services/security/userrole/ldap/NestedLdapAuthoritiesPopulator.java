@@ -19,8 +19,8 @@ package org.pentaho.platform.plugin.services.security.userrole.ldap;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.ldap.core.ContextSource;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.ldap.populator.DefaultLdapAuthoritiesPopulator;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator;
 import org.springframework.util.Assert;
 
 import java.util.HashSet;

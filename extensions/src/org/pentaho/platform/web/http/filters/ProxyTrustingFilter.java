@@ -22,17 +22,17 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.security.SecurityHelper;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.HttpSessionContextIntegrationFilter;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolder;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -231,7 +231,7 @@ public class ProxyTrustingFilter implements Filter {
                 }; // end anonymous inner class
 
                 authWrapper.setAuthentication( SecurityContextHolder.getContext().getAuthentication() );
-                httpSession.setAttribute( HttpSessionContextIntegrationFilter.SPRING_SECURITY_CONTEXT_KEY,
+                httpSession.setAttribute( HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                   authWrapper );
                 return null;
               }

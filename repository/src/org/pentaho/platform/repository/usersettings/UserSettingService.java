@@ -18,6 +18,7 @@
 
 package org.pentaho.platform.repository.usersettings;
 
+import org.pentaho.platform.api.engine.IAuthorizationPolicy;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.repository2.unified.IUnifiedRepository;
 import org.pentaho.platform.api.usersettings.IUserSettingService;
@@ -26,6 +27,9 @@ import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.repository.usersettings.pojo.UserSetting;
 import org.pentaho.platform.repository2.ClientRepositoryPaths;
+import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
+import org.pentaho.platform.security.policy.rolebased.actions.RepositoryCreateAction;
+import org.pentaho.platform.security.policy.rolebased.actions.RepositoryReadAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,10 +47,16 @@ public class UserSettingService implements IUserSettingService {
   private static final byte[] lock = new byte[0];
 
   protected IUnifiedRepository repository;
+  protected IAuthorizationPolicy authPolicy;
   private Logger log = LoggerFactory.getLogger( getClass() );
 
   public UserSettingService( IUnifiedRepository repository ) {
     this.repository = repository;
+  }
+
+  public UserSettingService( IUnifiedRepository repository, IAuthorizationPolicy authPolicy ) {
+    this.repository = repository;
+    this.authPolicy = authPolicy;
   }
 
   public void init( IPentahoSession session ) {
@@ -231,7 +241,8 @@ public class UserSettingService implements IUserSettingService {
   }
 
   public void setGlobalUserSetting( String settingName, String settingValue ) {
-    if ( SecurityHelper.getInstance().isPentahoAdministrator( session ) ) {
+    if ( authPolicy.isAllowed( RepositoryReadAction.NAME ) && authPolicy.isAllowed( RepositoryCreateAction.NAME )
+        && authPolicy.isAllowed( AdministerSecurityAction.NAME ) ) {
       String tentantHomePath = ClientRepositoryPaths.getEtcFolderPath();
       Serializable tenantHomeId = repository.getFile( tentantHomePath ).getId();
       Map<String, Serializable> tenantMetadata = repository.getFileMetadata( tenantHomeId );

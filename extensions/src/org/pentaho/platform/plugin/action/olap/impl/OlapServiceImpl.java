@@ -75,7 +75,7 @@ import org.pentaho.platform.plugin.services.importexport.legacy.MondrianCatalogR
 import org.pentaho.platform.plugin.services.importexport.legacy.MondrianCatalogRepositoryHelper.Olap4jServerInfo;
 import org.pentaho.platform.repository.solution.filebased.MondrianVfs;
 import org.pentaho.platform.util.messages.LocaleHelper;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * Implementation of the IOlapService which uses the

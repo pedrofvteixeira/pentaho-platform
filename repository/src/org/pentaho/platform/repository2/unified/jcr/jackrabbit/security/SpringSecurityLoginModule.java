@@ -24,10 +24,10 @@ import org.apache.jackrabbit.core.security.authentication.AbstractLoginModule;
 import org.apache.jackrabbit.core.security.authentication.Authentication;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.repository2.unified.jcr.jackrabbit.security.messages.Messages;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.AuthenticationManager;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import javax.jcr.Credentials;
 import javax.jcr.RepositoryException;
@@ -143,7 +143,7 @@ public class SpringSecurityLoginModule extends AbstractLoginModule {
     boolean authenticated = false;
 
     try {
-      org.springframework.security.Authentication authentication =
+      org.springframework.security.core.Authentication authentication =
         SecurityContextHolder.getContext().getAuthentication();
       if( authentication != null && authentication.getName().equals( simpleCredentials.getUserID() ) ) {
         // see if there's already an active Authentication for this user.

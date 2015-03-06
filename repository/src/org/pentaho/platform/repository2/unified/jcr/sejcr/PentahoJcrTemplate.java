@@ -88,7 +88,7 @@ public class PentahoJcrTemplate extends JcrTemplate {
 
   private RuntimeException pentahoConvertJcrAccessException( final RuntimeException ex ) {
     if ( ex instanceof AccessControlException ) {
-      return new org.springframework.security.AccessDeniedException( Messages.getInstance().getString(
+      return new org.springframework.security.access.AccessDeniedException( Messages.getInstance().getString(
           "PentahoJcrTemplate.ERROR_0001_ACCESS_DENIED" ), ex ); //$NON-NLS-1$
     } else {
       return super.convertJcrAccessException( ex );
@@ -97,7 +97,7 @@ public class PentahoJcrTemplate extends JcrTemplate {
 
   private RuntimeException pentahoConvertJcrAccessException( final RepositoryException ex ) {
     if ( ex instanceof AccessDeniedException ) {
-      return new org.springframework.security.AccessDeniedException( Messages.getInstance().getString(
+      return new org.springframework.security.access.AccessDeniedException( Messages.getInstance().getString(
           "PentahoJcrTemplate.ERROR_0001_ACCESS_DENIED" ), ex ); //$NON-NLS-1$
     } else {
       return super.convertJcrAccessException( ex );

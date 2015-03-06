@@ -58,7 +58,7 @@ import org.pentaho.test.platform.engine.core.MicroPlatform;
 import org.pentaho.test.platform.engine.core.PluginManagerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

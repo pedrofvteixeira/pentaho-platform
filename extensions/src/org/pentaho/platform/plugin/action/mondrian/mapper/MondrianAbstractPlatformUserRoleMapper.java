@@ -19,6 +19,7 @@ package org.pentaho.platform.plugin.action.mondrian.mapper;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import mondrian.olap.Util;
@@ -39,9 +40,9 @@ import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianCatalog;
 import org.pentaho.platform.plugin.action.mondrian.catalog.MondrianSchema;
 import org.pentaho.platform.plugin.action.olap.IOlapService;
 import org.pentaho.platform.plugin.services.importexport.legacy.MondrianCatalogRepositoryHelper;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 
 /**
@@ -150,7 +151,9 @@ public abstract class MondrianAbstractPlatformUserRoleMapper implements IConnect
    */
   protected String[] getPlatformRolesFromSession( IPentahoSession session ) {
     // Get the authorities
-    GrantedAuthority[] gAuths = (GrantedAuthority[]) session.getAttribute( IPentahoSession.SESSION_ROLES );
+    Collection<? extends GrantedAuthority> gAuths =
+        ( Collection<? extends GrantedAuthority> ) session.getAttribute( IPentahoSession.SESSION_ROLES );
+
     if ( gAuths == null ) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       gAuths = authentication.getAuthorities();
@@ -158,11 +161,11 @@ public abstract class MondrianAbstractPlatformUserRoleMapper implements IConnect
     }
 
     String[] rtn = null;
-    if ( ( gAuths != null ) && ( gAuths.length > 0 ) ) {
+    if ( ( gAuths != null ) && ( gAuths.size() > 0 ) ) {
       // Copy role names out of the Authentication
-      rtn = new String[gAuths.length];
-      for ( int i = 0; i < gAuths.length; i++ ) {
-        rtn[i] = gAuths[i].getAuthority();
+      rtn = new String[gAuths.size()];
+      for ( int i = 0; i < gAuths.size(); i++ ) {
+        rtn[i] = ( ( GrantedAuthority ) gAuths.toArray()[i] ).getAuthority();
       }
       // Sort the returned list of roles
       Arrays.sort( rtn );

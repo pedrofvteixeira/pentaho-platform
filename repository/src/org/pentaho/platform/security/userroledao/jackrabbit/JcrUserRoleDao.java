@@ -40,7 +40,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.extensions.jcr.JcrCallback;
 import org.springframework.extensions.jcr.JcrSystemException;
 import org.springframework.extensions.jcr.JcrTemplate;
-import org.springframework.security.providers.dao.UserCache;
+import org.springframework.security.core.userdetails.UserCache;
+import org.springframework.security.core.userdetails.cache.NullUserCache;
 
 import javax.jcr.NamespaceException;
 import javax.jcr.RepositoryException;

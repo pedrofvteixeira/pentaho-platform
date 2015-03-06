@@ -18,7 +18,7 @@
 
 package org.pentaho.platform.repository2.unified.jcr.jackrabbit.security;
 
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.security.Principal;
 import java.security.acl.Group;
