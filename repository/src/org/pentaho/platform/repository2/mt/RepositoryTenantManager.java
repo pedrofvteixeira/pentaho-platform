@@ -39,13 +39,13 @@ import org.pentaho.platform.security.policy.rolebased.IRoleAuthorizationPolicyRo
 import org.pentaho.platform.security.policy.rolebased.messages.Messages;
 import org.springframework.extensions.jcr.JcrCallback;
 import org.springframework.extensions.jcr.JcrTemplate;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.User;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 import javax.jcr.Node;
@@ -263,9 +263,8 @@ public class RepositoryTenantManager extends AbstractRepositoryTenantManager {
     PentahoSessionHolder.setSession( pentahoSession );
     final String password = "ignored";
 
-    List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-    authList.add( new GrantedAuthorityImpl( tenantAdminRoleId ) );
-    GrantedAuthority[] authorities = authList.toArray( new GrantedAuthority[0] );
+    List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+    authorities.add( new SimpleGrantedAuthority( tenantAdminRoleId ) );
     UserDetails userDetails = new User( username, password, true, true, true, true, authorities );
     Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, password, authorities );
     PentahoSessionHolder.setSession( pentahoSession );

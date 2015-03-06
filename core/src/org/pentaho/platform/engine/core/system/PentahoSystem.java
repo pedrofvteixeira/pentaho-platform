@@ -18,6 +18,18 @@
 
 package org.pentaho.platform.engine.core.system;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
+
 import org.apache.commons.collections.list.UnmodifiableList;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
@@ -55,24 +67,14 @@ import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.util.logging.Logger;
 import org.pentaho.platform.util.messages.LocaleHelper;
 import org.pentaho.platform.util.web.SimpleUrlFactory;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.User;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.concurrent.Callable;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 public class PentahoSystem {
 
@@ -241,6 +243,11 @@ public class PentahoSystem {
     PentahoSystem.globalParameters = new SimpleParameterProvider( PentahoSystem.globalAttributes );
 
     PentahoSystem.applicationContext = pApplicationContext;
+    if ( PentahoSystem.applicationContext.getContext() instanceof GenericApplicationContext) {
+      (( GenericApplicationContext ) PentahoSystem.applicationContext.getContext()).refresh();
+    } else if ( PentahoSystem.applicationContext.getContext() instanceof ConfigurableApplicationContext) {
+      (( ConfigurableApplicationContext ) PentahoSystem.applicationContext.getContext()).refresh();
+    }
 
     if ( debug ) {
       Logger.debug( PentahoSystem.class, "Setting property path" ); //$NON-NLS-1$
@@ -287,6 +294,7 @@ public class PentahoSystem {
 
     Logger.setLogLevel( PentahoSystem.loggingLevel );
 
+    
     // to guarantee hostnames in SSL mode are not being spoofed
     if ( debug ) {
       Logger.debug( PentahoSystem.class, "Register host name verifier" ); //$NON-NLS-1$
@@ -369,15 +377,15 @@ public class PentahoSystem {
       session.setAuthenticated( name );
       // create authentication
 
-      GrantedAuthority[] roles;
+      List<GrantedAuthority> roles;
 
       ISystemSettings settings = PentahoSystem.getSystemSettings();
       String roleName = ( settings != null ) ? settings.getSystemSetting( "acl-voter/admin-role", "Admin" ) : "Admin";
 
-      roles = new GrantedAuthority[1];
-      roles[0] = new GrantedAuthorityImpl( roleName );
+      roles = new ArrayList<GrantedAuthority>();
+      roles.add( new SimpleGrantedAuthority( roleName ) );
 
-      User user = new User( name, "", true, true, true, true, roles );
+      User user = new User( name, "", true, true, true, true, new ArrayList<GrantedAuthority>( roles ) );
       UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken( user, "", roles ); //$NON-NLS-1$
 
       // set holders

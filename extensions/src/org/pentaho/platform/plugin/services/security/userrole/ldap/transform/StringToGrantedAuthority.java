@@ -21,7 +21,7 @@ import org.apache.commons.collections.Transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.plugin.services.messages.Messages;
-import org.springframework.security.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 
 import java.util.Collection;
 import java.util.HashSet;

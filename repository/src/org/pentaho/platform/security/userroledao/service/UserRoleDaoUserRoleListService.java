@@ -25,10 +25,10 @@ import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.api.mt.ITenantedPrincipleNameResolver;
 import org.pentaho.platform.repository2.unified.jcr.JcrTenantUtils;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,7 +141,7 @@ public class UserRoleDaoUserRoleListService implements IUserRoleListService {
       userToSearch = usernamePrincipalResolver.getPrincipleId( tenant, username );
     }
     UserDetails user = userDetailsService.loadUserByUsername( userToSearch );
-    List<String> roles = new ArrayList<String>( user.getAuthorities().length );
+    List<String> roles = new ArrayList<String>( user.getAuthorities().size() );
     for ( GrantedAuthority role : user.getAuthorities() ) {
       String principalName = role.getAuthority();
       roles.add( principalName );

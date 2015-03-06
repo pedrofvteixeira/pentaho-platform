@@ -33,10 +33,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Dispatches requests to Servlets provided by BIServer plugins. To define a Servlet in a plugin, simply add a bean
@@ -177,7 +179,7 @@ public class PluginDispatchServlet implements Servlet {
 
     for ( Map.Entry<String, ListableBeanFactory> pluginBeanFactoryEntry : pluginBeanFactoryMap.entrySet() ) {
 
-      Map<String, Object> beans =
+      Map<String, Servlet> beans =
         BeanFactoryUtils.beansOfTypeIncludingAncestors( pluginBeanFactoryEntry.getValue(),
           Servlet.class, true, true );
 
@@ -186,8 +188,8 @@ public class PluginDispatchServlet implements Servlet {
           "found " + beans.size() + " servlets in " + pluginBeanFactoryEntry.getKey() ); //$NON-NLS-1$//$NON-NLS-2$
       }
 
-      for ( Map.Entry<String, Object> beanEntry : beans.entrySet() ) {
-        Servlet pluginServlet = (Servlet) beanEntry.getValue();
+      for ( Entry<String, Servlet> beanEntry : beans.entrySet() ) {
+        Servlet pluginServlet = beanEntry.getValue();
         String servletId = beanEntry.getKey();
 
         String pluginId = pluginBeanFactoryEntry.getKey();

@@ -5,7 +5,7 @@
   +-->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:pen="http://www.pentaho.com/schema/pentaho-system"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
        http://www.pentaho.com/schema/pentaho-system http://www.pentaho.com/schema/pentaho-system.xsd" default-lazy-init="true">
 
   <!-- ======================== FILTER CHAIN ======================= -->
@@ -13,7 +13,7 @@
       if you wish to use channel security, add "channelProcessingFilter," in
       front of "httpSessionContextIntegrationFilter" in the list below
   -->
-  <bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+  <bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
     <property name="filterInvocationDefinitionSource">
       <value>
         <![CDATA[CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
@@ -27,25 +27,26 @@
   </bean>
 
   <!-- ======================== AUTHENTICATION ======================= -->
-  <bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+  <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
     <property name="providers">
       <list>
-        <pen:bean class="org.springframework.security.providers.AuthenticationProvider"/>
-        <ref local="anonymousAuthenticationProvider" />
+        <pen:bean class="org.springframework.security.authentication.AuthenticationProvider"/>
+        <ref bean="daoAuthenticationProvider" />
+        <ref bean="anonymousAuthenticationProvider" />
       </list>
     </property>
   </bean>
 
   <!-- Automatically receives AuthenticationEvent messages -->
   <bean id="loggerListener"
-        class="org.springframework.security.event.authentication.LoggerListener" />
+        class="org.springframework.security.authentication.event.LoggerListener" />
   <bean id="basicProcessingFilter"
         class="org.pentaho.platform.web.http.security.PentahoBasicProcessingFilter">
     <property name="authenticationManager">
-      <ref local="authenticationManager" />
+      <ref bean="authenticationManager" />
     </property>
     <property name="authenticationEntryPoint">
-      <ref local="basicProcessingFilterEntryPoint" />
+      <ref bean="basicProcessingFilterEntryPoint" />
     </property>
   </bean>
   <bean id="basicAuthPostFilter"
@@ -54,7 +55,7 @@
 
 
   <bean id="basicProcessingFilterEntryPoint"
-        class="org.springframework.security.ui.basicauth.BasicProcessingFilterEntryPoint">
+        class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
     <property name="realmName" value="Pentaho Realm" />
   </bean>
 
@@ -77,10 +78,10 @@
   <bean id="requestParameterProcessingFilter"
         class="org.pentaho.platform.web.http.security.RequestParameterAuthenticationFilter">
     <property name="authenticationManager">
-      <ref local="authenticationManager" />
+      <ref bean="authenticationManager" />
     </property>
     <property name="authenticationEntryPoint">
-      <ref local="requestParameterProcessingFilterEntryPoint" />
+      <ref bean="requestParameterProcessingFilterEntryPoint" />
     </property>
   </bean>
   <bean id="requestParameterProcessingFilterEntryPoint"
@@ -91,37 +92,35 @@
 
   <!-- custom Pentaho end -->
   <bean id="anonymousProcessingFilter"
-        class="org.springframework.security.providers.anonymous.AnonymousProcessingFilter">
+        class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
     <property name="key" value="foobar" />
     <property name="userAttribute" value="anonymousUser,Anonymous" />
   </bean>
   <bean id="anonymousAuthenticationProvider"
-        class="org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider">
+        class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
     <property name="key" value="foobar" />
   </bean>
   <bean id="httpSessionContextIntegrationFilter"
-        class="org.springframework.security.context.HttpSessionContextIntegrationFilter" />
-  <bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
+        class="org.springframework.security.web.context.SecurityContextPersistenceFilter" />
+  <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
     <constructor-arg value="/index.jsp" />
     <!-- URL redirected to after logout -->
     <constructor-arg>
       <list>
         <bean class="org.pentaho.platform.web.http.security.PentahoLogoutHandler" />
         <bean
-            class="org.springframework.security.ui.logout.SecurityContextLogoutHandler" />
+            class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
       </list>
     </constructor-arg>
     <property name="filterProcessesUrl" value="/Logout" />
   </bean>
   <bean id="securityContextHolderAwareRequestFilter"
-        class="org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter" />
+        class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
 
-  <bean id="securityContextHolderAwareRequestFilterForWS" class="org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter">
+  <bean id="securityContextHolderAwareRequestFilterForWS" class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter">
     <!-- override so that SavedRequestAwareWrapper is not used -->
-    <property name="wrapperClass" value="org.springframework.security.wrapper.SecurityContextHolderAwareRequestWrapper" />
+    <property name="wrapperClass" value="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper" />
   </bean>
-
-
 
   <!--
       ===================== HTTP REQUEST SECURITY ====================
@@ -129,43 +128,44 @@
   <bean id="exceptionTranslationFilter"
         class="org.springframework.security.ui.ExceptionTranslationFilter">
     <property name="authenticationEntryPoint">
-      <ref local="authenticationProcessingFilterEntryPoint" />
+      <ref bean="authenticationProcessingFilterEntryPoint" />
     </property>
     <property name="accessDeniedHandler">
-      <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl" />
+      <bean class="org.springframework.security.web.access.AccessDeniedHandlerImpl" />
     </property>
   </bean>
 
-  <bean id="exceptionTranslationFilterForWS" class="org.springframework.security.ui.ExceptionTranslationFilter">
+  <bean id="exceptionTranslationFilterForWS" class="org.springframework.security.web.access.ExceptionTranslationFilter">
     <property name="authenticationEntryPoint">
-      <ref local="basicProcessingFilterEntryPoint" />
+      <ref bean="basicProcessingFilterEntryPoint" />
     </property>
     <property name="accessDeniedHandler">
-      <bean class="org.springframework.security.ui.AccessDeniedHandlerImpl" />
+      <bean class="org.springframework.security.web.access.AccessDeniedHandlerImpl" />
     </property>
   </bean>
-
 
   <bean id="authenticationProcessingFilter"
-        class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
+        class="com.pentaho.platform.security.PlatformAuthenticationProcessingFilter">
     <property name="authenticationManager">
-      <ref local="authenticationManager" />
+      <ref bean="authenticationManager" />
     </property>
     <property name="authenticationFailureUrl" value="/Login?login_error=1" />
     <property name="defaultTargetUrl" value="/Home" />
     <property name="filterProcessesUrl" value="/j_spring_security_check" />
+    <!--
     <property name="targetUrlResolver">
       <bean id="targetUrlResolver" class="org.springframework.security.ui.TargetUrlResolverImpl">
         <property name="justUseSavedRequestOnGet" value="true" />
       </bean>
     </property>
+    -->
   </bean>
   <bean id="authenticationProcessingFilterEntryPoint"
-        class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+        class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
     <property name="loginFormUrl" value="/Login" />
     <property name="forceHttps" value="false" />
   </bean>
-  <bean id="httpRequestAccessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+  <bean id="httpRequestAccessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
     <property name="allowIfAllAbstainDecisions" value="false" />
     <property name="decisionVoters">
       <list>
@@ -182,12 +182,12 @@
       expressions last
   -->
   <bean id="filterInvocationInterceptor"
-        class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+        class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
     <property name="authenticationManager">
-      <ref local="authenticationManager" />
+      <ref bean="authenticationManager" />
     </property>
     <property name="accessDecisionManager">
-      <ref local="httpRequestAccessDecisionManager" />
+      <ref bean="httpRequestAccessDecisionManager" />
     </property>
     <property name="objectDefinitionSource">
       <value>
@@ -263,12 +263,12 @@ CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
     </property>
   </bean>
 
-  <bean id="filterInvocationInterceptorForWS" class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+  <bean id="filterInvocationInterceptorForWS" class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
     <property name="authenticationManager">
-      <ref local="authenticationManager" />
+      <ref bean="authenticationManager" />
     </property>
     <property name="accessDecisionManager">
-      <ref local="httpRequestAccessDecisionManager" />
+      <ref bean="httpRequestAccessDecisionManager" />
     </property>
     <!-- allow anyone to see the wsdl of various services -->
     <property name="objectDefinitionSource">
@@ -309,4 +309,9 @@ CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
       </list>
     </property>
   </bean>
+  <bean id="preAuthenticatedSecurityFilter" class="org.pentaho.platform.web.http.security.PreAuthenticatedFilter">
+    <constructor-arg ref="PreAuthenticatedSessionHolder"/>
+
+  </bean>
+
 </beans>

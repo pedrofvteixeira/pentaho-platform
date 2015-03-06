@@ -18,8 +18,8 @@
 package org.pentaho.platform.plugin.services.security.userrole;
 
 import org.junit.Test;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Arrays;
 

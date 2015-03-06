@@ -18,12 +18,13 @@
 package org.pentaho.platform.web.http.security;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.ui.AuthenticationEntryPoint;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -46,9 +47,8 @@ public class RequestParameterFilterEntryPoint implements AuthenticationEntryPoin
     // Everything is OK
   }
 
-  public void commence( final ServletRequest request, final ServletResponse response,
+  public void commence( final HttpServletRequest request, final HttpServletResponse response,
       final AuthenticationException authException ) throws IOException, ServletException {
-    HttpServletResponse httpResponse = (HttpServletResponse) response;
-    httpResponse.sendError( HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage() );
+    response.sendError( HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage() );
   }
 }

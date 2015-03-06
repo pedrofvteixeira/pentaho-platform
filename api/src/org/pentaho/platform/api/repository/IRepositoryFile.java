@@ -17,14 +17,14 @@
 
 package org.pentaho.platform.api.repository;
 
-import org.pentaho.platform.api.engine.IAclSolutionFile;
+
 import org.pentaho.platform.api.engine.IFileFilter;
 import org.pentaho.platform.api.engine.ISolutionFile;
 
 import java.util.List;
 import java.util.Set;
 
-public interface IRepositoryFile extends ISearchable, IAclSolutionFile {
+public interface IRepositoryFile extends ISearchable {
 
   public static final char SEPARATOR = '/';
 

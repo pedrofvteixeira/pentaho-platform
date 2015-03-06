@@ -17,10 +17,6 @@
 
 package org.pentaho.platform.scheduler2.versionchecker;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,7 +38,11 @@ import org.pentaho.platform.scheduler2.quartz.test.StubUserRoleListService;
 import org.pentaho.platform.scheduler2.ws.ParamValue;
 import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceTest.TstPluginManager;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings( "nls" )
 public class EmbeddedVersionCheckSystemListenerTest {

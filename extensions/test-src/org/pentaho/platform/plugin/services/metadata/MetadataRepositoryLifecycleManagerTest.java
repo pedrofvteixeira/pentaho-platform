@@ -82,13 +82,13 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.jcr.JcrCallback;
 import org.springframework.extensions.jcr.JcrTemplate;
 import org.springframework.extensions.jcr.SessionFactory;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.User;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -334,9 +334,9 @@ public class MetadataRepositoryLifecycleManagerTest implements ApplicationContex
         new GrantedAuthority[]{new GrantedAuthorityImpl( superAdminRoleName )};
     final String password = "ignored";
     UserDetails repositoryAdminUserDetails =
-        new User( repositoryAdminUsername, password, true, true, true, true, repositoryAdminAuthorities );
+        new User( repositoryAdminUsername, password, true, true, true, true, Arrays.asList( repositoryAdminAuthorities ) );
     Authentication repositoryAdminAuthentication =
-        new UsernamePasswordAuthenticationToken( repositoryAdminUserDetails, password, repositoryAdminAuthorities );
+        new UsernamePasswordAuthenticationToken( repositoryAdminUserDetails, password, Arrays.asList( repositoryAdminAuthorities ) );
     PentahoSessionHolder.setSession( pentahoSession );
     // this line necessary for Spring Security's MethodSecurityInterceptor
     SecurityContextHolder.getContext().setAuthentication( repositoryAdminAuthentication );
@@ -372,8 +372,8 @@ public class MetadataRepositoryLifecycleManagerTest implements ApplicationContex
       authList.add( new GrantedAuthorityImpl( roleName ) );
     }
     GrantedAuthority[] authorities = authList.toArray( new GrantedAuthority[0] );
-    UserDetails userDetails = new User( username, password, true, true, true, true, authorities );
-    Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, password, authorities );
+    UserDetails userDetails = new User( username, password, true, true, true, true, Arrays.asList( authorities ) );
+    Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, password, Arrays.asList( authorities ) );
     PentahoSessionHolder.setSession( pentahoSession );
     // this line necessary for Spring Security's MethodSecurityInterceptor
     SecurityContextHolder.getContext().setAuthentication( auth );
@@ -398,8 +398,8 @@ public class MetadataRepositoryLifecycleManagerTest implements ApplicationContex
       authList.add( new GrantedAuthorityImpl( adminAuthorityName ) );
     }
     GrantedAuthority[] authorities = authList.toArray( new GrantedAuthority[0] );
-    UserDetails userDetails = new User( username, password, true, true, true, true, authorities );
-    Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, password, authorities );
+    UserDetails userDetails = new User( username, password, true, true, true, true, Arrays.asList( authorities ) );
+    Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, password, Arrays.asList( authorities ) );
     PentahoSessionHolder.setSession( pentahoSession );
     // this line necessary for Spring Security's MethodSecurityInterceptor
     SecurityContextHolder.getContext().setAuthentication( auth );

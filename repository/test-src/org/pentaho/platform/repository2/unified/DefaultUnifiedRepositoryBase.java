@@ -81,13 +81,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.extensions.jcr.JcrCallback;
 import org.springframework.extensions.jcr.JcrTemplate;
 import org.springframework.extensions.jcr.SessionFactory;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.User;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
@@ -194,14 +194,6 @@ public class DefaultUnifiedRepositoryBase implements ApplicationContextAware {
     FileUtils.deleteDirectory( new File( "/tmp/jackrabbit-test-TRUNK" ) );
     PentahoSessionHolder.setStrategyName( PentahoSessionHolder.MODE_GLOBAL );
 
-    // register repository spring context for correct work of <pen:list>
-    final StandaloneSpringPentahoObjectFactory pentahoObjectFactory = new StandaloneSpringPentahoObjectFactory();
-    GenericApplicationContext appCtx = new GenericApplicationContext();
-    XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader( appCtx );
-    xmlReader.loadBeanDefinitions( new ClassPathResource( "repository.spring.xml" ) );
-    xmlReader.loadBeanDefinitions( new ClassPathResource( "repository-test-override.spring.xml" ) );
-    pentahoObjectFactory.init( null, appCtx );
-    PentahoSystem.registerObjectFactory( pentahoObjectFactory );
   }
 
   @AfterClass
@@ -315,11 +307,10 @@ public class DefaultUnifiedRepositoryBase implements ApplicationContextAware {
     List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
 
     for ( String roleName : roles ) {
-      authList.add( new GrantedAuthorityImpl( roleName ) );
+      authList.add( new SimpleGrantedAuthority( roleName ) );
     }
-    GrantedAuthority[] authorities = authList.toArray( new GrantedAuthority[0] );
-    UserDetails userDetails = new User( username, PASSWORD, true, true, true, true, authorities );
-    Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, PASSWORD, authorities );
+    UserDetails userDetails = new User( username, PASSWORD, true, true, true, true, authList );
+    Authentication auth = new UsernamePasswordAuthenticationToken( userDetails, PASSWORD, authList );
     PentahoSessionHolder.setSession( pentahoSession );
     // this line necessary for Spring Security's MethodSecurityInterceptor
     SecurityContextHolder.getContext().setAuthentication( auth );
@@ -331,8 +322,8 @@ public class DefaultUnifiedRepositoryBase implements ApplicationContextAware {
   public void loginAsRepositoryAdmin() {
     StandaloneSession pentahoSession = new StandaloneSession( repositoryAdminUsername );
     pentahoSession.setAuthenticated( repositoryAdminUsername );
-    final GrantedAuthority[] repositoryAdminAuthorities =
-      new GrantedAuthority[] { new GrantedAuthorityImpl( superAdminRoleName ) };
+    List<GrantedAuthority> repositoryAdminAuthorities = new ArrayList<GrantedAuthority>();
+    repositoryAdminAuthorities.add( new SimpleGrantedAuthority( superAdminRoleName ) );
     final String password = "ignored";
     UserDetails repositoryAdminUserDetails =
       new User( repositoryAdminUsername, password, true, true, true, true, repositoryAdminAuthorities );

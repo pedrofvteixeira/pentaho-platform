@@ -19,15 +19,14 @@
 package org.pentaho.platform.security.policy.rolebased;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.pentaho.platform.api.engine.IAuthorizationPolicy;
-import org.pentaho.platform.api.engine.IPentahoSession;
-import org.pentaho.platform.api.engine.ISecurityHelper;
-import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 
 /**
@@ -88,9 +87,11 @@ public class RoleAuthorizationPolicy implements IAuthorizationPolicy {
     List<String> runtimeRoles = new ArrayList<String>();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Assert.state( authentication != null );
-    GrantedAuthority[] authorities = authentication.getAuthorities();
-    for ( int i = 0; i < authorities.length; i++ ) {
-      runtimeRoles.add( authorities[i].getAuthority() );
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    Iterator iter = authorities.iterator();
+    while(iter.hasNext()) {
+      GrantedAuthority authority = (GrantedAuthority) iter.next();
+      runtimeRoles.add( authority.getAuthority() );
     }
     return runtimeRoles;
   }

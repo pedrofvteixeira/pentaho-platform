@@ -23,12 +23,12 @@ import org.pentaho.platform.api.engine.ICacheManager;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.plugin.action.mondrian.catalog.IMondrianCatalogService;
 import org.pentaho.platform.plugin.action.olap.IOlapService;
 import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
 import org.pentaho.platform.security.policy.rolebased.actions.RepositoryCreateAction;
 import org.pentaho.platform.security.policy.rolebased.actions.RepositoryReadAction;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -59,7 +59,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   @Produces( TEXT_PLAIN )
   public Response executeGlobalActions() {
     IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-    if ( SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) ) {
+    if ( /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
       PentahoSystem.publish( pentahoSession, org.pentaho.platform.engine.core.system.GlobalListsPublisher.class
         .getName() );
     }
@@ -73,7 +73,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   public String refreshMetadata() {
     String result = null;
     IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-    if ( SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) ) {
+    if (  /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
       result =
           PentahoSystem.publish( pentahoSession, org.pentaho.platform.engine.services.metadata.MetadataPublisher.class
             .getName() );
@@ -87,7 +87,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   @Produces( TEXT_PLAIN )
   public Response refreshSystemSettings() {
     IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-    if ( SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) ) {
+    if (  /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
       PentahoSystem.publish( pentahoSession, org.pentaho.platform.engine.core.system
         .SettingsPublisher.class.getName() );
     }
@@ -101,7 +101,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   public Response flushMondrianSchemaCache() {
     if ( canAdminister() ) {
       IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-      if ( SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) ) {
+      if (  /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
         // Flush the catalog helper (legacy)
         IMondrianCatalogService mondrianCatalogService =
             PentahoSystem.get( IMondrianCatalogService.class, "IMondrianCatalogService", pentahoSession ); //$NON-NLS-1$

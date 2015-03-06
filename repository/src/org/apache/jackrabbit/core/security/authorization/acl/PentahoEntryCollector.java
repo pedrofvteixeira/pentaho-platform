@@ -34,19 +34,22 @@ import org.pentaho.platform.repository2.unified.jcr.JcrTenantUtils;
 import org.pentaho.platform.security.policy.rolebased.IRoleAuthorizationPolicyRoleBindingDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.Assert;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.security.AccessControlEntry;
 import javax.jcr.security.Privilege;
 import javax.jcr.version.VersionHistory;
+
 import java.security.Principal;
 import java.security.acl.Group;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -474,9 +477,11 @@ public class PentahoEntryCollector extends EntryCollector {
     Assert.state( pentahoSession != null );
     Authentication authentication = SecurityHelper.getInstance().getAuthentication();
     if ( authentication != null ) {
-      GrantedAuthority[] authorities = authentication.getAuthorities();
-      for ( int i = 0; i < authorities.length; i++ ) {
-        runtimeRoles.add( authorities[ i ].getAuthority() );
+      Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+      Iterator iter = authorities.iterator();
+      while( iter.hasNext() ) {
+        GrantedAuthority authority = (GrantedAuthority) iter.next();
+        runtimeRoles.add( authority.getAuthority() );
       }
     }
     return runtimeRoles;

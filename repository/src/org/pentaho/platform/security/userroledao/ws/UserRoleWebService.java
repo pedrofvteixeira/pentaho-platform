@@ -18,15 +18,20 @@
 package org.pentaho.platform.security.userroledao.ws;
 
 import org.apache.commons.lang.StringUtils;
+import org.pentaho.platform.api.engine.IAuthorizationPolicy;
 import org.pentaho.platform.api.engine.security.userroledao.IPentahoRole;
 import org.pentaho.platform.api.engine.security.userroledao.IPentahoUser;
 import org.pentaho.platform.api.engine.security.userroledao.IUserRoleDao;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.security.SecurityHelper;
+import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
+import org.pentaho.platform.security.policy.rolebased.actions.RepositoryCreateAction;
+import org.pentaho.platform.security.policy.rolebased.actions.RepositoryReadAction;
 import org.pentaho.platform.security.userroledao.messages.Messages;
 
 import javax.jws.WebService;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,7 +52,9 @@ public class UserRoleWebService implements IUserRoleWebService {
   }
 
   protected boolean isAdmin() {
-    return SecurityHelper.getInstance().isPentahoAdministrator( PentahoSessionHolder.getSession() );
+    IAuthorizationPolicy authorizationPolicy = PentahoSystem.get( IAuthorizationPolicy.class, PentahoSessionHolder.getSession() );
+    return ( authorizationPolicy.isAllowed( RepositoryReadAction.NAME ) && authorizationPolicy.isAllowed( RepositoryCreateAction.NAME )
+        && authorizationPolicy.isAllowed( AdministerSecurityAction.NAME ) );
   }
 
   protected IUserRoleDao getDao() throws UserRoleException {

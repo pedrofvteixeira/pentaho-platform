@@ -22,11 +22,12 @@ import org.pentaho.platform.api.engine.IParameterProvider;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IUserRoleListService;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -182,10 +183,7 @@ public class SecurityParameterProvider implements IParameterProvider {
       } else if ( name.equals( SecurityParameterProvider.SecurityNames
           .get( SecurityParameterProvider.PRINCIPAL_AUTHENTICATED ) ) ) {
         return getPrincipalAuthenticated();
-      } else if ( name.equals( SecurityParameterProvider.SecurityNames
-          .get( SecurityParameterProvider.PRINCIPAL_IS_ADMINISTRATOR ) ) ) {
-        return getPrincipalIsAdministrator();
-      }
+      } 
     } else {
       if ( name.equals( SecurityParameterProvider.SecurityNames.get( SecurityParameterProvider.SYSTEM_ROLE_NAMES ) ) ) {
         return getSystemRoleNames();
@@ -217,23 +215,19 @@ public class SecurityParameterProvider implements IParameterProvider {
     return "false"; //$NON-NLS-1$
   }
 
-  protected String getPrincipalIsAdministrator() {
-    return SecurityHelper.getInstance().isPentahoAdministrator( this.session ) ? "true" : "false"; //$NON-NLS-1$
-    // //$NON-NLS-2$
-  }
 
   protected Object getPrincipalRoles() {
     Authentication auth = getAuthentication();
     if ( auth != null ) {
-      GrantedAuthority[] auths = auth.getAuthorities();
+      Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
       if ( auths != null ) {
-        List rtn = new ArrayList( auths.length );
+        List<String> rtn = new ArrayList<String>( auths.size() );
         for ( GrantedAuthority element : auths ) {
           rtn.add( element.getAuthority() );
         }
         return rtn;
       } else {
-        return new ArrayList();
+        return new ArrayList<String>();
       }
     }
     return null;

@@ -18,14 +18,14 @@
 
 package org.pentaho.platform.security.policy.rolebased.springsecurity;
 
-import org.pentaho.platform.api.engine.IAuthorizationPolicy;
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.vote.AccessDecisionVoter;
-import org.springframework.util.Assert;
-
+import java.util.Collection;
 import java.util.Iterator;
+
+import org.pentaho.platform.api.engine.IAuthorizationPolicy;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.core.Authentication;
+import org.springframework.util.Assert;
 
 /**
  * An {@link AccessDecisionVoter} that delegates to an {@link IAuthorizationPolicy} instance.
@@ -78,9 +78,10 @@ public class AuthorizationPolicyVoter implements AccessDecisionVoter {
     return true;
   }
 
-  public int vote( final Authentication authentication, final Object object, final ConfigAttributeDefinition config ) {
+  @Override
+  public int vote( final Authentication authentication, final Object object, final Collection configAttributes ) {
     int result = ACCESS_ABSTAIN;
-    Iterator iter = config.getConfigAttributes().iterator();
+    Iterator iter = configAttributes.iterator();
 
     while ( iter.hasNext() ) {
       ConfigAttribute attribute = (ConfigAttribute) iter.next();
