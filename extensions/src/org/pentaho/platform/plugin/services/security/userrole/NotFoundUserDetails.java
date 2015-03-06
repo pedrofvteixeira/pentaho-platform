@@ -17,9 +17,11 @@
 
 package org.pentaho.platform.plugin.services.security.userrole;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Collection;
 
 public class NotFoundUserDetails implements UserDetails {
   private static final long serialVersionUID = 2330317789852451431L;
@@ -34,7 +36,7 @@ public class NotFoundUserDetails implements UserDetails {
   }
 
   @Override
-  public GrantedAuthority[] getAuthorities() {
+  public Collection<? extends GrantedAuthority> getAuthorities() {
     throw new IllegalStateException( ERROR_MSG );
   }
 

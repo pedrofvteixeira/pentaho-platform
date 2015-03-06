@@ -117,6 +117,10 @@ public class PluginManagerNotConfiguredTest extends BaseTest {
       }
     }
 
+    // failure to refresh context in spring 4 causes a
+    // IllegalStateException: org.springframework.context.support.GenericApplicationContext has not been refreshed yet
+    appCtx.refresh();
+
     return appCtx;
   }
 

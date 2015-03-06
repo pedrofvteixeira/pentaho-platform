@@ -19,13 +19,15 @@ package org.pentaho.platform.web.http.security;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.security.Authentication;
-import org.springframework.security.BadCredentialsException;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.event.authentication.AuthenticationSuccessEvent;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +47,7 @@ import java.io.IOException;
  * <p/>
  * User: nbaker Date: 8/15/13
  */
-public class PentahoBasicProcessingFilter extends org.springframework.security.ui.basicauth.BasicProcessingFilter
+public class PentahoBasicProcessingFilter extends org.springframework.security.web.authentication.www.BasicAuthenticationFilter
     implements ApplicationEventPublisherAware {
 
   private ApplicationEventPublisher applicationEventPublisher;
@@ -55,8 +57,12 @@ public class PentahoBasicProcessingFilter extends org.springframework.security.u
   }
 
   @Override
-  public void doFilterHttp( HttpServletRequest request, HttpServletResponse response, FilterChain chain )
+  public void doFilter( ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain )
     throws IOException, ServletException {
+
+    HttpServletRequest request = ( HttpServletRequest ) servletRequest;
+    HttpServletResponse response = ( HttpServletResponse ) servletResponse;
+
     if ( request.getRequestedSessionId() != null && !request.isRequestedSessionIdValid() ) {
       // expired session detected.
       Cookie expiredCookie = null;
@@ -112,7 +118,7 @@ public class PentahoBasicProcessingFilter extends org.springframework.security.u
       }
     }
 
-    super.doFilterHttp( request, response, chain );
+    super.doFilter( request, response, chain );
   }
 
   @Override

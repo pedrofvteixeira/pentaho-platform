@@ -24,9 +24,9 @@ import org.pentaho.platform.api.mt.ITenantedPrincipleNameResolver;
 import org.pentaho.platform.plugin.services.security.userrole.ldap.search.LdapSearch;
 import org.pentaho.platform.repository2.unified.jcr.JcrTenantUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -150,7 +150,7 @@ public class DefaultLdapUserRoleListService implements IUserRoleListService, Ini
       throw new UnsupportedOperationException( "only allowed to access to default tenant" );
     }
     UserDetails user = userDetailsService.loadUserByUsername( userNameUtils.getPrincipleName( username ) );
-    List<GrantedAuthority> results = Arrays.asList( user.getAuthorities() );
+    List<GrantedAuthority> results = Arrays.asList( user.getAuthorities().toArray( new GrantedAuthority[]{} ) );
     List<String> roles = new ArrayList<String>( results.size() );
     for ( GrantedAuthority role : results ) {
       roles.add( role.getAuthority() );

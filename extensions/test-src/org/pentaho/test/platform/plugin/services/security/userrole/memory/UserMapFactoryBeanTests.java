@@ -20,7 +20,7 @@ package org.pentaho.test.platform.plugin.services.security.userrole.memory;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.platform.plugin.services.security.userrole.memory.UserMapFactoryBean;
-import org.springframework.security.userdetails.memory.UserMap;
+import org.springframework.security.core.userdetails.memory.UserMap;
 
 import static org.junit.Assert.assertNotNull;
 

@@ -19,9 +19,9 @@ package org.pentaho.platform.plugin.services.security.userrole.memory;
 
 import org.pentaho.platform.api.mt.ITenantedPrincipleNameResolver;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UsernameNotFoundException;
-import org.springframework.security.userdetails.memory.InMemoryDaoImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.memory.InMemoryDaoImpl;
 
 public class DefaultInMemoryUserDetailsService extends InMemoryDaoImpl {
 

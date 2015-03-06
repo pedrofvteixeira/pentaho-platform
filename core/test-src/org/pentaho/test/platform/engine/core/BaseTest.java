@@ -151,6 +151,7 @@ public class BaseTest extends GenericPentahoTest implements IActionCompleteListe
       }
     }
 
+    appCtx.refresh();
     String[] beanNames = appCtx.getBeanDefinitionNames();
     System.out.println( "Loaded Beans: " ); //$NON-NLS-1$
     for ( String n : beanNames ) {

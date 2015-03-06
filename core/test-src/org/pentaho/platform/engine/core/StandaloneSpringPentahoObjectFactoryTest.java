@@ -245,6 +245,7 @@ public class StandaloneSpringPentahoObjectFactoryTest extends TestCase {
     File f = new File( "test-res/solution/system/pentahoObjects.spring.xml" );
     FileSystemResource fsr = new FileSystemResource( f );
     GenericApplicationContext appCtx = new GenericApplicationContext();
+    appCtx.refresh();
     XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader( appCtx );
     xmlReader.loadBeanDefinitions( fsr );
 

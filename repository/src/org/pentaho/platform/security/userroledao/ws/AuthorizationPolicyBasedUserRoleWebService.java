@@ -26,7 +26,6 @@ import javax.jws.WebService;
 
 /**
  * Same as {@link UserRoleWebService} except that it uses task permissions to determine administrator status
- * instead of {@code ISecurityHelper.isPentahoAdministrator}.
  * 
  * @author Will Gorman (wgorman@pentaho.com)
  */

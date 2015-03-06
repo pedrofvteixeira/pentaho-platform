@@ -17,8 +17,8 @@
 
 package org.pentaho.platform.api.engine;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.concurrent.Callable;
 
@@ -97,33 +97,14 @@ public interface ISecurityHelper {
   <T> T runAsAnonymous( Callable<T> callable ) throws Exception;
 
   /**
-   * Utility method that communicates with the installed ACLVoter to determine administrator status
-   * 
-   * @param session
-   *          The users IPentahoSession object
-   * @return true if the user is considered a Pentaho administrator
-   */
-  boolean isPentahoAdministrator( IPentahoSession session );
-
-  /**
-   * Utility method that communicates with the installed ACLVoter to determine whether a particular role is granted
-   * to the specified user.
-   * 
-   * @param session
-   *          The users' IPentahoSession
+   * Utility method to determine whether a particular role is granted
+   * to the user.
+   *
    * @param role
    *          The role to look for
    * @return true if the user is granted the specified role.
    */
-  boolean isGranted( IPentahoSession session, GrantedAuthority role );
-
-  /**
-   * @param aFile
-   * @return a boolean that indicates if this file can have ACLS placed on it.
-   */
-  boolean canHaveACLS( ISolutionFile aFile );
-
-  boolean hasAccess( IAclHolder aHolder, int actionOperation, IPentahoSession session );
+  boolean isGranted( GrantedAuthority role );
 
   /**
    * Utility method for hydrating a Spring Authentication object (Principal) given just a user name. Note: The

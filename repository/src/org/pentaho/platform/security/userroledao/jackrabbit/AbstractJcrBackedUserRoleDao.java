@@ -77,8 +77,8 @@ import org.pentaho.platform.repository2.unified.jcr.PentahoJcrConstants;
 import org.pentaho.platform.security.userroledao.PentahoRole;
 import org.pentaho.platform.security.userroledao.PentahoUser;
 import org.pentaho.platform.security.userroledao.messages.Messages;
-import org.springframework.security.providers.dao.UserCache;
-import org.springframework.security.providers.dao.cache.NullUserCache;
+import org.springframework.security.core.userdetails.UserCache;
+import org.springframework.security.core.userdetails.cache.NullUserCache;
 
 public abstract class AbstractJcrBackedUserRoleDao implements IUserRoleDao {
 

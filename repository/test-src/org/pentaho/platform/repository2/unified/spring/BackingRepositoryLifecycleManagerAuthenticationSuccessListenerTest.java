@@ -27,11 +27,12 @@ import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.security.userroledao.DefaultTenantedPrincipleNameResolver;
 import org.pentaho.test.platform.MethodTrackingData;
 import org.pentaho.test.platform.engine.security.MockSecurityHelper;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.event.authentication.AuthenticationSuccessEvent;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -187,7 +188,7 @@ public class BackingRepositoryLifecycleManagerAuthenticationSuccessListenerTest 
       this.currentUser = currentUser;
     }
 
-    public GrantedAuthority[] getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
       return null;
     }
 

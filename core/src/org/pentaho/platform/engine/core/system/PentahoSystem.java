@@ -56,12 +56,14 @@ import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.util.logging.Logger;
 import org.pentaho.platform.util.messages.LocaleHelper;
 import org.pentaho.platform.util.web.SimpleUrlFactory;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.User;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -83,7 +85,7 @@ public class PentahoSystem {
 
   public static final boolean ignored = false; // used to suppress compiler
   private static final String securityContextHolderStrategy =
-      "org.pentaho.platform.engine.security.PentahoSecurityContextHolderStrategy";
+      "MODE_INHERITABLETHREADLOCAL";
 
   public static int loggingLevel = ILogger.ERROR;
 
@@ -367,22 +369,22 @@ public class PentahoSystem {
     final String name =
         StringUtils.defaultIfEmpty( PentahoSystem.get( String.class, "singleTenantAdminUserName", null ), "admin" );
     IPentahoSession origSession = PentahoSessionHolder.getSession();
-    SecurityContext originalContext = SecurityContextHolder.getContext();
+    Authentication origAuth = SecurityContextHolder.getContext().getAuthentication();
     try {
       // create pentaho session
       StandaloneSession session = new StandaloneSession( name );
       session.setAuthenticated( name );
       // create authentication
 
-      GrantedAuthority[] roles;
+      List<GrantedAuthority> roles;
 
       ISystemSettings settings = PentahoSystem.getSystemSettings();
       String roleName = ( settings != null ) ? settings.getSystemSetting( "acl-voter/admin-role", "Admin" ) : "Admin";
 
-      roles = new GrantedAuthority[1];
-      roles[0] = new GrantedAuthorityImpl( roleName );
+      roles = new ArrayList<GrantedAuthority>();
+      roles.add( new SimpleGrantedAuthority( roleName ) );
 
-      User user = new User( name, "", true, true, true, true, roles );
+      User user = new User( name, "", true, true, true, true, new ArrayList<GrantedAuthority>( roles ) );
       UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken( user, "", roles ); //$NON-NLS-1$
 
       // set holders
@@ -404,7 +406,7 @@ public class PentahoSystem {
         }
       }
       PentahoSessionHolder.setSession( origSession );
-      SecurityContextHolder.setContext( originalContext );
+      SecurityContextHolder.getContext().setAuthentication( origAuth );
     }
   }
 

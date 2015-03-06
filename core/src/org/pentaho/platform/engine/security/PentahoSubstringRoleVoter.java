@@ -18,13 +18,14 @@
 
 package org.pentaho.platform.engine.security;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.vote.AccessDecisionVoter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.access.AccessDecisionVoter;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Similar to {@link org.springframework.security.vote.RoleVoter} except that it does not use a role prefix;
@@ -84,21 +85,22 @@ public class PentahoSubstringRoleVoter implements AccessDecisionVoter {
     return true;
   }
 
-  public int vote( final Authentication authentication, final Object object, final ConfigAttributeDefinition config ) {
+  @Override
+  public int vote( Authentication authentication, Object object, Collection configAttributes ) {
     int result = ACCESS_ABSTAIN;
-    Iterator iter = config.getConfigAttributes().iterator();
-    GrantedAuthority[] authorities = extractAuthorities( authentication );
+    List<? extends GrantedAuthority> authorities =
+        (List<? extends GrantedAuthority>) extractAuthorities( authentication );
 
+    Iterator iter = configAttributes.iterator();
     while ( iter.hasNext() ) {
       ConfigAttribute attribute = (ConfigAttribute) iter.next();
-
       if ( this.supports( attribute ) ) {
         result = ACCESS_DENIED;
 
         // Attempt to find a matching granted authority
-        for ( int i = 0; i < authorities.length; i++ ) {
+        for ( int i = 0; i < authorities.size(); i++ ) {
           if ( attribute.getAttribute().substring( processConfigAttributePrefix.length() ).equals(
-              authorities[i].getAuthority() ) ) {
+              authorities.get( i ).getAuthority() ) ) {
             return ACCESS_GRANTED;
           }
         }
@@ -108,7 +110,7 @@ public class PentahoSubstringRoleVoter implements AccessDecisionVoter {
     return result;
   }
 
-  private GrantedAuthority[] extractAuthorities( Authentication authentication ) {
+  private Collection<? extends GrantedAuthority> extractAuthorities( Authentication authentication ) {
     return authentication.getAuthorities();
   }
 }

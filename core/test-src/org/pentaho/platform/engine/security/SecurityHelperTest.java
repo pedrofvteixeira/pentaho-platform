@@ -27,6 +27,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -45,13 +46,14 @@ import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.core.system.boot.PentahoSystemBoot;
 import org.pentaho.platform.engine.core.system.objfac.references.SingletonPentahoObjectReference;
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.context.SecurityContextImpl;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
-import org.springframework.security.userdetails.User;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+
 
 public class SecurityHelperTest {
 
@@ -94,7 +96,7 @@ public class SecurityHelperTest {
   @Test
   public void createAuthentificationTest() {
     Authentication authentication = getAuthorizedSecurityHelper().createAuthentication( DEF_USERNAME );
-    GrantedAuthority[] autorities = authentication.getAuthorities();
+    Collection<? extends GrantedAuthority> autorities = authentication.getAuthorities();
 
     // check for the all inner roles from ALL_ROLES_ARRAY that they are present in authentication authorities
     for ( String sourceRole : ALL_ROLES_ARRAY ) {
@@ -120,7 +122,7 @@ public class SecurityHelperTest {
 
     boolean roleWasFound = false;
     for ( GrantedAuthority authElem : auth.getAuthorities() ) {
-      if ( authElem != null && authElem.equals( ANONIMOUS_ROLE ) ) {
+      if ( authElem != null && authElem.getAuthority() != null && authElem.getAuthority().equals( ANONIMOUS_ROLE ) ) {
         roleWasFound = true;
         break;
       }

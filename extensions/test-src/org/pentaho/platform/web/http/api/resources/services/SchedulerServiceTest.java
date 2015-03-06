@@ -41,6 +41,8 @@ import org.pentaho.platform.api.scheduler2.SimpleJobTrigger;
 import org.pentaho.platform.repository2.unified.webservices.RepositoryFileDto;
 import org.pentaho.platform.scheduler2.quartz.QuartzScheduler;
 import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
+import org.pentaho.platform.security.policy.rolebased.actions.RepositoryCreateAction;
+import org.pentaho.platform.security.policy.rolebased.actions.RepositoryReadAction;
 import org.pentaho.platform.security.policy.rolebased.actions.SchedulerAction;
 import org.pentaho.platform.web.http.api.resources.ComplexJobTriggerProxy;
 import org.pentaho.platform.web.http.api.resources.JobRequest;
@@ -612,6 +614,14 @@ public class SchedulerServiceTest {
     doReturn( mockPentahoSession ).when( schedulerService ).getSession();
     doReturn( "admin" ).when( mockPentahoSession ).getName();
     doReturn( true ).when( schedulerService ).canAdminister( mockPentahoSession );
+
+    IAuthorizationPolicy mockPolicy = mock( IAuthorizationPolicy.class );
+    when( mockPolicy.isAllowed( AdministerSecurityAction.NAME ) ).thenReturn( true );
+    when( mockPolicy.isAllowed( RepositoryReadAction.NAME ) ).thenReturn( true );
+    when( mockPolicy.isAllowed( RepositoryCreateAction.NAME ) ).thenReturn( true );
+
+    when( schedulerService.getPolicy() ).thenReturn( mockPolicy );
+
     List<Job> mockJobs = new ArrayList<Job>();
     mockJobs.add( mock( Job.class ) );
     doReturn( mockJobs ).when( schedulerService.scheduler ).getJobs( any( IJobFilter.class ) );
@@ -745,27 +755,34 @@ public class SchedulerServiceTest {
     String[] testArray = new String[]{value};
     doReturn( testArray ).when( mockJobParams ).get( jobParamKey );
 
-    // Test 1
-    doReturn( true ).when( mockSecurityHelper ).isPentahoAdministrator( mockPentahoSession );
+    IAuthorizationPolicy mockPolicyIsAdmin = mock( IAuthorizationPolicy.class );
+    when( mockPolicyIsAdmin.isAllowed( AdministerSecurityAction.NAME ) ).thenReturn( true );
+    when( mockPolicyIsAdmin.isAllowed( RepositoryReadAction.NAME ) ).thenReturn( true );
+    when( mockPolicyIsAdmin.isAllowed( RepositoryCreateAction.NAME ) ).thenReturn( true );
+
+    when( schedulerService.getPolicy() ).thenReturn( mockPolicyIsAdmin );
 
     Job testJob = schedulerService.getJobInfo( jobId );
     assertEquals( mockJob, testJob );
 
-    // Test 2
-    doReturn( false ).when( mockSecurityHelper ).isPentahoAdministrator( mockPentahoSession );
+    IAuthorizationPolicy mockPolicyNonAdmin = mock( IAuthorizationPolicy.class );
+    when( mockPolicyNonAdmin.isAllowed( AdministerSecurityAction.NAME ) ).thenReturn( true );
+    when( mockPolicyNonAdmin.isAllowed( RepositoryReadAction.NAME ) ).thenReturn( true );
+    when( mockPolicyNonAdmin.isAllowed( RepositoryCreateAction.NAME ) ).thenReturn( true );
+
+    when( schedulerService.getPolicy() ).thenReturn( mockPolicyNonAdmin );
+
     testJob = schedulerService.getJobInfo( jobId );
     assertEquals( mockJob, testJob );
 
     verify( mockJobParams, times( 2 ) ).put( eq( jobParamKey ), any( Serializable.class ) );
     verify( schedulerService, times( 2 ) ).getJob( jobId );
-    verify( schedulerService, times( 2 ) ).getSecurityHelper();
-    verify( schedulerService, times( 3 ) ).getSession();
-    verify( mockPentahoSession, times( 1 ) ).getName();
-    verify( mockJob, times( 1 ) ).getUserName();
+    verify( schedulerService, times( 2 ) ).getPolicy();
+    verify( schedulerService, times( 4 ) ).getSession();
+    verify( mockJob, times( 2 ) ).getUserName();
     verify( mockJob, times( 6 ) ).getJobParams();
     verify( mockJobParams, times( 2 ) ).keySet();
     verify( mockJobParams, times( 2 ) ).get( jobParamKey );
-    verify( mockSecurityHelper, times( 2 ) ).isPentahoAdministrator( mockPentahoSession );
   }
 
   @Test
@@ -781,7 +798,12 @@ public class SchedulerServiceTest {
     IPentahoSession mockPentahoSession = mock( IPentahoSession.class );
     doReturn( mockPentahoSession ).when( schedulerService ).getSession();
 
-    doReturn( false ).when( mockSecurityHelper ).isPentahoAdministrator( mockPentahoSession );
+    IAuthorizationPolicy mockPolicyNonAdmin = mock( IAuthorizationPolicy.class );
+    when( mockPolicyNonAdmin.isAllowed( AdministerSecurityAction.NAME ) ).thenReturn( true );
+    when( mockPolicyNonAdmin.isAllowed( RepositoryReadAction.NAME ) ).thenReturn( true );
+    when( mockPolicyNonAdmin.isAllowed( RepositoryCreateAction.NAME ) ).thenReturn( true );
+
+    when( schedulerService.getPolicy() ).thenReturn( mockPolicyNonAdmin );
 
     String sessionName = "sessionName";
     doReturn( sessionName ).when( mockPentahoSession ).getName();

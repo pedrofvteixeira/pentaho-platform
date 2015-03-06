@@ -21,10 +21,10 @@ import org.pentaho.platform.api.engine.IUserRoleListService;
 import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.plugin.services.messages.Messages;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -102,7 +102,7 @@ public class InMemoryUserRoleListService implements IUserRoleListService, Initia
   @Override
   public List<String> getRolesForUser( final ITenant tenant, final String username ) throws UsernameNotFoundException {
     UserDetails user = userDetailsService.loadUserByUsername( username );
-    List<GrantedAuthority> results = Arrays.asList( user.getAuthorities() );
+    List<GrantedAuthority> results = Arrays.asList( user.getAuthorities().toArray( new GrantedAuthority[]{} ) );
     List<String> roles = new ArrayList<String>( results.size() );
     for ( GrantedAuthority role : results ) {
       roles.add( role.getAuthority() );

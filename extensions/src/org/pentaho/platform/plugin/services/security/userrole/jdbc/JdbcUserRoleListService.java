@@ -26,11 +26,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.object.MappingSqlQuery;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -232,7 +232,7 @@ public class JdbcUserRoleListService extends JdbcDaoSupport implements IUserRole
 
   public List<String> getRolesForUser( final String username ) throws UsernameNotFoundException, DataAccessException {
     UserDetails user = userDetailsService.loadUserByUsername( username );
-    List<String> roles = new ArrayList<String>( user.getAuthorities().length );
+    List<String> roles = new ArrayList<String>( user.getAuthorities().toArray().length );
     for ( GrantedAuthority role : user.getAuthorities() ) {
       if ( roleMapper != null ) {
         roles.add( roleMapper.toPentahoRole( role.getAuthority() ) );
