@@ -49,7 +49,7 @@ import org.pentaho.platform.scheduler2.recur.RecurrenceList;
 import org.pentaho.platform.scheduler2.recur.SequentialRecurrence;
 import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceTest.TestQuartzScheduler;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @SuppressWarnings( "nls" )
 public class QuartzSchedulerTest {

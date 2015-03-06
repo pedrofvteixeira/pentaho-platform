@@ -42,7 +42,7 @@ import org.pentaho.platform.scheduler2.quartz.test.StubUserRoleListService;
 import org.pentaho.platform.scheduler2.ws.ParamValue;
 import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceTest.TstPluginManager;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @SuppressWarnings( "nls" )
 public class EmbeddedVersionCheckSystemListenerTest {

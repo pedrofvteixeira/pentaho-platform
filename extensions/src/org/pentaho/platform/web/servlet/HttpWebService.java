@@ -30,7 +30,6 @@ import org.pentaho.platform.api.engine.IActionParameter;
 import org.pentaho.platform.api.engine.IActionSequence;
 import org.pentaho.platform.api.engine.IMessageFormatter;
 import org.pentaho.platform.api.engine.IParameterProvider;
-import org.pentaho.platform.api.engine.IPentahoAclEntry;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.engine.IRuntimeContext;
 import org.pentaho.platform.api.engine.IUserRoleListService;
@@ -40,7 +39,6 @@ import org.pentaho.platform.engine.core.output.SimpleOutputHandler;
 import org.pentaho.platform.engine.core.solution.ActionInfo;
 import org.pentaho.platform.engine.core.solution.SimpleParameterProvider;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
-import org.pentaho.platform.engine.security.acls.PentahoAclEntry;
 import org.pentaho.platform.engine.services.ActionSequenceJCRHelper;
 import org.pentaho.platform.engine.services.SoapHelper;
 import org.pentaho.platform.engine.services.solution.PentahoEntityResolver;
@@ -767,7 +765,7 @@ public class HttpWebService extends ServletBase {
    * Returns XML for list of ACLs.
    */
   protected Document getACLs() throws ServletException, IOException {
-    Map validPermissionsNameMap = PentahoAclEntry.getValidPermissionsNameMap( IPentahoAclEntry.PERMISSIONS_LIST_ALL );
+    Map validPermissionsNameMap = /*PentahoAclEntry.getValidPermissionsNameMap( IPentahoAclEntry.PERMISSIONS_LIST_ALL );*/ new HashMap<String,String>();
     Element rootElement = new DefaultElement( "acls" );
     Document doc = DocumentHelper.createDocument( rootElement );
     if ( validPermissionsNameMap != null ) {

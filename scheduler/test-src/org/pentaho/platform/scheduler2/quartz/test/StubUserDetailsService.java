@@ -18,12 +18,14 @@
 package org.pentaho.platform.scheduler2.quartz.test;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.User;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.UserDetailsService;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Arrays;
 
 public class StubUserDetailsService implements UserDetailsService {
 
@@ -33,7 +35,7 @@ public class StubUserDetailsService implements UserDetailsService {
     auths[0] = new GrantedAuthorityImpl( "Authenticated" );
     auths[1] = new GrantedAuthorityImpl( "Administrator" );
 
-    UserDetails user = new User( "admin", "password", true, true, true, true, auths );
+    UserDetails user = new User( "admin", "password", true, true, true, true, Arrays.asList( auths ) );
 
     return user;
   }

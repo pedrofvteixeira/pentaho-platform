@@ -18,8 +18,8 @@
 package org.pentaho.platform.plugin.services.security.userrole.memory;
 
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.security.userdetails.memory.UserMap;
-import org.springframework.security.userdetails.memory.UserMapEditor;
+import org.springframework.security.core.userdetails.memory.UserMap;
+import org.springframework.security.core.userdetails.memory.UserMapEditor;
 
 /**
  * Takes as input the string that defines a <code>UserMap</code>. When Spring instantiates this bean, it outputs a

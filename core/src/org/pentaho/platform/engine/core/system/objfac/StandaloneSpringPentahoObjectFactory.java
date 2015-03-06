@@ -145,5 +145,11 @@ public class StandaloneSpringPentahoObjectFactory extends AbstractSpringPentahoO
       return SpringScopeSessionHolder.SESSION.get().getId();
     }
 
+    @Override
+    public Object resolveContextualObject( String arg0 ) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
   }
 }

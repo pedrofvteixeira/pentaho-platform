@@ -40,10 +40,10 @@ import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.core.system.StandaloneSession;
 import org.pentaho.platform.engine.security.SecurityHelper;
 import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
-import org.springframework.security.AuthenticationManager;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 /**
  * JAAS LoginModule which delegates to the Platform's Spring Security {@link org.springframework.security.AuthenticationManager}.
@@ -92,7 +92,7 @@ public class SpringSecurityLoginModule extends AbstractKarafLoginModule {
 
   public boolean login() throws LoginException {
 
-    org.springframework.security.Authentication authentication =
+    org.springframework.security.core.Authentication authentication =
       SecurityContextHolder.getContext().getAuthentication();
 
     if ( authentication != null ) {
@@ -163,7 +163,7 @@ public class SpringSecurityLoginModule extends AbstractKarafLoginModule {
 
     principals = new HashSet<Principal>();
     principals.add( new UserPrincipal( authentication.getName() ) );
-    GrantedAuthority[] authorities = authentication.getAuthorities();
+    GrantedAuthority[] authorities = authentication.getAuthorities().toArray( new GrantedAuthority[]{} );
     if ( authorities != null ) {
       for ( GrantedAuthority authority : authorities ) {
         principals.add( new RolePrincipal( authority.getAuthority() ) );

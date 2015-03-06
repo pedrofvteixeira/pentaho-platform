@@ -32,10 +32,10 @@
 
 package org.pentaho.platform.plugin.services.security.userrole.memory;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.UserDetails;
-import org.springframework.security.userdetails.memory.UserMap;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.memory.UserMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public class UserRoleListEnhancedUserMap extends UserMap {
   public void addUser( final UserDetails user ) throws IllegalArgumentException {
     super.addUser( user );
     this.userRoleListEnhanceduserMap.put( user.getUsername().toLowerCase(), user );
-    GrantedAuthority[] auths = user.getAuthorities();
+    GrantedAuthority[] auths = user.getAuthorities().toArray( new GrantedAuthority[]{} );
     for ( GrantedAuthority anAuthority : auths ) {
       Set<String> userListForAuthority = rolesToUsersMap.get( anAuthority );
       if ( userListForAuthority == null ) {
