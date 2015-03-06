@@ -22,7 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.web.http.PreAuthenticatedSessionHolder;
-import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;

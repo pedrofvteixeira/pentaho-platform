@@ -23,8 +23,8 @@ import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.web.http.messages.Messages;
-import org.springframework.security.Authentication;
-import org.springframework.security.ui.logout.LogoutHandler;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
  * Pentaho behavior that should be invoked when a web user logs out.
  * 
  * @author mlowery
- * @see org.springframework.security.ui.logout.LogoutHandler
- * @see org.springframework.security.ui.logout.LogoutFilter
+ * @see org.springframework.security.web.authentication.logout.LogoutHandler
+ * @see org.springframework.security.web.authentication.logout.LogoutFilter
  */
 public class PentahoLogoutHandler implements LogoutHandler {
   private static final Log logger = LogFactory.getLog( PentahoLogoutHandler.class );

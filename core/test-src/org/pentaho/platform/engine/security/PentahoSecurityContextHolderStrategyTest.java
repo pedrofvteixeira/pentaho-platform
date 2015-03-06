@@ -1,8 +1,8 @@
 package org.pentaho.platform.engine.security;
 
 import org.junit.Test;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;

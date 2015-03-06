@@ -1,10 +1,9 @@
 package org.pentaho.platform.engine.security;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContext;
-import org.springframework.security.context.SecurityContextHolderStrategy;
-import org.springframework.security.context.SecurityContextImpl;
-import org.springframework.util.Assert;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.security.core.context.SecurityContextImpl;
 
 /**
  * Used by Spring Security's {@link org.springframework.security.context.SecurityContextHolder} to govern the creation
@@ -23,7 +22,7 @@ public class PentahoSecurityContextHolderStrategy implements SecurityContextHold
 
   public SecurityContext getContext() {
     if ( context.get() == null ) {
-      context.set( new PentahoSecurityContextImpl() );
+      context.set( createEmptyContext() );
     }
 
     return (SecurityContext) context.get();
@@ -60,6 +59,11 @@ public class PentahoSecurityContextHolderStrategy implements SecurityContextHold
     public String toString() {
       return "Authentication: " + this.getAuthentication();
     }
+  }
+
+  @Override
+  public SecurityContext createEmptyContext() {
+    return new PentahoSecurityContextImpl();
   }
 
 

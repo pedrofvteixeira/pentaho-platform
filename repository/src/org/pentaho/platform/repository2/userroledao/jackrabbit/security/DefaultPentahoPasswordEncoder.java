@@ -23,7 +23,7 @@ import org.apache.jackrabbit.core.security.authentication.CryptedSimpleCredentia
 import org.pentaho.platform.engine.security.messages.Messages;
 import org.pentaho.platform.util.StringUtil;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.providers.encoding.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.jcr.SimpleCredentials;
 
@@ -76,6 +76,29 @@ public class DefaultPentahoPasswordEncoder implements PasswordEncoder {
     } catch ( Exception e ) {
       throw new RuntimeException( e );
     }
+  }
+
+  @Override
+  public String encode( CharSequence rawPassword ) {
+    Validate.notNull( rawPassword, Messages.getInstance().getString(
+        "DefaultPentahoPasswordEncoder.ERROR_0001_RAWPASS_CANNOT_BE_NULL" ) ); //$NON-NLS-1$
+    // same code as org.pentaho.platform.util.Base64PasswordService.encrypt()
+    if ( rawPassword == null || rawPassword.length() == 0) {
+      return null;
+    }
+    CryptedSimpleCredentials cryptedCredentials;
+    try {
+      cryptedCredentials = new CryptedSimpleCredentials( "dummyUser", rawPassword.toString() );
+      return cryptedCredentials.getPassword();
+    } catch ( Exception e ) {
+      throw new RuntimeException( e );
+    }
+
+  }
+
+  @Override
+  public boolean matches( CharSequence rawPassword, String encodedPassword ) {
+    return isPasswordValid( encodedPassword, ( rawPassword != null ? rawPassword.toString() : "" ), null );
   }
 
 }

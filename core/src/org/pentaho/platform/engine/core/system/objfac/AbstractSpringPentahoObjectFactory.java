@@ -28,6 +28,7 @@ import org.pentaho.platform.api.engine.ObjectFactoryException;
 import org.pentaho.platform.engine.core.messages.Messages;
 import org.pentaho.platform.engine.core.system.StandaloneSession;
 import org.pentaho.platform.engine.core.system.objfac.spring.SpringScopeSessionHolder;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;

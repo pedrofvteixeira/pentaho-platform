@@ -44,7 +44,7 @@ import org.pentaho.platform.repository2.unified.DefaultUnifiedRepositoryBase;
 import org.pentaho.platform.repository2.unified.jcr.JcrRepositoryDumpToFile;
 import org.pentaho.platform.repository2.unified.jcr.JcrRepositoryFileUtils;
 import org.pentaho.platform.repository2.unified.jcr.JcrRepositoryDumpToFile.Mode;
-import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.xml.namespace.QName;

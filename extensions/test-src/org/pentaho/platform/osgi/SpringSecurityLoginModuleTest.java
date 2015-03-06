@@ -23,12 +23,12 @@ import org.pentaho.platform.api.engine.IAuthorizationPolicy;
 import org.pentaho.platform.api.engine.IUserRoleListService;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
-import org.springframework.security.Authentication;
-import org.springframework.security.AuthenticationManager;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -39,6 +39,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 
 import static org.junit.Assert.*;
@@ -83,10 +84,10 @@ public class SpringSecurityLoginModuleTest {
 
     when( authorizationPolicy.isAllowed( AdministerSecurityAction.NAME ) ).thenReturn( true ).thenReturn( true )
       .thenReturn( false );
-    when( authentication.getAuthorities() ).thenReturn( authorities );
+    when( authentication.getAuthorities() ).thenReturn( ( Collection ) Arrays.asList( authorities ) );
     when( authentication.getName() ).thenReturn( "joe" );
     when( authentication.isAuthenticated() ).thenReturn( true );
-    when( authentication2.getAuthorities() ).thenReturn( authorities2 );
+    when( authentication2.getAuthorities() ).thenReturn( ( Collection ) Arrays.asList( authorities2 ) );
     when( authentication2.getName() ).thenReturn( "pat" );
     when( authentication2.isAuthenticated() ).thenReturn( true );
     when( authenticationManager.authenticate( argThat( new AuthenticationManagerMatcher( "joe" ) ) ) ).thenReturn(
@@ -169,10 +170,10 @@ public class SpringSecurityLoginModuleTest {
 
     when( authorizationPolicy.isAllowed( AdministerSecurityAction.NAME ) ).thenReturn( true ).thenReturn( true )
       .thenReturn( false );
-    when( authentication.getAuthorities() ).thenReturn( authorities );
+    when( authentication.getAuthorities() ).thenReturn( ( Collection ) Arrays.asList( authorities ) );
     when( authentication.getName() ).thenReturn( "joe" );
     when( authentication.isAuthenticated() ).thenReturn( true );
-    when( authentication2.getAuthorities() ).thenReturn( authorities2 );
+    when( authentication2.getAuthorities() ).thenReturn( ( Collection ) Arrays.asList( authorities2 ) );
     when( authentication2.getName() ).thenReturn( "pat" );
     when( authentication2.isAuthenticated() ).thenReturn( true );
     when( authenticationManager.authenticate( argThat( new AuthenticationManagerMatcher( "joe" ) ) ) ).thenReturn(
