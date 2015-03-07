@@ -38,8 +38,13 @@
   </bean>
 
   <!-- Automatically receives AuthenticationEvent messages -->
-  <bean id="loggerListener"
-        class="org.springframework.security.authentication.event.LoggerListener" />
+  <!--<bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener" />-->
+  <bean id="loggerListener" class="org.pentaho.platform.engine.security.event.PentahoLoggerListener">
+    <constructor-arg>
+      <bean class="org.springframework.security.authentication.event.LoggerListener" />
+    </constructor-arg>
+  <bean>
+  
   <bean id="basicProcessingFilter"
         class="org.pentaho.platform.web.http.security.PentahoBasicProcessingFilter">
     <property name="authenticationManager">
@@ -62,7 +67,11 @@
   <!-- custom Pentaho begin -->
 
   <!-- replaces Spring's default ApplicationEventMulticaster; do not change bean id -->
-  <bean id="applicationEventMulticaster" class="org.pentaho.platform.engine.security.event.OrderedApplicationEventMulticaster" />
+  <bean id="applicationEventMulticaster" class="org.pentaho.platform.engine.security.event.OrderedApplicationEventMulticaster">
+    <property>
+      <bean class="org.springframework.core.task.SyncTaskExecutor" />
+    </property>
+  <bean>
 
   <!-- next two beans replace SecurityStartupFilter -->
   <bean class="org.pentaho.platform.engine.security.event.PentahoAuthenticationSuccessListener" />
