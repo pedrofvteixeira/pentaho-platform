@@ -43,7 +43,7 @@
     <constructor-arg>
       <bean class="org.springframework.security.authentication.event.LoggerListener" />
     </constructor-arg>
-  <bean>
+  </bean>
   
   <bean id="basicProcessingFilter"
         class="org.pentaho.platform.web.http.security.PentahoBasicProcessingFilter">
@@ -68,10 +68,10 @@
 
   <!-- replaces Spring's default ApplicationEventMulticaster; do not change bean id -->
   <bean id="applicationEventMulticaster" class="org.pentaho.platform.engine.security.event.OrderedApplicationEventMulticaster">
-    <property>
+    <property name="taskExecutor">
       <bean class="org.springframework.core.task.SyncTaskExecutor" />
     </property>
-  <bean>
+  </bean>
 
   <!-- next two beans replace SecurityStartupFilter -->
   <bean class="org.pentaho.platform.engine.security.event.PentahoAuthenticationSuccessListener" />
