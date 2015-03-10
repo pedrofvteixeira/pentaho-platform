@@ -39,11 +39,7 @@
 
   <!-- Automatically receives AuthenticationEvent messages -->
   <!--<bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener" />-->
-  <bean id="loggerListener" class="org.pentaho.platform.engine.security.event.PentahoLoggerListener">
-    <constructor-arg>
-      <bean class="org.springframework.security.authentication.event.LoggerListener" />
-    </constructor-arg>
-  </bean>
+  <bean id="loggerListener" class="org.pentaho.platform.engine.security.event.PentahoLoggerListener" />
   
   <bean id="basicProcessingFilter"
         class="org.pentaho.platform.web.http.security.PentahoBasicProcessingFilter">
