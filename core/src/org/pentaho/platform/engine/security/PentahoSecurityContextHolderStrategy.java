@@ -63,8 +63,7 @@ public class PentahoSecurityContextHolderStrategy implements SecurityContextHold
 
   @Override
   public SecurityContext createEmptyContext() {
-    // TODO Auto-generated method stub
-    return null;
+    return getContext();
   }
 
 
