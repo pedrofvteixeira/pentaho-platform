@@ -25,6 +25,7 @@ import org.pentaho.platform.engine.security.SecurityHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -221,7 +222,7 @@ public class ProxyTrustingFilter implements Filter {
                 }; // end anonymous inner class
 
                 authWrapper.setAuthentication( SecurityContextHolder.getContext().getAuthentication() );
-                httpSession.setAttribute( /* HttpSessionContextIntegrationFilter.SPRING_SECURITY_CONTEXT_KEY */ "SPRING_SECURITY_CONTEXT",
+                httpSession.setAttribute( HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                   authWrapper );
                 return null;
               }
