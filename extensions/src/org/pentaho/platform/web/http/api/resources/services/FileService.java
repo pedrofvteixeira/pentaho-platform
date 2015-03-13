@@ -76,6 +76,8 @@ import org.pentaho.platform.security.policy.rolebased.actions.RepositoryReadActi
 import org.pentaho.platform.web.http.api.resources.SessionResource;
 import org.pentaho.platform.web.http.api.resources.utils.FileUtils;
 import org.pentaho.platform.web.http.messages.Messages;
+import org.pentaho.platform.web.http.api.resources.utils.SystemUtils;
+
 
 public class FileService {
 
@@ -1125,9 +1127,15 @@ public class FileService {
   public boolean doCanAdminister() throws Exception {
     boolean status = false;
     try {
+      /*
       status = getPolicy().isAllowed( RepositoryReadAction.NAME )
         && getPolicy().isAllowed( RepositoryCreateAction.NAME )
         && getPolicy().isAllowed( AdministerSecurityAction.NAME );
+      */
+
+      // Centralize canAdminister calls to SystemUtils.canAdminister()
+      return SystemUtils.canAdminister();
+
     } catch ( Exception e ) {
       logger.error( Messages.getInstance().getString( "SystemResource.CAN_ADMINISTER" ), e );
     }

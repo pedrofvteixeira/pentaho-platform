@@ -41,6 +41,7 @@ import org.pentaho.platform.security.policy.rolebased.actions.SchedulerAction;
 import org.pentaho.platform.util.messages.LocaleHelper;
 import org.pentaho.platform.web.http.api.resources.*;
 import org.pentaho.platform.web.http.api.resources.proxies.BlockStatusProxy;
+import org.pentaho.platform.web.http.api.resources.utils.SystemUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -291,7 +292,7 @@ public class SchedulerService {
 
   public Job getJobInfo( String jobId ) throws SchedulerException {
     Job job = getJob( jobId );
-    if ( /* getSecurityHelper().isPentahoAdministrator( getSession() ) TODO */ true
+    if ( canAdminister( getSession() )
         || getSession().getName().equals( job.getUserName() ) ) {
       for ( String key : job.getJobParams().keySet() ) {
         Serializable value = job.getJobParams().get( key );
@@ -483,10 +484,16 @@ public class SchedulerService {
   }
 
   protected Boolean canAdminister( IPentahoSession session ) {
+
+    /*
     if ( getPolicy().isAllowed( AdministerSecurityAction.NAME ) ) {
       return true;
     }
     return false;
+    */
+
+    // Centralize canAdminister calls to SystemUtils.canAdminister()
+    return SystemUtils.canAdminister();
   }
 
   protected String getExtension( String filename ) {

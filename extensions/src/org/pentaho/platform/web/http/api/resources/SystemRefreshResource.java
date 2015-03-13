@@ -18,16 +18,13 @@
 package org.pentaho.platform.web.http.api.resources;
 
 import org.codehaus.enunciate.Facet;
-import org.pentaho.platform.api.engine.IAuthorizationPolicy;
 import org.pentaho.platform.api.engine.ICacheManager;
 import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.plugin.action.mondrian.catalog.IMondrianCatalogService;
 import org.pentaho.platform.plugin.action.olap.IOlapService;
-import org.pentaho.platform.security.policy.rolebased.actions.AdministerSecurityAction;
-import org.pentaho.platform.security.policy.rolebased.actions.RepositoryCreateAction;
-import org.pentaho.platform.security.policy.rolebased.actions.RepositoryReadAction;
+import org.pentaho.platform.web.http.api.resources.utils.SystemUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -59,7 +56,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   @Produces( TEXT_PLAIN )
   public Response executeGlobalActions() {
     IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-    if ( /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
+    if ( canAdminister() ) {
       PentahoSystem.publish( pentahoSession, org.pentaho.platform.engine.core.system.GlobalListsPublisher.class
         .getName() );
     }
@@ -73,7 +70,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   public String refreshMetadata() {
     String result = null;
     IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-    if (  /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
+    if (  canAdminister() ) {
       result =
           PentahoSystem.publish( pentahoSession, org.pentaho.platform.engine.services.metadata.MetadataPublisher.class
             .getName() );
@@ -87,7 +84,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   @Produces( TEXT_PLAIN )
   public Response refreshSystemSettings() {
     IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-    if (  /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
+    if (  canAdminister() ) {
       PentahoSystem.publish( pentahoSession, org.pentaho.platform.engine.core.system
         .SettingsPublisher.class.getName() );
     }
@@ -101,7 +98,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   public Response flushMondrianSchemaCache() {
     if ( canAdminister() ) {
       IPentahoSession pentahoSession = PentahoSessionHolder.getSession();
-      if (  /* SecurityHelper.getInstance().isPentahoAdministrator( pentahoSession ) TODO */ true ) {
+
         // Flush the catalog helper (legacy)
         IMondrianCatalogService mondrianCatalogService =
             PentahoSystem.get( IMondrianCatalogService.class, "IMondrianCatalogService", pentahoSession ); //$NON-NLS-1$
@@ -110,7 +107,7 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
         IOlapService olapService =
           PentahoSystem.get( IOlapService.class, "IOlapService", pentahoSession ); //$NON-NLS-1$
         olapService.flushAll( pentahoSession );
-      }
+
       return Response.ok().type( MediaType.TEXT_PLAIN ).build();
     } else {
       return Response.status( UNAUTHORIZED ).build();
@@ -134,8 +131,14 @@ public class SystemRefreshResource extends AbstractJaxRSResource {
   }
 
   private boolean canAdminister() {
+
+    /*
     IAuthorizationPolicy policy = PentahoSystem.get( IAuthorizationPolicy.class );
     return policy.isAllowed( RepositoryReadAction.NAME ) && policy.isAllowed( RepositoryCreateAction.NAME )
         && ( policy.isAllowed( AdministerSecurityAction.NAME ) );
+     */
+
+    // Centralize canAdminister calls to SystemUtils.canAdminister()
+    return SystemUtils.canAdminister();
   }
 }
