@@ -70,7 +70,7 @@
   Object reqObj = request.getSession().getAttribute( SPRING_SECURITY_SAVED_REQUEST_KEY );
   String requestedURL = "";
   if (reqObj != null) {
-    requestedURL = ((SavedRequest) reqObj).getFullRequestUrl();
+    requestedURL = ((SavedRequest) reqObj).getRedirectUrl();
 
     String lookFor;
     for (int i=0; i<send401RequestList.size(); i++) {
