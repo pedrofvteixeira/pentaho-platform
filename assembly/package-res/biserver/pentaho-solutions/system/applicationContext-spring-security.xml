@@ -201,7 +201,7 @@
     </property>
 
     <property name="authenticationSuccessHandler">
-      <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+      <bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
         <property name="defaultTargetUrl" value="/Home" />
       </bean>
     </property>
