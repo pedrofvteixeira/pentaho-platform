@@ -49,8 +49,6 @@
     <constructor-arg>
       <util:list>
 
-        <!-- TODO research proper mapping of old CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON PATTERN_TYPE_APACHE_ANT ( *NOT* using filter-chain-map, that's cheating :D ) -->
-
         <sec:filter-chain pattern="/webservices/**" filters="securityContextHolderAwareRequestFilterForWS,httpSessionPentahoSessionContextIntegrationFilter,httpSessionContextIntegrationFilter,basicProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilterForWS,filterInvocationInterceptorForWS" />
 
         <sec:filter-chain pattern="/api/**" filters="securityContextHolderAwareRequestFilterForWS,httpSessionPentahoSessionContextIntegrationFilter,httpSessionContextIntegrationFilter,basicProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilterForWS,filterInvocationInterceptorForWS" />
@@ -71,6 +69,7 @@
         <ref bean="anonymousAuthenticationProvider" />
       </list>
     </property>
+    <property name="eraseCredentialsAfterAuthentication" value="false" />
   </bean>
 
   <!-- Automatically receives AuthenticationEvent messages -->
@@ -202,7 +201,7 @@
     </property>
 
     <property name="authenticationSuccessHandler">
-      <bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+      <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
         <property name="defaultTargetUrl" value="/Home" />
       </bean>
     </property>
@@ -358,9 +357,9 @@ CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
     <property name="securityMetadataSource">
       <sec:filter-security-metadata-source lowercase-comparisons="true" request-matcher="ant">
 
-        <sec:intercept-url pattern="/content/common-ui/resources/web/(.+/)*.+\.js*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/*require-cfg.js*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/*require-js-cfg.js*" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/content/common-ui/resources/web/**/*js*" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/**/*require-cfg.js*" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/**/*require-js-cfg.js*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/content/common-ui/resources/web/require.js*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/content/common-ui/resources/web/require-cfg.js*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/content/data-access/resources/gwt/*css" access="Anonymous,Authenticated" />
@@ -368,16 +367,16 @@ CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
         <sec:intercept-url pattern="/content/common-ui/resources/web/cache/cache-service.js*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/cacheexpirationservice*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/js/theme*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/content/common-ui/resources/themes/*" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/content/common-ui/resources/themes/**" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/content/common-ui/resources/web/dojo/djconfig.js*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/content/common-ui/resources/web/angular-directives/angular-directives.css" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/content/pentaho-mobile/resources/*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/docs/*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/mantlelogin/*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/mantle/mantleloginservice/*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/mantle/*" access="Authenticated" />
-        <sec:intercept-url pattern="/welcome/*" access="Anonymous,Authenticated" />
-        <sec:intercept-url pattern="/public/*" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/content/pentaho-mobile/resources/**" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/docs/**" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/mantlelogin/**" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/mantle/mantleloginservice/**" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/mantle/**" access="Authenticated" />
+        <sec:intercept-url pattern="/welcome/**" access="Anonymous,Authenticated" />
+        <sec:intercept-url pattern="/public/**" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/login*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/ping/alive.gif*" access="Anonymous,Authenticated" />
         <sec:intercept-url pattern="/j_spring_security_check*" access="Anonymous,Authenticated" />
@@ -406,19 +405,19 @@ CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
         <sec:intercept-url pattern="*system*sessionstartupactions.xml*" access="Nobody" />
         <sec:intercept-url pattern="*system*systemlisteners.xml*" access="Nobody" />
         <sec:intercept-url pattern="*system*hibernate*" access="Nobody" />
-        <sec:intercept-url pattern="*system*birt/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*dialects/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*google/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*jasperreports/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*kettle/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*logs/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*mondrian/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*quartz/.*" access="Nobody" />
-        <sec:intercept-url pattern="*system*simple-jndi/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*smtp-email/*" access="Nobody" />
-        <sec:intercept-url pattern="*system.*ui/*" access="Nobody" />
-        <sec:intercept-url pattern="*system*\.\./*" access="Nobody" />
-        <sec:intercept-url pattern="/*" access="Authenticated" />
+        <sec:intercept-url pattern="*system*birt/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*dialects/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*google/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*jasperreports/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*kettle/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*logs/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*mondrian/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*quartz/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*simple-jndi/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*smtp-email/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*ui/**" access="Nobody" />
+        <sec:intercept-url pattern="*system*/**" access="Nobody" />
+        <sec:intercept-url pattern="/**" access="Authenticated" />
 
       </sec:filter-security-metadata-source>
     </property>
@@ -487,10 +486,11 @@ CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
         <sec:intercept-url pattern="/webservices/scheduler\?wsdl*" access="Anonymous,Authenticated"/>
         <sec:intercept-url pattern="/webservices/repositorysync\?wsdl*" access="Anonymous,Authenticated"/>
         <sec:intercept-url pattern="/webservices/datasourcemgmtservice\?wsdl*" access="Anonymous,Authenticated"/>
-        <sec:intercept-url pattern="/webservices/*" access="Authenticated"/>
+        <sec:intercept-url pattern="/webservices/**" access="Authenticated"/>
         <sec:intercept-url pattern="/api/*require-cfg.js*" access="Anonymous,Authenticated"/>
         <sec:intercept-url pattern="/api/*require-js-cfg.js*" access="Authenticated"/>
-        <sec:intercept-url pattern="/plugin/*" access="Authenticated"/>
+        <sec:intercept-url pattern="/api/**" access="Authenticated"/>
+        <sec:intercept-url pattern="/plugin/**" access="Authenticated"/>
 
       </sec:filter-security-metadata-source>
     </property>
