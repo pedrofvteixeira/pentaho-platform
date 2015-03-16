@@ -22,7 +22,7 @@ public class PentahoSecurityContextHolderStrategy implements SecurityContextHold
 
   public SecurityContext getContext() {
     if ( context.get() == null ) {
-      context.set( new PentahoSecurityContextImpl() );
+      context.set( createEmptyContext() );
     }
 
     return (SecurityContext) context.get();
@@ -63,7 +63,7 @@ public class PentahoSecurityContextHolderStrategy implements SecurityContextHold
 
   @Override
   public SecurityContext createEmptyContext() {
-    return getContext();
+    return new PentahoSecurityContextImpl();
   }
 
 

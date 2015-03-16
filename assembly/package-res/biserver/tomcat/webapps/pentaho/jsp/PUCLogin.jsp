@@ -21,6 +21,7 @@
     import="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter,
             org.springframework.security.web.savedrequest.SavedRequest,
             org.springframework.security.core.AuthenticationException,
+            org.springframework.security.web.context.HttpSessionSecurityContextRepository,
             org.pentaho.platform.uifoundation.component.HtmlComponent,
             org.pentaho.platform.engine.core.system.PentahoSystem,
             org.pentaho.platform.util.messages.LocaleHelper,
@@ -41,7 +42,7 @@
 
   private List<String> send401RequestList;
 
-  public final String SPRING_SECURITY_SAVED_REQUEST_KEY = "SPRING_SECURITY_SAVED_REQUEST_KEY";
+  public final String SPRING_SECURITY_SAVED_REQUEST_KEY = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
   public void jspInit() {
     // super.jspInit();
