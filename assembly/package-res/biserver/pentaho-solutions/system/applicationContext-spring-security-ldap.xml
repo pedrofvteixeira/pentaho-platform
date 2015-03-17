@@ -29,7 +29,7 @@
     </pen:publish>
   </bean>
 
-  <bean id="authenticator" class="org.springframework.security.authentication.ldap.authenticator.BindAuthenticator">
+  <bean id="authenticator" class="org.springframework.security.ldap.authentication.BindAuthenticator">
     <constructor-arg>
       <ref bean="contextSource" />
     </constructor-arg>
@@ -56,7 +56,7 @@
 
   <!-- be sure to escape ampersands -->
   <bean id="populator"
-        class="org.springframework.security.ldap.populator.DefaultLdapAuthoritiesPopulator">
+        class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
     <constructor-arg index="0">
       <ref bean="contextSource" />
     </constructor-arg>

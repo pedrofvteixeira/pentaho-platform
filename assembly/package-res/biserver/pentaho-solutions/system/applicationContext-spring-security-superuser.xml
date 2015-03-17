@@ -43,6 +43,6 @@
 
 
 	<bean id="superPasswordEncoder"
-		class="org.springframework.security.providers.encoding.Md5PasswordEncoder" />
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
 
 </beans>
