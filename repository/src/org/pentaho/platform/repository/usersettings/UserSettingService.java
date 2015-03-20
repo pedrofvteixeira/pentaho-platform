@@ -243,9 +243,8 @@ public class UserSettingService implements IUserSettingService {
   }
 
   public void setGlobalUserSetting( String settingName, String settingValue ) {
-    IAuthorizationPolicy authorizationPolicy = PentahoSystem.get( IAuthorizationPolicy.class, session );
-    if ( authorizationPolicy.isAllowed( RepositoryReadAction.NAME ) && authorizationPolicy.isAllowed( RepositoryCreateAction.NAME )
-        && authorizationPolicy.isAllowed( AdministerSecurityAction.NAME ) ) {
+    if ( authPolicy.isAllowed( RepositoryReadAction.NAME ) && authPolicy.isAllowed( RepositoryCreateAction.NAME )
+        && authPolicy.isAllowed( AdministerSecurityAction.NAME ) ) {
       String tentantHomePath = ClientRepositoryPaths.getEtcFolderPath();
       Serializable tenantHomeId = repository.getFile( tentantHomePath ).getId();
       Map<String, Serializable> tenantMetadata = repository.getFileMetadata( tenantHomeId );
