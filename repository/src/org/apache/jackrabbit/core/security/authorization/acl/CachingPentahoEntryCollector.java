@@ -16,13 +16,6 @@
  */
 package org.apache.jackrabbit.core.security.authorization.acl;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import javax.jcr.RepositoryException;
-
 import org.apache.jackrabbit.core.NodeImpl;
 import org.apache.jackrabbit.core.SessionImpl;
 import org.apache.jackrabbit.core.cache.GrowingLRUMap;
@@ -35,6 +28,12 @@ import org.pentaho.platform.engine.core.system.PentahoSessionHolder;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.jcr.RepositoryException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * <code>CachingEntryCollector</code> extends <code>PentahoEntryCollector</code> by keeping a cache of ACEs per access
@@ -156,14 +155,14 @@ public class CachingPentahoEntryCollector extends PentahoEntryCollector {
    * @see EntryCollector#getEntries(org.apache.jackrabbit.core.NodeImpl)
    */
   @Override
-  protected Entries getEntries( NodeImpl node ) throws RepositoryException {
+  protected PentahoEntries getEntries( NodeImpl node ) throws RepositoryException {
     NodeId nodeId = node.getNodeId();
     Entries entries = getCache().get( nodeId );
     if ( entries == null ) {
       // fetch entries and update the cache
       entries = updateCache( node );
     }
-    return entries;
+    return entries instanceof PentahoEntries ? ( PentahoEntries ) entries : new PentahoEntries( entries );
   }
 
   /**
