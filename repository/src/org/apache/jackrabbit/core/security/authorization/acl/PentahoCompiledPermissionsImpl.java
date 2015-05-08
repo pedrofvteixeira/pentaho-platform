@@ -102,7 +102,7 @@ public class PentahoCompiledPermissionsImpl extends AbstractCompiledPermissions 
     // retrieve all ACEs at path or at the direct ancestor of path that
     // apply for the principal names.
     NodeImpl n = ACLProvider.getNode( node, isAcItem );
-    Iterator<AccessControlEntry> entries = entryCollector.collectEntries( n, filter ).iterator();
+    Iterator<Entry> entries = entryCollector.collectEntries( n, filter ).iterator();
 
     /*
      * Calculate privileges and permissions: Since the ACEs only define privileges on a node and do not allow to
@@ -121,7 +121,7 @@ public class PentahoCompiledPermissionsImpl extends AbstractCompiledPermissions 
     NodeId nodeId = ( node == null ) ? null : node.getNodeId();
 
     while ( entries.hasNext() ) {
-      ACLTemplate.Entry ace = (ACLTemplate.Entry) entries.next();
+      Entry ace = (Entry) entries.next();
       /*
        * Determine if the ACE also takes effect on the parent: Some permissions (e.g. add-node or removal) must be
        * determined from privileges defined for the parent. A 'local' entry defined on the target node never
@@ -276,8 +276,8 @@ public class PentahoCompiledPermissionsImpl extends AbstractCompiledPermissions 
        * permissions that are required when calculating the complete set of permissions (see special treatment of
        * remove, create or ac-specific permissions).
        */
-      for ( AccessControlEntry accessControlEntry : entryCollector.collectEntries( node, filter ) ) {
-        ACLTemplate.Entry ace = (ACLTemplate.Entry) accessControlEntry;
+      for ( Entry e : entryCollector.collectEntries( node, filter ) ) {
+        Entry ace = (Entry) e;
         if ( ace.getPrivilegeBits().includesRead() ) {
           canRead = ace.isAllow();
           break;
@@ -305,8 +305,10 @@ public class PentahoCompiledPermissionsImpl extends AbstractCompiledPermissions 
    * Returns stored entriesInheriting flag for given node
    */
   private boolean isEntriesInheriting( final NodeImpl node ) throws RepositoryException {
-   return JcrRepositoryFileAclUtils.getAclMetadata( session, node.getPath(), new ACLTemplate( node.getNode(
-        AccessControlConstants.N_POLICY ) ) ).isEntriesInheriting();
+    NodeImpl aclNode = node.getNode( AccessControlConstants.N_POLICY );
+    String path = aclNode != null ? aclNode.getParent().getPath() : null;
+    return JcrRepositoryFileAclUtils.getAclMetadata( session, node.getPath(),
+        new ACLTemplate( aclNode, path, false /* allowUnknownPrincipals */ ) ).isEntriesInheriting();
   }
 
   private boolean isBelowRootFolder( final NodeImpl node ) throws RepositoryException {
