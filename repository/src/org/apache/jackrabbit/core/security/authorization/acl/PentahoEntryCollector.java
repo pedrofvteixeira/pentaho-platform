@@ -186,9 +186,7 @@ public class PentahoEntryCollector extends EntryCollector {
 
     // find first access-controlled node
     currentNode = findAccessControlledNode( currentNode );
-    NodeImpl aclNode = currentNode.getNode( N_POLICY ); 
-    String path = aclNode != null ? aclNode.getParent().getPath() : null;
-    acl = new ACLTemplate( aclNode, path, false /* allowUnknownPrincipals */ );
+    acl = new ACLTemplate( currentNode.getNode( N_POLICY ), currentNode.getPath(), false /* allowUnknownPrincipals */ );
 
     // owner comes from the first access-controlled node
     String owner = null;
@@ -200,9 +198,7 @@ public class PentahoEntryCollector extends EntryCollector {
     // find the ACL
     NodeImpl firstAccessControlledNode = currentNode;
     currentNode = findNonInheritingNode( currentNode );
-    NodeImpl aclCurrentNode = currentNode.getNode( N_POLICY );
-    String currentPath = aclCurrentNode != null ? aclCurrentNode.getParent().getPath() : null;
-    acl = new ACLTemplate( aclCurrentNode, currentPath, false /* allowUnknownPrincipals */ );
+    acl = new ACLTemplate( currentNode.getNode( N_POLICY ), currentNode.getPath(), false /* allowUnknownPrincipals */ );
 
     // If we're inheriting from another node, check to see if that node has removeChildNodes or addChildNodes
     // permissions. This needs to transform to become addChild removeChild
@@ -230,13 +226,9 @@ public class PentahoEntryCollector extends EntryCollector {
 
     // find first ancestor that is not inheriting; its ACEs will be used if the ACL is not inheriting
     ACLTemplate ancestorAcl = null;
-    NodeImpl aclAncestorNode = null;
-    String ancestorPath = null;
     if ( firstAccessControlledNode.isSame( currentNode ) && !rootID.equals( currentNode.getNodeId() ) ) {
       NodeImpl ancestorNode = findNonInheritingNode( (NodeImpl) currentNode.getParent() );
-      aclAncestorNode = ancestorNode.getNode( N_POLICY );
-      ancestorPath = aclAncestorNode != null ? aclAncestorNode.getParent().getPath() : null;
-      ancestorAcl = new ACLTemplate( aclAncestorNode, ancestorPath, false /* allowUnknownPrincipals */ );
+      ancestorAcl = new ACLTemplate( ancestorNode.getNode( N_POLICY ), ancestorNode.getPath(), false /* allowUnknownPrincipals */ );
     }
 
     // now acl points to the nearest ancestor that is access-controlled and is not inheriting;
@@ -391,9 +383,14 @@ public class PentahoEntryCollector extends EntryCollector {
       }
       // remove all physical entries from the ACL. MagicAces will not be present in the ACL Entries, so we check
       // before trying to remove
-      if ( ancestorAcl.getEntries().contains( entry ) ) {
-        // ancestorAcl.removeAccessControlEntry( entry ); TODO CHECK
+      AccessControlEntry[] ancestorACEs = ancestorAcl.getEntries().toArray( new AccessControlEntry[]{} );
+      for( AccessControlEntry ace : ancestorACEs ){
+        PentahoEntry pe = buildPentahoEntry( ancestorNode.getNode( N_POLICY ).getNodeId(), ancestorAcl.getPath(), ace );
+        if ( entry.equals( pe ) ){
+          ancestorAcl.removeAccessControlEntry( ace );
+        }
       }
+
       // remove existing ACE since (1) it doesn't have the privs we're looking for and (2) the following
       // addAccessControlEntry will silently fail to add a new ACE if perms already exist
       if ( !privs.isEmpty() ) {
@@ -549,18 +546,29 @@ public class PentahoEntryCollector extends EntryCollector {
       }
 
       for( AccessControlEntry ace : acl.getEntries() ){
-
-        Principal principal = ace.getPrincipal();
-        boolean isGroupEntry = principal instanceof Group;
-        PrivilegeBits bits = ( ( ACLTemplate.Entry ) ace ).getPrivilegeBits();
-        boolean isAllow = ( ( ACLTemplate.Entry ) ace ).isAllow();
-
-         aces.add( new PentahoEntry( aclNode.getNodeId(), principal.getName(), isGroupEntry, bits,
-             isAllow, acl.getPath(), ( (ACLTemplate.Entry) ace ).getRestrictions() ) );
+         aces.add( buildPentahoEntry( aclNode.getNodeId(), acl.getPath(), ace ) );
       }
     }
 
     return aces;
+  }
+
+  private PentahoEntry buildPentahoEntry( NodeId nodeId, String path, AccessControlEntry ace ) throws RepositoryException {
+
+    PentahoEntry entry = null;
+
+    if( ace != null ) {
+
+      Principal principal = ace.getPrincipal();
+      boolean isGroupEntry = principal instanceof Group;
+      PrivilegeBits bits = ( ( ACLTemplate.Entry ) ace ).getPrivilegeBits();
+      boolean isAllow = ( ( ACLTemplate.Entry ) ace ).isAllow();
+
+      entry = new PentahoEntry( nodeId, principal.getName(), isGroupEntry, bits, isAllow, path,
+          ( (ACLTemplate.Entry) ace ).getRestrictions() );
+    }
+
+    return entry;
   }
 
   static class PentahoEntries extends Entries {
