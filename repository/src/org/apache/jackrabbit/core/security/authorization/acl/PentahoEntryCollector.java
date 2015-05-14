@@ -385,7 +385,7 @@ public class PentahoEntryCollector extends EntryCollector {
       // before trying to remove
       AccessControlEntry[] ancestorACEs = ancestorAcl.getEntries().toArray( new AccessControlEntry[]{} );
       for( AccessControlEntry ace : ancestorACEs ){
-        PentahoEntry pe = buildPentahoEntry( ancestorNode.getNode( N_POLICY ).getNodeId(), ancestorAcl.getPath(), ace );
+        PentahoEntry pe = buildPentahoEntry( ancestorNode.getNodeId(), ancestorAcl.getPath(), ace );
         if ( entry.equals( pe ) ){
           ancestorAcl.removeAccessControlEntry( ace );
         }
@@ -539,11 +539,7 @@ public class PentahoEntryCollector extends EntryCollector {
 
     if( acl != null && acl.getEntries() != null && acl.getEntries().size() > 0 ){
 
-      NodeImpl aclNode = ( (NodeImpl) systemSession.getNode( acl.getPath() ) ).getNode( N_POLICY );
-
-      if (aclNode == null || !NT_REP_ACL.equals(aclNode.getPrimaryNodeTypeName())) {
-        throw new IllegalArgumentException("Node must be of type 'rep:ACL'");
-      }
+      NodeImpl aclNode = ( (NodeImpl) systemSession.getNode( acl.getPath() ) );
 
       for( AccessControlEntry ace : acl.getEntries() ){
          aces.add( buildPentahoEntry( aclNode.getNodeId(), acl.getPath(), ace ) );
@@ -588,10 +584,6 @@ public class PentahoEntryCollector extends EntryCollector {
     @Override
     public List getACEs() {
       return aces;
-    }
-
-    public void addACE( PentahoEntry ace ) {
-      getACEs().add( ace );
     }
 
     @Override

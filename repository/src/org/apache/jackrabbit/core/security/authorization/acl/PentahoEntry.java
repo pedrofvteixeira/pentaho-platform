@@ -63,6 +63,22 @@ public class PentahoEntry implements AccessControlConstants {
   private final GlobPattern pattern;
   private final boolean hasRestrictions;
 
+  /**
+   * https://issues.apache.org/jira/browse/JCR-3882
+   *
+   * We can't use 'pattern.equals( other.pattern )' for the time being, this is a
+   * workaround while the above issue does not get pushed into a stable jackrabbit release
+   */
+
+  private final String path;
+  private final String restriction;
+
+  /**
+   * end workaround
+   */
+
+
+
   private int hashCode;
 
   public PentahoEntry(NodeId id, String principalName, boolean isGroupEntry,
@@ -75,6 +91,20 @@ public class PentahoEntry implements AccessControlConstants {
     this.id = id;
     this.pattern = calculatePattern(path, globValue);
     this.hasRestrictions = (globValue != null);
+
+    /**
+     * https://issues.apache.org/jira/browse/JCR-3882
+     *
+     * We can't use 'pattern.equals( other.pattern )' for the time being, this is a
+     * workaround while the above issue does not get pushed into a stable jackrabbit release
+     */
+
+    this.path = path;
+    this.restriction = globValue != null ? globValue.getString() : null;
+
+    /**
+     * end workaround
+     */
   }
 
   public PentahoEntry(NodeId id, String principalName, boolean isGroupEntry,
@@ -87,6 +117,21 @@ public class PentahoEntry implements AccessControlConstants {
     this.id = id;
     this.pattern = calculatePattern( path, ( restrictions != null ? restrictions.get( P_GLOB ) : null ) );
     this.hasRestrictions = ( restrictions != null && restrictions.get( P_GLOB ) != null );
+
+    /**
+     * https://issues.apache.org/jira/browse/JCR-3882
+     *
+     * We can't use 'pattern.equals( other.pattern )' for the time being, this is a
+     * workaround while the above issue does not get pushed into a stable jackrabbit release
+     */
+
+    this.path = path;
+    this.restriction = restrictions != null && restrictions.get( P_GLOB ) != null ?
+        restrictions.get( P_GLOB ).getString() : null;
+
+    /**
+     * end workaround
+     */
   }
 
   static List<PentahoEntry> readEntries(NodeImpl aclNode, String path) throws RepositoryException {
@@ -212,10 +257,41 @@ public class PentahoEntry implements AccessControlConstants {
     }
     if (obj instanceof PentahoEntry) {
       PentahoEntry other = (PentahoEntry) obj;
-      return principalName.equals(other.principalName) &&
-          privilegeBits.equals(other.privilegeBits) &&
-          isAllow == other.isAllow &&
-          pattern.equals(other.pattern);
+
+      try {
+
+        return principalName.equals( other.principalName ) &&
+            privilegeBits.equals( other.privilegeBits ) &&
+            isAllow == other.isAllow &&
+
+
+
+            /* pattern.equals( other.pattern ) */
+
+            /**
+             * https://issues.apache.org/jira/browse/JCR-3882
+             *
+             * We can't use 'pattern.equals( other.pattern )' for the time being, this is a
+             * workaround while the above issue does not get pushed into a stable jackrabbit release
+             */
+
+            (
+
+              path.equals( other.path ) &&
+                  ( (restriction == null) ? other.restriction == null : restriction.equals(other.restriction) )
+
+            )
+
+            /**
+             * end workaround
+             */
+
+
+            ;
+
+      } catch ( NullPointerException npe ){
+        throw npe;
+      }
     }
     return false;
   }
