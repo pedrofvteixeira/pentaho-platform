@@ -258,40 +258,34 @@ public class PentahoEntry implements AccessControlConstants {
     if (obj instanceof PentahoEntry) {
       PentahoEntry other = (PentahoEntry) obj;
 
-      try {
-
-        return principalName.equals( other.principalName ) &&
-            privilegeBits.equals( other.privilegeBits ) &&
-            isAllow == other.isAllow &&
+      return principalName.equals( other.principalName ) &&
+          privilegeBits.equals( other.privilegeBits ) &&
+          isAllow == other.isAllow &&
 
 
+          /* pattern.equals( other.pattern ) */
 
-            /* pattern.equals( other.pattern ) */
+          /**
+           * https://issues.apache.org/jira/browse/JCR-3882
+           *
+           * We can't use 'pattern.equals( other.pattern )' for the time being, this is a
+           * workaround while the above issue does not get pushed into a stable jackrabbit release
+           */
 
-            /**
-             * https://issues.apache.org/jira/browse/JCR-3882
-             *
-             * We can't use 'pattern.equals( other.pattern )' for the time being, this is a
-             * workaround while the above issue does not get pushed into a stable jackrabbit release
-             */
+          (
 
-            (
+            path.equals( other.path ) &&
+                ( (restriction == null) ? other.restriction == null : restriction.equals(other.restriction) )
 
-              path.equals( other.path ) &&
-                  ( (restriction == null) ? other.restriction == null : restriction.equals(other.restriction) )
+          )
 
-            )
-
-            /**
-             * end workaround
-             */
+          /**
+           * end workaround
+           */
 
 
-            ;
+          ;
 
-      } catch ( NullPointerException npe ){
-        throw npe;
-      }
     }
     return false;
   }
