@@ -583,7 +583,12 @@ public class PentahoEntryCollector extends EntryCollector {
 
     @Override
     public List getACEs() {
-      return aces;
+      return this.aces;
+    }
+
+    @Override
+    public boolean isEmpty() {
+      return this.aces == null || this.aces.isEmpty();
     }
 
     @Override
