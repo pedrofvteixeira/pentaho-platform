@@ -67,7 +67,7 @@
 
     <!--  external lib/xml dependencies -->
     <dependency org="jaxen" name="jaxen" rev="1.1.1" transitive="false"/>
-    <dependency org="xerces" name="xercesImpl" rev="2.9.1">
+    <dependency org="xerces" name="xercesImpl" rev="2.9.1" >
       <exclude org="xml-apis" name="xml-apis"/>
     </dependency>
     <dependency org="xerces" name="xercesImpl" rev="2.9.1" conf="test->default">
@@ -77,7 +77,7 @@
 
     <dependency org="dom4j" name="dom4j" rev="1.6.1" transitive="false"/>
     <dependency org="wsdl4j" name="wsdl4j" rev="1.6.2" transitive="false"/>
-    <dependency org="javax.jcr" name="jcr" rev="1.0" transitive="false"/>
+    <dependency org="javax.jcr" name="jcr" rev="2.0" transitive="false"/>
     <dependency org="org.apache.geronimo.specs" name="geronimo-stax-api_1.0_spec" rev="1.0" transitive="false"/>
     <dependency org="org.springframework.security" name="spring-security-core" rev="3.2.5.RELEASE" transitive="false"/>
     <dependency org="org.springframework.ldap" name="spring-ldap-core" rev="2.0.2.RELEASE" transitive="false"/>
@@ -134,7 +134,7 @@
     <dependency org="com.sun.jersey" name="jersey-core" rev="1.16" transitive="false"/>
     <dependency org="com.sun.jersey" name="jersey-json" rev="1.16" transitive="false"/>
     <dependency org="com.sun.jersey" name="jersey-client" rev="1.16" transitive="false"/>
-    <dependency org="com.sun.jersey" name="jersey-server" rev="1.16" transitive="false"/>
+    <dependency org="com.sun.jersey" name="jersey-server" rev="1.16" transitive="false" />
     <dependency org="com.sun.jersey" name="jersey-servlet" rev="1.16" transitive="false"/>
 
     <!-- END JAX-WS (Service extension) dependencies -->
@@ -259,7 +259,8 @@
     <dependency org="com.healthmarketscience.jackcess" name="jackcess" rev="1.2.4" conf="default->default"
                 transitive="false"/>
     <dependency org="org.postgresql" name="postgresql" rev="9.3-1102-jdbc4" conf="default->default" transitive="false"/>
-    <dependency org="hsqldb" name="hsqldb" rev="1.8.0" conf="default->default" transitive="false"/>
+    <dependency org="org.hsqldb" name="hsqldb" rev="2.3.2" conf="default->default" transitive="false"/>
+    
     <dependency org="com.h2database" name="h2" rev="1.2.131" conf="default->default" />
 
 
@@ -274,6 +275,7 @@
     <dependency org="luciddb" name="LucidDbClient-minimal" rev="0.9.4" conf="default->default" transitive="false"/>
     <dependency org="pentaho" name="pentaho-hadoop-hive-jdbc-shim" rev="${dependency.pentaho-hadoop-hive-jdbc-shim.revision}" changing="true"
                 transitive="false"/>
+    <dependency org="pentaho" name="pdi-dataservice-plugin" rev="${project.revision}" />
 
     <dependency org="net.sf.kosmosfs" name="kfs" rev="0.3" transitive="false"/>
     <dependency org="xmlenc" name="xmlenc" rev="0.52" transitive="false"/>
@@ -322,6 +324,8 @@
                 changing="true"/>
     <dependency org="${ivy.artifact.group}" name="pentaho-platform-scheduler" rev="${project.revision}" changing="true"
                 conf="default->default"/>
+    <dependency org="${ivy.artifact.group}" name="pentaho-platform-build-utils" rev="${project.revision}"
+                changing="true"/>
 
     <!--  runtime dependencies -->
     <dependency org="annogen" name="annogen" rev="0.1.0" conf="runtime->default"/>
@@ -357,12 +361,14 @@
                 conf="test->default" transitive="false"/>
     <dependency org="pentaho" name="pentaho-platform-repository-test" rev="${project.revision}" changing="true"
                 conf="test->default" transitive="false"/>
-    <dependency org="hsqldb" name="hsqldb" rev="1.8.0.7" conf="test->default"/>
-    <dependency org="simple-jndi" name="simple-jndi" rev="0.11.3" conf="test->default"/>
+    <dependency org="org.hsqldb" name="hsqldb" rev="2.3.2" conf="test->default"/>
+    <dependency org="pentaho" name="simple-jndi" rev="${dependency.pentaho-simple-jndi.revision}" conf="test->default"/>
     <dependency org="commons-beanutils" name="commons-beanutils" rev="1.8.0" transitive="false" conf="test->default"/>
 
     <dependency org="com.mockrunner" name="mockrunner-servlet" rev="0.3.7" conf="test->default"/>
     <dependency org="com.mockrunner" name="mockrunner" rev="0.3.1" conf="test->default"/>
+    <dependency org="net.javacrumbs.json-unit" name="json-unit" rev="1.5.5" conf="test->default" />
+    <dependency org="xmlunit" name="xmlunit" rev="1.6" conf="test->default" />
 
     <!-- Necessary because Pentaho's security tests re-use Spring's Security test classes. -->
     <dependency org="org.springframework.security" name="spring-security-core-tests" rev="2.0.5.RELEASE"
@@ -390,6 +396,8 @@
       <exclude org="avalon-framework" name="avalon-framework"/>
       <exclude org="log4j" name="log4j"/>
     </dependency>
+
+    <dependency org="com.sun.jersey.contribs" name="wadl-resourcedoc-doclet" rev="1.19" transitive="false" />
 
     <dependency org="com.google.guava" name="guava" rev="17.0" conf="test->default"/>
 

@@ -18,6 +18,7 @@
 
 package org.pentaho.platform.repository2.unified.webservices;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +27,12 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import org.pentaho.platform.api.repository2.unified.IRepositoryVersionManager;
 import org.pentaho.platform.api.repository2.unified.RepositoryFile;
 import org.pentaho.platform.api.repository2.unified.RepositoryFileSid;
+import org.pentaho.platform.api.repository2.unified.RepositoryFileTree;
 import org.pentaho.platform.api.repository2.unified.RepositoryRequest;
+import org.pentaho.platform.repository2.unified.jcr.JcrRepositoryFileUtils;
 
 /**
  * Converts {@code RepositoryFile} into JAXB-safe object and vice-versa.
@@ -62,9 +66,19 @@ public class RepositoryFileAdapter extends XmlAdapter<RepositoryFileDto, Reposit
   public RepositoryFileDto marshal( final RepositoryFile v ) {
     return toFileDto( v, membersSet, exclude, includeAcls );
   }
+  
+  public RepositoryFileDto marshal( final RepositoryFileTree repositoryFileTree ) {
+    return toFileDto( repositoryFileTree, membersSet, exclude, includeAcls );
+  }
 
   private static boolean include( String key, Set<String> set, boolean exclude ) {
     return !exclude && ( set == null || set.contains( key ) ) || ( exclude && !set.contains( key ) );
+  }
+  
+  public static RepositoryFileDto toFileDto ( final RepositoryFileTree repositoryFileTree , Set<String> memberSet, boolean exclude,
+                                             boolean includeAcls ) {
+    RepositoryFileDto repositoryFileDto = toFileDto( repositoryFileTree.getFile(), memberSet, exclude, includeAcls );
+    return repositoryFileDto;
   }
 
   public static RepositoryFileDto toFileDto( final RepositoryFile v, Set<String> memberSet, boolean exclude ) {
@@ -85,6 +99,9 @@ public class RepositoryFileAdapter extends XmlAdapter<RepositoryFileDto, Reposit
     }
     if ( include( "hidden", memberSet, exclude ) ) {
       f.hidden = v.isHidden();
+    }
+    if ( include( "aclNode", memberSet, exclude ) ) {
+      f.aclNode = v.isAclNode();
     }
     if ( include( "createDate", memberSet, exclude ) ) {
       f.createdDate = v.getCreatedDate();
@@ -154,6 +171,16 @@ public class RepositoryFileAdapter extends XmlAdapter<RepositoryFileDto, Reposit
           e.printStackTrace();
         }
       }
+
+      if ( include( "owner", memberSet, exclude ) ) {
+        Serializable id = v.getId();
+        if( id != null ) {
+          RepositoryFileAclDto acl = getRepoWs().getAcl( "" + id );
+          if ( acl != null ) {
+            f.owner = acl.getOwner();
+          }
+        }
+      }
     }
 
     if ( include( "locales", memberSet, exclude ) ) {
@@ -178,7 +205,22 @@ public class RepositoryFileAdapter extends XmlAdapter<RepositoryFileDto, Reposit
         }
       }
     }
-
+    
+    IRepositoryVersionManager repositoryVersionManager;
+    try {
+      repositoryVersionManager = JcrRepositoryFileUtils.getRepositoryVersionManager();
+    } catch ( NoClassDefFoundError ex ) {
+      //If this class is not available then we are running this method from Spoon
+      //and do not need to populate the versioning flags.  They are populated to
+      //support tree and child calls.
+      return f;
+    }
+    if ( include( "versioningEnabled", memberSet, exclude ) ) {
+      f.setVersioningEnabled( repositoryVersionManager.isVersioningEnabled( v.getPath() ) );
+    }
+    if ( include( "versionCommentEnabled", memberSet, exclude ) ) {
+      f.setVersionCommentEnabled( repositoryVersionManager.isVersionCommentEnabled( v.getPath() ) );
+    }
     return f;
   }
 
@@ -220,7 +262,7 @@ public class RepositoryFileAdapter extends XmlAdapter<RepositoryFileDto, Reposit
       .folder( v.folder ).fileSize( v.fileSize ).lastModificationDate( v.lastModifiedDate ).locale( v.locale )
       .lockDate( v.lockDate ).locked( v.locked ).lockMessage( v.lockMessage ).lockOwner( v.lockOwner )
       .title( v.title ).versioned( v.versioned ).versionId( v.versionId ).originalParentFolderPath(
-        v.originalParentFolderPath ).deletedDate( v.deletedDate ).hidden( v.hidden ).build();
+        v.originalParentFolderPath ).deletedDate( v.deletedDate ).hidden( v.hidden ).aclNode( v.aclNode ).build();
   }
 
   private static DefaultUnifiedRepositoryWebService getRepoWs() {

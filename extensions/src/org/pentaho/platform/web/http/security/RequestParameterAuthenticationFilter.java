@@ -17,20 +17,12 @@
 
 package org.pentaho.platform.web.http.security;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.di.core.encryption.Encr;
+import org.pentaho.platform.api.engine.IConfiguration;
+import org.pentaho.platform.api.engine.ISystemConfig;
+import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.web.http.messages.Messages;
 import org.pentaho.platform.web.http.request.MultiReadHttpServletRequest;
 import org.springframework.beans.factory.InitializingBean;
@@ -42,6 +34,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.util.Assert;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Processes Request Parameter authorization, putting the result into the <code>SecurityContextHolder</code>.
@@ -88,6 +90,11 @@ public class RequestParameterAuthenticationFilter implements Filter, Initializin
 
   private String passwordParameter = RequestParameterAuthenticationFilter.DefaultPasswordParameter;
 
+  private ISystemConfig systemConfig = PentahoSystem.get( ISystemConfig.class );
+
+  private boolean isRequestParameterAuthenticationEnabled;
+  private boolean isRequestAuthenticationParameterLoaded = false;
+
   // ~ Methods ================================================================
 
   public void afterPropertiesSet() throws Exception {
@@ -107,6 +114,15 @@ public class RequestParameterAuthenticationFilter implements Filter, Initializin
 
   public void doFilter( final ServletRequest request, final ServletResponse response, final FilterChain chain )
     throws IOException, ServletException {
+    IConfiguration config = this.systemConfig.getConfiguration( "security" );
+
+    if ( !isRequestAuthenticationParameterLoaded ) {
+      String strParameter = config.getProperties().getProperty( "requestParameterAuthenticationEnabled" );
+      isRequestParameterAuthenticationEnabled = Boolean.valueOf( strParameter );
+      isRequestAuthenticationParameterLoaded = true;
+    }
+
+    if ( isRequestParameterAuthenticationEnabled ) {
     if ( !( request instanceof HttpServletRequest ) ) {
       throw new ServletException( Messages.getInstance().getErrorString(
           "RequestParameterAuthenticationFilter.ERROR_0005_HTTP_SERVLET_REQUEST_REQUIRED" ) ); //$NON-NLS-1$
@@ -170,8 +186,11 @@ public class RequestParameterAuthenticationFilter implements Filter, Initializin
         SecurityContextHolder.getContext().setAuthentication( authResult );
       }
     }
+      chain.doFilter( wrapper, response );
+    } else {
+      chain.doFilter( request, response );
+    }
 
-    chain.doFilter( wrapper, response );
   }
 
   public AuthenticationEntryPoint getAuthenticationEntryPoint() {
@@ -217,4 +236,11 @@ public class RequestParameterAuthenticationFilter implements Filter, Initializin
     passwordParameter = value;
   }
 
+  public ISystemConfig getSystemConfig() {
+    return systemConfig;
+  }
+
+  public void setSystemConfig( ISystemConfig systemConfig ) {
+    this.systemConfig = systemConfig;
+  }
 }

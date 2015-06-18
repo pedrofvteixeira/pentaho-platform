@@ -130,6 +130,10 @@ public class SecurityHelper implements ISecurityHelper {
     // TODO We need to figure out how to inject this
     // Get the tenant id from the principle name and set it as an attribute of the pentaho session
 
+    // Clearing the SecurityContext to force the subsequent call to getContext() to generate a new SecurityContext.
+    // This prevents us from modifying the Authentication on a SecurityContext isntance which may be shared between
+    // threads.
+    SecurityContextHolder.clearContext();
     SecurityContextHolder.getContext().setAuthentication( auth );
     PentahoSystem.sessionStartup( PentahoSessionHolder.getSession(), paramProvider );
   }
@@ -205,6 +209,10 @@ public class SecurityHelper implements ISecurityHelper {
         new AnonymousAuthenticationToken( "anonymousUser", new User( user, "ignored", true, true, true, true,
           authorities ), authorities );
 
+      // Clearing the SecurityContext to force the subsequent call to getContext() to generate a new SecurityContext.
+      // This prevents us from modifying the Authentication on a SecurityContext isntance which may be shared between
+      // threads.
+      SecurityContextHolder.clearContext();
       SecurityContextHolder.getContext().setAuthentication( auth );
       return callable.call();
     } finally {
@@ -302,6 +310,11 @@ public class SecurityHelper implements ISecurityHelper {
       // Set the session first or else the call to
       // createAuthentication will fail
       PentahoSessionHolder.setSession( session );
+
+      // Clearing the SecurityContext to force the subsequent call to getContext() to generate a new SecurityContext.
+      // This prevents us from modifying the Authentication on a SecurityContext isntance which may be shared between
+      // threads.
+      SecurityContextHolder.clearContext();
 
       // Now create the authentication
       Authentication auth = createAuthentication( singleTenantAdmin ); //$NON-NLS-1$

@@ -17,6 +17,7 @@
 
 package org.pentaho.platform.osgi;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.karaf.main.Main;
 import org.apache.tika.io.IOUtils;
 import org.pentaho.platform.api.engine.IPentahoSession;
@@ -31,7 +32,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
+import java.util.Vector;
 
 /**
  * This Pentaho SystemListener starts the Embedded Karaf framework to support OSGI in the platform.

@@ -33,12 +33,20 @@ import org.pentaho.platform.engine.core.system.boot.PentahoSystemBoot;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+import org.pentaho.platform.engine.core.system.objfac.references.SingletonPentahoObjectReference;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
-
+import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -161,6 +169,140 @@ public class SecurityHelperTest {
     String runningResult = getAuthorizedSecurityHelper().runAsUser( DEF_USERNAME, callable );
 
     assertEquals( CALLABLE_RETURNED_VALUE_OK, runningResult );
+  }
+
+  @Test
+  /**
+   * Verification for BISERVER-12365 where a Threads are sharing a SecurityContext and making concurrent calls to
+   * runAsSytem() and runAsUser()
+   */
+  public void testWithSharedSecurityContext() throws InterruptedException {
+
+
+    IUserRoleListService userRoleListService = getUserRoleListServiceMock("admin", new String[]{"authenticated"});
+
+    when( userRoleListService.getRolesForUser( Matchers.<ITenant>any(), eq( "suzy" ) ) ).thenReturn( Collections.singletonList( "authenticated" ));
+
+    PentahoSystem.registerObject( userRoleListService );
+    PentahoSystem.registerReference(
+        new SingletonPentahoObjectReference.Builder<String>( String.class ).object( "admin" )
+            .attributes( Collections.<String, Object>singletonMap( "id", "singleTenantAdminUserName" ) ).build() );
+
+    SecurityContextHolder.setStrategyName( PentahoSecurityContextHolderStrategy.class.getName() );
+    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken( "suzy", "password" );
+
+    final SecurityContext context = new SecurityContextImpl();
+
+    SecurityContextHolder.setContext( context );
+    SecurityContextHolder.getContext().setAuthentication( token );
+
+    final AtomicBoolean lock = new AtomicBoolean( true );
+    final AtomicBoolean lock2 = new AtomicBoolean( true );
+
+
+
+    final Thread t2 = new Thread( new Runnable() {
+      @Override public void run() {
+        try {
+          SecurityContextHolder.setContext( context );
+          SecurityHelper.getInstance().runAsSystem( new Callable<Void>() {
+            @Override public Void call() throws Exception {
+              synchronized ( lock ) {
+                System.out.println("Starting Thread 2");
+                lock.notify();
+              }
+              synchronized ( lock2 ) {
+                lock2.wait();
+              }
+
+              System.out.println("Finishing Thread 2");
+              return null;
+            }
+          } );
+        } catch ( Exception e ) {
+          e.printStackTrace();
+          fail( e.getMessage() );
+        }
+      }
+    } );
+
+    final Thread t1 = new Thread( new Runnable() {
+      @Override public void run() {
+        try {
+          SecurityContextHolder.setContext( context );
+          SecurityHelper.getInstance().runAsSystem( new Callable<Void>() {
+            @Override public Void call() throws Exception {
+
+              System.out.println("Starting Thread 1");
+              t2.start();
+              synchronized ( lock ) {
+                lock.wait();
+              }
+
+              System.out.println("Finishing Thread 1");
+              return null;
+            }
+          } );
+        } catch ( Exception e ) {
+          e.printStackTrace();
+          fail( e.getMessage() );
+        }
+      }
+    } );
+
+
+    t1.start();
+    t1.join();
+    synchronized ( lock2 ) {
+      lock2.notify();
+    }
+    t2.join();
+
+    assertSame( token.getPrincipal(), SecurityContextHolder.getContext().getAuthentication().getPrincipal() );
+
+
+  }
+
+  @Test
+  /**
+   * Authenticate as Suzy, make a runAsSystem() call with an embedded runAsUser(), verify that Authentication is
+   * restored successfully.
+   */
+  public void testNestedCalls() throws Exception {
+
+    IUserRoleListService userRoleListService = getUserRoleListServiceMock("admin", new String[]{"authenticated"});
+
+    when( userRoleListService.getRolesForUser( Matchers.<ITenant>any(), eq( "suzy" ) ) ).thenReturn( Collections.singletonList( "authenticated" ));
+
+    PentahoSystem.registerObject( userRoleListService );
+    PentahoSystem.registerReference(
+        new SingletonPentahoObjectReference.Builder<String>( String.class ).object( "admin" )
+            .attributes( Collections.<String, Object>singletonMap( "id", "singleTenantAdminUserName" ) ).build() );
+
+    SecurityContextHolder.setStrategyName( PentahoSecurityContextHolderStrategy.class.getName() );
+    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken( "suzy", "password" );
+    SecurityContextHolder.getContext().setAuthentication( token );
+    SecurityHelper.getInstance().runAsSystem( new Callable<Void>() {
+      @Override public Void call() throws Exception {
+
+        try {
+          SecurityHelper.getInstance().runAsUser( "suzy", new Callable<Void>() {
+            @Override public Void call() throws Exception {
+
+              assertEquals(
+                  ( (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal() ).getUsername(),
+                  "suzy" );
+              throw new NullPointerException();
+            }
+          } );
+        } catch( Exception e){}
+
+        assertEquals( ( (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal() ).getUsername(),
+            "admin" );
+        return null;
+      }
+    } );
+    assertSame( SecurityContextHolder.getContext().getAuthentication(), token );
   }
 
   private static void setSystemSettingsService( ISystemSettings service ) {

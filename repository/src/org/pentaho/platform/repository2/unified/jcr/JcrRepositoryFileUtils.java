@@ -57,6 +57,7 @@ import org.pentaho.platform.api.engine.IPentahoSession;
 import org.pentaho.platform.api.locale.IPentahoLocale;
 import org.pentaho.platform.api.repository2.unified.IRepositoryAccessVoterManager;
 import org.pentaho.platform.api.repository2.unified.IRepositoryFileData;
+import org.pentaho.platform.api.repository2.unified.IRepositoryVersionManager;
 import org.pentaho.platform.api.repository2.unified.RepositoryFile;
 import org.pentaho.platform.api.repository2.unified.RepositoryFileAcl;
 import org.pentaho.platform.api.repository2.unified.RepositoryFilePermission;
@@ -73,36 +74,6 @@ import org.pentaho.platform.repository2.unified.jcr.sejcr.CredentialsStrategySes
 import org.pentaho.platform.util.messages.LocaleHelper;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
-import javax.jcr.Item;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.PropertyType;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.lock.Lock;
-import javax.jcr.version.Version;
-import javax.jcr.version.VersionHistory;
-import javax.jcr.version.VersionManager;
 
 /**
  * Class of static methods where the real JCR work takes place.
@@ -125,9 +96,7 @@ public class JcrRepositoryFileUtils {
   private static List<Character> reservedChars = Collections.unmodifiableList( Arrays.asList( new Character[] { '/',
     '\\', '\t', '\r', '\n' } ) );
 
-  // versioning and version comments enabled flags default to true
-  private static boolean versioningEnabled = true;
-  private static boolean versionCommentsEnabled = true;
+  private static IRepositoryVersionManager repositoryVersionManager = null;
 
   /**
    * Try to get parameters from PentahoSystem, otherwise use default
@@ -138,20 +107,6 @@ public class JcrRepositoryFileUtils {
 
     if ( newOverrideReservedChars != null ) {
       reservedChars = newOverrideReservedChars;
-    }
-
-    Boolean systemVersioningEnabled =
-        PentahoSystem.get( Boolean.class, "versioningEnabled", PentahoSessionHolder.getSession() );
-
-    if ( systemVersioningEnabled != null ) {
-      versioningEnabled = systemVersioningEnabled;
-    }
-
-    Boolean systemVersionCommentsEnabled =
-        PentahoSystem.get( Boolean.class, "versionCommentsEnabled", PentahoSessionHolder.getSession() );
-
-    if ( systemVersionCommentsEnabled != null ) {
-      versionCommentsEnabled = systemVersionCommentsEnabled;
     }
   }
 
@@ -217,6 +172,7 @@ public class JcrRepositoryFileUtils {
     String lockMessage = null;
     String title = null;
     String description = null;
+    Boolean aclNode = false;
     Map<String, Properties> localePropertiesMap = null;
 
     id = getNodeId( session, pentahoJcrConstants, node );
@@ -250,6 +206,9 @@ public class JcrRepositoryFileUtils {
     if ( node.hasProperty( pentahoJcrConstants.getPHO_FILESIZE() ) ) {
       fileSize = node.getProperty( pentahoJcrConstants.getPHO_FILESIZE() ).getLong();
     }
+    if ( node.hasProperty( pentahoJcrConstants.getPHO_ACLNODE() ) ) {
+        aclNode = node.getProperty( pentahoJcrConstants.getPHO_ACLNODE() ).getBoolean();
+    }    
     if ( isPentahoFile( pentahoJcrConstants, node ) ) {
       // pho:lastModified nodes have OnParentVersion values of IGNORE; i.e. they don't exist in frozen nodes
       if ( !node.isNodeType( pentahoJcrConstants.getNT_FROZENNODE() ) ) {
@@ -330,7 +289,7 @@ public class JcrRepositoryFileUtils {
             lastModified ).folder( folder ).versioned( versioned ).path( path ).versionId( versionId ).fileSize(
             fileSize ).locked( locked ).lockDate( lockDate ).hidden( hidden ).lockMessage( lockMessage ).lockOwner(
             lockOwner ).title( title ).description( description ).locale( pentahoLocale.toString() )
-            .localePropertiesMap( localePropertiesMap ).build();
+    		.localePropertiesMap( localePropertiesMap ).aclNode( aclNode ).build();    
 
     return file;
   }
@@ -582,6 +541,7 @@ public class JcrRepositoryFileUtils {
     String encodedfolderName = JcrStringHelper.fileNameEncode( folder.getName() );
     Node folderNode = parentFolderNode.addNode( encodedfolderName, pentahoJcrConstants.getPHO_NT_PENTAHOFOLDER() );
     folderNode.setProperty( pentahoJcrConstants.getPHO_HIDDEN(), folder.isHidden() );
+    folderNode.setProperty( pentahoJcrConstants.getPHO_ACLNODE(), folder.isAclNode() );
     // folderNode.setProperty(pentahoJcrConstants.getPHO_TITLE(), folder.getTitle());
     Node localeNodes = null;
     if ( folder.getTitle() != folder.getName() ) { // Title is different from the name
@@ -624,6 +584,7 @@ public class JcrRepositoryFileUtils {
     fileNode.setProperty( pentahoJcrConstants.getPHO_LASTMODIFIED(), Calendar.getInstance() );
     fileNode.setProperty( pentahoJcrConstants.getPHO_HIDDEN(), file.isHidden() );
     fileNode.setProperty( pentahoJcrConstants.getPHO_FILESIZE(), content.getDataSize() );
+    fileNode.setProperty( pentahoJcrConstants.getPHO_ACLNODE(), file.isAclNode() );    
     if ( file.getLocalePropertiesMap() != null && !file.getLocalePropertiesMap().isEmpty() ) {
       Node localeNodes =
           fileNode.addNode( pentahoJcrConstants.getPHO_LOCALES(), pentahoJcrConstants.getPHO_NT_LOCALE() );
@@ -670,6 +631,7 @@ public class JcrRepositoryFileUtils {
     fileNode.setProperty( pentahoJcrConstants.getPHO_LASTMODIFIED(), Calendar.getInstance() );
     fileNode.setProperty( pentahoJcrConstants.getPHO_HIDDEN(), file.isHidden() );
     fileNode.setProperty( pentahoJcrConstants.getPHO_FILESIZE(), content.getDataSize() );
+    fileNode.setProperty( pentahoJcrConstants.getPHO_ACLNODE(), file.isAclNode() );    
     if ( file.getLocalePropertiesMap() != null && !file.getLocalePropertiesMap().isEmpty() ) {
       Node localePropertiesMapNode = null;
       if ( !fileNode.hasNode( pentahoJcrConstants.getPHO_LOCALES() ) ) {
@@ -704,6 +666,7 @@ public class JcrRepositoryFileUtils {
     preventLostUpdate( session, pentahoJcrConstants, folder );
 
     folderNode.setProperty( pentahoJcrConstants.getPHO_HIDDEN(), folder.isHidden() );
+    folderNode.setProperty( pentahoJcrConstants.getPHO_ACLNODE(), folder.isAclNode() );
     if ( folder.getLocalePropertiesMap() != null && !folder.getLocalePropertiesMap().isEmpty() ) {
       Node localePropertiesMapNode = null;
       if ( !folderNode.hasNode( pentahoJcrConstants.getPHO_LOCALES() ) ) {
@@ -756,12 +719,8 @@ public class JcrRepositoryFileUtils {
       Node node = nodeIterator.nextNode();
       if ( isSupportedNodeType( pentahoJcrConstants, node ) ) {
         RepositoryFile file = nodeToFile( session, pentahoJcrConstants, pathConversionHelper, lockHelper, node );
-        if ( !repositoryRequest.isShowHidden() ) {
-          if ( !file.isHidden() ) {
+        if ( !file.isAclNode() && ( !file.isHidden() || repositoryRequest.isShowHidden() ) ) {
             children.add( file );
-          }
-        } else {
-          children.add( file );
         }
       }
     }
@@ -941,6 +900,7 @@ public class JcrRepositoryFileUtils {
       final boolean aclOnlyChange ) throws RepositoryException {
     Assert.notNull( node );
     session.save();
+
     /*
      * session.save must be called inside the versionable node block and outside to ensure user changes are made when a
      * file is not versioned.
@@ -977,7 +937,7 @@ public class JcrRepositoryFileUtils {
 
       // if we're not versioning, delete only the previous version to
       // prevent the number of versions from increasing. We still need a versioned node
-      if ( Boolean.FALSE.equals( versioningEnabled ) ) {
+      if ( !getRepositoryVersionManager().isVersioningEnabled( versionableNode.getPath() ) ) {
 
         List<VersionSummary> versionSummaries =
             (List<VersionSummary>) getVersionSummaries( session, pentahoJcrConstants, versionableNode.getIdentifier(),
@@ -1043,9 +1003,8 @@ public class JcrRepositoryFileUtils {
     return nodeToFile( session, pentahoJcrConstants, pathConversionHelper, lockHelper, fileNode );
   }
 
-  public static List<VersionSummary> getVersionSummaries( final Session session,
-      final PentahoJcrConstants pentahoJcrConstants, final Serializable fileId, final boolean includeAclOnlyChanges )
-    throws RepositoryException {
+  public static Object getVersionSummaries( final Session session, final PentahoJcrConstants pentahoJcrConstants,
+      final Serializable fileId, final boolean includeAclOnlyChanges ) throws RepositoryException {
     Node fileNode = session.getNodeByIdentifier( fileId.toString() );
     VersionHistory versionHistory = session.getWorkspace().getVersionManager().getVersionHistory( fileNode.getPath() );
     // get root version but don't include it in version summaries; from JSR-170 specification section 8.2.5:
@@ -1142,7 +1101,7 @@ public class JcrRepositoryFileUtils {
     return session.getWorkspace().getVersionManager().getBaseVersion( node.getPath() ).getName();
   }
 
-  public static VersionSummary getVersionSummary( final Session session, final PentahoJcrConstants pentahoJcrConstants,
+  public static Object getVersionSummary( final Session session, final PentahoJcrConstants pentahoJcrConstants,
       final Serializable fileId, final Serializable versionId ) throws RepositoryException {
     VersionManager vMgr = session.getWorkspace().getVersionManager();
     Node fileNode = session.getNodeByIdentifier( fileId.toString() );
@@ -1154,24 +1113,6 @@ public class JcrRepositoryFileUtils {
       version = vMgr.getBaseVersion( fileNode.getPath() );
     }
     return toVersionSummary( pentahoJcrConstants, versionHistory, version );
-  }
-
-  /**
-   * Send versioning enabled flag
-   * 
-   * @return
-   */
-  public static boolean getVersioningEnabled() {
-    return versioningEnabled;
-  }
-
-  /**
-   * Send version comments enabled flag
-   * 
-   * @return
-   */
-  public static boolean getVersionCommentsEnabled() {
-    return versionCommentsEnabled;
   }
 
   public static RepositoryFileTree getTree( final Session session, final PentahoJcrConstants pentahoJcrConstants,
@@ -1237,7 +1178,7 @@ public class JcrRepositoryFileUtils {
 
     RepositoryFile rootFile =
         nodeToFile( session, pentahoJcrConstants, pathConversionHelper, lockHelper, fileNode, false, null );
-    if ( ( !showHidden && rootFile.isHidden() )
+    if ( ( !showHidden && rootFile.isHidden() ) || rootFile.isAclNode()
         || ( !accessVoterManager.hasAccess( rootFile, RepositoryFilePermission.READ, JcrRepositoryFileAclUtils.getAcl(
             session, pentahoJcrConstants, rootFile.getId() ), PentahoSessionHolder.getSession() ) ) ) {
       return null;
@@ -1304,7 +1245,7 @@ public class JcrRepositoryFileUtils {
    * This method is called twice by <code>getTreeNode</code>. It's job is to determine whether the current child node
    * should be added to the list of children for the node being processed. It is a separate method simply because it is
    * too much code to appear twice in the above <code>getTreeNode</code> method. It also makes the recursive call back
-   * getTreeByNode to process the next lower level of folder node (it must process the lower levels to know if the
+   * to getTreeByNode to process the next lower level of folder node (it must process the lower levels to know if the
    * folder should be added). Finally, it returns the foundFiltered boolean to let the caller know if a file was found
    * that satisfied the childNodeFilter.
    */
@@ -1529,19 +1470,15 @@ public class JcrRepositoryFileUtils {
         (Node) fileNode, loadMaps, locale ) : null;
   }
 
-  /**
-   * 
-   * @param versioningEnabled
-   */
-  public static void setVersioningEnabled( boolean versioningEnabled ) {
-    JcrRepositoryFileUtils.versioningEnabled = versioningEnabled;
+  public static IRepositoryVersionManager getRepositoryVersionManager() {
+    if ( repositoryVersionManager == null ) {
+      repositoryVersionManager = PentahoSystem.get( IRepositoryVersionManager.class );
+    }
+    return repositoryVersionManager;
   }
-
-  /**
-   * 
-   * @param versionCommentsEnabled
-   */
-  public static void setVersionCommentsEnabled( boolean versionCommentsEnabled ) {
-    JcrRepositoryFileUtils.versionCommentsEnabled = versionCommentsEnabled;
+  
+  //User for unit tests
+  public static void setRepositoryVersionManager( IRepositoryVersionManager repositoryVersionManager ){
+    JcrRepositoryFileUtils.repositoryVersionManager = repositoryVersionManager;
   }
 }
