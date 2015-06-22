@@ -84,8 +84,7 @@ public class PentahoSystem {
   public static final boolean trace = false;
 
   public static final boolean ignored = false; // used to suppress compiler
-  private static final String securityContextHolderStrategy =
-      "SecurityContextHolder.MODE_INHERITABLETHREADLOCAL";
+  private static final String securityContextHolderStrategy = "MODE_INHERITABLETHREADLOCAL";
 
   public static int loggingLevel = ILogger.ERROR;
 
