@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.pentaho</groupId>
+    <artifactId>pentaho-ce-jar-parent-pom</artifactId>
+    <version>7.1-SNAPSHOT</version>
+  </parent>
+  <groupId>pentaho</groupId>
+  <artifactId>pentaho-platform-ce-parent</artifactId>
+  <version>7.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+  <description>Parent pom for pentaho-platform projects</description>
+  <url>http://www.pentaho.com</url>
+  <modules>
+
+    <module>api</module>
+    <module>core</module>
+    <module>repository</module>
+    <module>scheduler</module>
+    <module>extensions</module>
+    <module>build-utils</module>
+    <!-- <module>user-console</module> -->
+    <!-- <module>assembly</module> -->
+
+  </modules>
+  
+  <scm>
+    <connection>scm:git:git@github.com:pentaho/pentaho-platform.git</connection>
+    <developerConnection>scm:git:git@github.com:pentaho/pentaho-platform.git</developerConnection>
+    <url>https://github.com/pentaho/pentaho-platform</url>
+  </scm>
+  <properties>
+
+    <!-- ============================= -->
+    <!-- COMMON 3RD PARTY DEPENDENCIES -->
+    <!-- ============================= -->
+
+    <spring.framework.version>4.3.2.RELEASE</spring.framework.version>
+    <spring.security.version>4.1.3.RELEASE</spring.security.version>
+
+    <!-- =============== -->
+    <!-- LICENSE HEADERS -->
+    <!-- =============== -->
+
+    <license.inception.year>2002</license.inception.year>
+    <license.current.year>2016</license.current.year>
+    <license-maven-plugin.version>3.0</license-maven-plugin.version>
+    <!-- set to true when we reach a point where all classes have properly applied licenses -->
+    <license.fail.if.missing>false</license.fail.if.missing> 
+
+  </properties>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>${license-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>validate-src-license-header</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>validate-text-src-license-header</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <failIfMissing>${license.fail.if.missing}</failIfMissing>
+          <header>${license.header.file}</header>
+          <headerDefinitions>
+            <headerDefinition>${license.header.definition.file}</headerDefinition>
+          </headerDefinitions>
+          <properties>
+            <project.inceptionYear>${license.inception.year}</project.inceptionYear>
+            <project.currentYear>${license.current.year}</project.currentYear>
+          </properties>
+          <useDefaultExcludes>true</useDefaultExcludes>
+          <includes>
+            <include>src/main/java/**</include>
+            <include>src/test/java/**</include>
+            <include>src/it/java/**</include>
+            <include>src/main/javascript/**</include>
+            <include>src/test/javascript/**</include>
+          </includes>
+          <excludes>
+            <exclude>**/README</exclude>
+            <exclude>src/test/resources/**</exclude>
+            <exclude>src/main/resources/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>  
+  
+</project>
