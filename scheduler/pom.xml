@@ -13,7 +13,7 @@
     <groupId>pentaho</groupId>
     <artifactId>pentaho-platform-ce-parent</artifactId>
 	   <relativePath>../pom.xml</relativePath>
-    <version>${project.version}</version>
+    <version>7.1-SNAPSHOT</version>
   </parent>
   
   <artifactId>pentaho-platform-scheduler</artifactId>
