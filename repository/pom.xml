@@ -7,16 +7,27 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>pentaho</groupId>
-		<artifactId>pentaho-platform</artifactId>
+		<artifactId>pentaho-platform-ce-parent</artifactId>
 		<version>7.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>pentaho</groupId>
 	<artifactId>pentaho-platform-repository</artifactId>
 	<packaging>jar</packaging>
-	<version>7.1-SNAPSHOT</version>
 
 	<properties>
+		<!-- ===================== -->
+		<!-- LICENSE HEADERS -->
+		<!-- ===================== -->
+		<license.header.file>${basedir}/../license/templates/licenseHeader.txt</license.header.file>
+		<license.header.definition.file>${basedir}/../license/styles/javadoc_style_license_header.xml</license.header.definition.file>
+
+		<!-- ==================== -->
+		<!-- reuseForks FLAG -->
+		<!-- ==================== -->
+		<maven-surefire-plugin.reuseForks>false</maven-surefire-plugin.reuseForks>
+		<maven-failsafe-plugin.reuseForks>false</maven-failsafe-plugin.reuseForks>
+
 		<commons-cli.version>1.2</commons-cli.version>
 		<commons-codec.version>1.9</commons-codec.version>
 		<commons-collections.version>3.2.2</commons-collections.version>
@@ -1010,11 +1021,13 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Test dependency -->
+		<!-- =============== -->
+		<!-- Test Dependency -->
+		<!-- =============== -->
 		<dependency>
 			<groupId>pentaho</groupId>
-			<artifactId>pentaho-platform-core-test</artifactId>
-			<version>${project.version}</version>
+			<artifactId>pentaho-platform-core</artifactId>
+			<version>${project.version}-tests</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -1187,59 +1200,52 @@
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}-${project.version}</finalName>
-		 
 		<plugins>
-		<!--
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<archive>
+								<manifest>
+									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+									<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								</manifest>
+								<manifestEntries>
+									<Source-Java-Version>${source.jdk.version}</Source-Java-Version>
+									<Target-Java-Version>${target.jdk.version}</Target-Java-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>test-jar</id>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<!-- <finalName>${project.artifactId}-test-${project.version}</finalName> -->
+							<archive>
+								<manifest>
+									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+									<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								</manifest>
+								<manifestEntries>
+									<Source-Java-Version>1.8</Source-Java-Version>
+									<Target-Java-Version>1.8</Target-Java-Version>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
-		-->
-		
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-jar</id>
-            <goals><goal>jar</goal></goals>
-            <phase>package</phase>
-                  <configuration>
-                    <archive>
-                      <manifest>
-                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                      </manifest>
-                      <manifestEntries>
-                        <Source-Java-Version>1.8</Source-Java-Version>
-                        <Target-Java-Version>1.8</Target-Java-Version>
-                      </manifestEntries>
-                    </archive>
-                  </configuration>
-          </execution>
-          <execution>
-            <id>test-jar</id>
-            <goals><goal>test-jar</goal></goals>
-            <phase>package</phase>
-                <configuration>
-                  <!-- <finalName>${project.artifactId}-test-${project.version}</finalName> -->
-                  <archive>
-                    <manifest>
-                      <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                      <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                    </manifest>
-                    <manifestEntries>
-                      <Source-Java-Version>1.8</Source-Java-Version>
-                      <Target-Java-Version>1.8</Target-Java-Version>
-                    </manifestEntries>
-                  </archive>
-                </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+		</plugins>
+	</build>
 
 </project>
