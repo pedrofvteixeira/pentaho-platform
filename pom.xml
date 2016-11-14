@@ -28,7 +28,7 @@
 
     <module>api</module>
     <module>core</module>
-    <!-- <module>repository</module> -->
+    <module>repository</module>
     <module>scheduler</module>
     <!-- <module>extensions</module> -->
     <module>build-utils</module>
