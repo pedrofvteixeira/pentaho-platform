@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.pentaho</groupId>
+    <artifactId>pentaho-ce-jar-parent-pom</artifactId>
+    <version>7.1-SNAPSHOT</version>
+  </parent>
+  <groupId>pentaho</groupId>
+  <artifactId>pentaho-platform-ce-parent</artifactId>
+  <version>7.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}</name>
+  <description>Parent pom for pentaho-plafform projects</description>
+  <url>http://www.pentaho.com</url>
+  <licenses>
+    <license>
+      <name>Mozilla Public License, Version 2.0</name>
+      <url>http://www.mozilla.org/MPL/2.0/index.txt</url>
+    </license>
+  </licenses>
+  <modules>
+
+    <!-- =================================================== -->
+    <!-- Start uncommenting these once they become available -->
+    <!-- =================================================== -->
+
+    <module>api</module>
+    <module>core</module>
+    <!-- <module>repository</module> -->
+    <module>scheduler</module>
+    <!-- <module>extensions</module> -->
+    <module>build-utils</module>
+    <!-- <module>user-console</module> -->
+    <!-- <module>assembly</module> -->
+
+  </modules>
+  <scm>
+    <connection>scm:git:git@github.com:pentaho/pentaho-platform.git</connection>
+    <developerConnection>scm:git:git@github.com:pentaho/pentaho-platform.git</developerConnection>
+    <url>https://github.com/pentaho/pentaho-platform</url>
+  </scm>
+  <properties>
+
+    <!-- =============== -->
+    <!-- LICENSE HEADERS -->
+    <!-- =============== -->
+
+    <!-- platform-api is LGPL, all other are GLP -->
+    <license.header.file>license/templates/licenseHeader.txt</license.header.file>
+    <license.header.definition.file>license/styles/javadoc_style_license_header.xml</license.header.definition.file>
+    <license.inception.year>2002</license.inception.year>
+    <license.current.year>2016</license.current.year>
+    <license-maven-plugin.version>2.3</license-maven-plugin.version>
+    <!-- set to true when we reach a point where all classes have properly applied licenses -->
+    <license.fail.if.missing>false</license.fail.if.missing> 
+
+    <!-- ====================== -->
+    <!-- CHECKSTYLE VALIDATIONS -->
+    <!-- ====================== -->
+
+    <checkstyle.source.directory>${basedir}/src/main/java</checkstyle.source.directory>
+    <!-- set to true when we reach a point where all classes have properly applied checkstyle -->
+    <checkstyle.fail.on.error>false</checkstyle.fail.on.error> 
+    <checkstyle.fail.on.violation>false</checkstyle.fail.on.violation> 
+
+    <!-- ============================= -->
+    <!-- COMMON 3RD PARTY DEPENDENCIES -->
+    <!-- ============================= -->
+
+    <spring.framework.version>4.3.2.RELEASE</spring.framework.version>
+    <spring.security.version>4.1.3.RELEASE</spring.security.version>
+    
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>validate-src-checkstyle</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>validate-text-src-checkstyle</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <configLocation>${checkstyle-config-url}</configLocation>
+          <propertiesLocation>${checkstyle-properties-url}</propertiesLocation>
+          <includeResources>false</includeResources>
+          <includeTestResources>false</includeTestResources>
+          <sourceDirectory>${checkstyle.source.directory}</sourceDirectory>
+          <consoleOutput>true</consoleOutput>
+          <failsOnError>${checkstyle.fail.on.error}</failsOnError>
+          <failOnViolation>${checkstyle.fail.on.violation}</failOnViolation>
+          <linkXRef>true</linkXRef>
+          <cacheFile />
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>${license-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>validate-src-license-header</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>validate-text-src-license-header</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <failIfMissing>${license.fail.if.missing}</failIfMissing>
+          <header>${license.header.file}</header>
+          <headerDefinitions>
+            <headerDefinition>${license.header.definition.file}</headerDefinition>
+          </headerDefinitions>
+          <properties>
+            <project.inceptionYear>${license.inception.year}</project.inceptionYear>
+            <project.currentYear>${license.current.year}</project.currentYear>
+          </properties>
+          <useDefaultExcludes>true</useDefaultExcludes>
+          <includes>
+            <include>src/main/java/**</include>
+            <include>src/test/java/**</include>
+            <include>src/it/java/**</include>
+            <include>src/main/javascript/**</include>
+            <include>src/test/javascript/**</include>
+          </includes>
+          <excludes>
+            <exclude>**/README</exclude>
+            <exclude>src/test/resources/**</exclude>
+            <exclude>src/main/resources/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>pentaho-repositories</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <repositories>
+        <repository>
+          <releases>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </releases>
+          <snapshots>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>fail</checksumPolicy>
+          </snapshots>
+          <id>pentaho-nexus</id>
+          <name>Pentaho Public Release Repo</name>
+          <url>http://nexus.pentaho.org/content/groups/omni</url>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+</project>
