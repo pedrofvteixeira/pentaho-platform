@@ -1027,7 +1027,8 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-core</artifactId>
-			<version>${project.version}-tests</version>
+			<version>${project.version}</version>
+			<classifier>tests</classifier>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
