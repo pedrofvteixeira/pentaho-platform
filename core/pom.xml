@@ -722,8 +722,8 @@
 						      <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						    </manifest>
 						    <manifestEntries>
-						      <Source-Java-Version>1.8</Source-Java-Version>
-						      <Target-Java-Version>1.8</Target-Java-Version>
+						      <Source-Java-Version>${source.jdk.version}</Source-Java-Version>
+						      <Target-Java-Version>${target.jdk.version}</Target-Java-Version>
 						    </manifestEntries>
 						  </archive>
 						</configuration>
