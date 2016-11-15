@@ -22,10 +22,6 @@
   </licenses>
   <modules>
 
-    <!-- =================================================== -->
-    <!-- Start uncommenting these once they become available -->
-    <!-- =================================================== -->
-
     <module>api</module>
     <module>core</module>
     <module>repository</module>
@@ -47,9 +43,9 @@
     <!-- LICENSE HEADERS -->
     <!-- =============== -->
 
-    <!-- platform-api is LGPL, all other are GLP -->
-    <license.header.file>license/templates/licenseHeader.txt</license.header.file>
-    <license.header.definition.file>license/styles/javadoc_style_license_header.xml</license.header.definition.file>
+    <!-- platform-api is LGPL, all other are GPL -->
+    <!-- <license.header.file>license/templates/GPL-2.0.txt</license.header.file>
+    <license.header.definition.file>license/styles/javadoc_style_license_header.xml</license.header.definition.file> -->
     <license.inception.year>2002</license.inception.year>
     <license.current.year>2016</license.current.year>
     <license-maven-plugin.version>2.3</license-maven-plugin.version>
