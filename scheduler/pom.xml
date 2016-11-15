@@ -235,9 +235,16 @@
     </dependency>
     <dependency>
       <groupId>pentaho</groupId>
-      <artifactId>pentaho-platform-core-test</artifactId>
+      <artifactId>pentaho-platform-core</artifactId>
       <version>${project.version}</version>
+      <classifier>tests</classifier>
       <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
       <scope>test</scope>
     </dependency>
   </dependencies>
