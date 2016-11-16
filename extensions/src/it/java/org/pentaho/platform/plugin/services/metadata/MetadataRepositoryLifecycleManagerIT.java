@@ -98,8 +98,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  * Class Description User: dkincade
  */
 @RunWith ( SpringJUnit4ClassRunner.class )
-@ContextConfiguration ( locations = { "file:src/test/resources/repository.spring.xml",
-    "file:src/test/resources/repository-test-override.spring.xml" } )
+@ContextConfiguration ( locations = { "classpath:/repository.spring.xml",
+    "classpath:/repository-test-override.spring.xml" } )
 @SuppressWarnings ( "nls" )
 public class MetadataRepositoryLifecycleManagerIT implements ApplicationContextAware {
   public static final String REPOSITORY_ADMIN_USERNAME = "pentahoRepoAdmin";
