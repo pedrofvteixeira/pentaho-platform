@@ -2833,6 +2833,11 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.pentaho</groupId>
+            <artifactId>pentaho-vfs</artifactId>
+            <version>${pentaho-vfs.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
