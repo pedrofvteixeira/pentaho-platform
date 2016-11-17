@@ -6,17 +6,17 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>pentaho</groupId>
 		<artifactId>pentaho-platform-ce-parent</artifactId>
-
 		<version>7.1-SNAPSHOT</version>
 	</parent>
-	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>org.pentaho</groupId>
 	<artifactId>pentaho-platform-extensions</artifactId>
 	<packaging>jar</packaging>
-	<version>7.1-SNAPSHOT</version>
+
 	<properties>
 
 		<!-- =============== -->
@@ -31,280 +31,14 @@
 		<!-- 3RD PARTY DEPENDENCIES -->
 		<!-- ====================== -->
 
-		<junit.version>4.12</junit.version>
-		<commons-codec.version>1.9</commons-codec.version>
-		<commons-collections.version>3.2.2</commons-collections.version>
-		<commons-cli.version>1.2</commons-cli.version>
-		<commons-dbcp.version>1.4</commons-dbcp.version>
-		<commons-pool.version>1.5.7</commons-pool.version>
-		<commons-io.version>2.1</commons-io.version>
-		<commons-fileupload.version>1.3.2</commons-fileupload.version>
-		<commons-httpclient.version>3.0.1</commons-httpclient.version>
-		<commons-logging.version>1.1.3</commons-logging.version>
-		<commons-lang3.version>3.0</commons-lang3.version>
-		<commons-lang.version>2.6</commons-lang.version>
-		<commons-vfs2.version>2.1-20150824</commons-vfs2.version>
-		<esapi.version>2.0.1</esapi.version>
-		<slf4j-api.version>1.7.3</slf4j-api.version>
-		<slf4j-log4j12.version>1.7.3</slf4j-log4j12.version>
-		<jcl-over-slf4j.version>1.6.1</jcl-over-slf4j.version>
-		<batik-awt-util.version>1.7</batik-awt-util.version>
-		<batik-dom.version>1.7</batik-dom.version>
-		<batik-svggen.version>1.7</batik-svggen.version>
-		<spring-beans.version>4.3.2.RELEASE</spring-beans.version>
-		<spring-context.version>4.3.2.RELEASE</spring-context.version>
-		<spring-core.version>4.3.2.RELEASE</spring-core.version>
-		<spring-binding.version>2.4.4.RELEASE</spring-binding.version>
-		<se-jcr.version>0.9</se-jcr.version>
-		<jcommon.version>1.0.16</jcommon.version>
-		<jfreechart.version>1.0.13</jfreechart.version>
-		<saxon.version>9.1.0.8</saxon.version>
-		<saxon-dom.version>9.1.0.8</saxon-dom.version>
-		<jboss-modules.version>1.4.3.Final</jboss-modules.version>
-		<quartz.version>1.7.2</quartz.version>
-		<js.version>1.7R3</js.version>
-		<xstream.version>1.4.9</xstream.version>
-		<xmlbeans.version>2.6.0</xmlbeans.version>
-		<elasticsearch.version>0.16.3</elasticsearch.version>
-		<json.version>7.1-SNAPSHOT</json.version>
-		<jaxen.version>1.1.1</jaxen.version>
-		<xercesImpl.version>2.9.1</xercesImpl.version>
-		<xercesImpl.version>2.9.1</xercesImpl.version>
-		<dom4j.version>1.6.1</dom4j.version>
-		<wsdl4j.version>1.6.2</wsdl4j.version>
-		<jcr.version>2.0</jcr.version>
-		<geronimo-stax-api_1.0_spec.version>1.0</geronimo-stax-api_1.0_spec.version>
-		<spring-security-core.version>4.1.3.RELEASE</spring-security-core.version>
-		<spring-security-web.version>4.1.3.RELEASE</spring-security-web.version>
-		<spring-security-config.version>4.1.3.RELEASE</spring-security-config.version>
-		<spring-security-ldap.version>4.1.3.RELEASE</spring-security-ldap.version>
-		<spring-ldap-core.version>2.1.0.RELEASE</spring-ldap-core.version>
-		<mail.version>1.4.1</mail.version>
-		<hibernate-core.version>3.6.9.Final</hibernate-core.version>
-		<hibernate-c3p0.version>3.6.9.Final</hibernate-c3p0.version>
-		<antlr-complete.version>3.5.2</antlr-complete.version>
-		<asm.version>3.1</asm.version>
-		<asm-attrs.version>1.5.3</asm-attrs.version>
-		<jta.version>1.1</jta.version>
-		<ehcache-core.version>2.5.1</ehcache-core.version>
-		<cglib-nodep.version>2.2</cglib-nodep.version>
-		<hibernate-validator.version>4.2.0.Final</hibernate-validator.version>
-		<validation-api.version>1.0.0.GA</validation-api.version>
-		<axis2-adb.version>1.5</axis2-adb.version>
-		<axis2-codegen.version>1.5</axis2-codegen.version>
-		<axis2-java2wsdl.version>1.5</axis2-java2wsdl.version>
-		<axis2-kernel.version>1.5</axis2-kernel.version>
-		<axis2-transport-http.version>1.5</axis2-transport-http.version>
-		<axiom-api.version>1.2.8</axiom-api.version>
-		<axiom-dom.version>1.2.8</axiom-dom.version>
-		<axiom-impl.version>1.2.8</axiom-impl.version>
-		<oro.version>2.0.8</oro.version>
-		<javax.servlet-api.version>3.0.1</javax.servlet-api.version>
-		<webservices-api.version>2.1</webservices-api.version>
-		<webservices-rt.version>2.1</webservices-rt.version>
-		<jaxws-spring.version>1.8</jaxws-spring.version>
-		<xbean-spring.version>2.7</xbean-spring.version>
-		<jsr311-api.version>1.1.1</jsr311-api.version>
-		<jersey-multipart.version>1.19.1</jersey-multipart.version>
-		<mimepull.version>1.9.3</mimepull.version>
-		<jersey-apache-client.version>1.19.1</jersey-apache-client.version>
-		<jersey-spring.version>1.19.1</jersey-spring.version>
-		<jersey-core.version>1.19.1</jersey-core.version>
-		<jersey-bundle.version>1.19.1</jersey-bundle.version>
-		<jersey-json.version>1.19.1</jersey-json.version>
-		<jersey-client.version>1.19.1</jersey-client.version>
-		<jersey-server.version>1.19.1</jersey-server.version>
-		<jersey-servlet.version>1.19.1</jersey-servlet.version>
-		<jettison.version>1.2</jettison.version>
-		<castor.version>1.0.5</castor.version>
-		<bcprov-jdk16.version>1.46</bcprov-jdk16.version>
-		<jai_codec.version>1.1.2</jai_codec.version>
-		<jai_core.version>1.1.2</jai_core.version>
-		<jsf-api.version>1.1</jsf-api.version>
-		<taglibs-standard-impl.version>1.2.5</taglibs-standard-impl.version>
-		<jstl.version>1.0.5</jstl.version>
-		<javatar.version>2.5</javatar.version>
-		<gwt-servlet.version>2.5.1</gwt-servlet.version>
-		<enunciate-jersey-rt.version>1.27</enunciate-jersey-rt.version>
-		<pentaho-chartbeans.version>7.1-SNAPSHOT</pentaho-chartbeans.version>
-		<pentaho-reporting-engine-classic-core.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-core.version>
-		<pentaho-reporting-engine-classic-extensions.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions.version>
-		<pentaho-reporting-engine-classic-extensions-kettle.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-kettle.version>
-		<pentaho-reporting-engine-classic-extensions-mondrian.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-mondrian.version>
-		<pentaho-reporting-engine-classic-extensions-olap4j.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-olap4j.version>
-		<pentaho-reporting-engine-classic-extensions-pmd.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-pmd.version>
-		<pentaho-reporting-engine-classic-extensions-reportdesigner-parser.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-reportdesigner-parser.version>
-		<pentaho-reporting-engine-classic-extensions-sampledata.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-sampledata.version>
-		<pentaho-reporting-engine-classic-extensions-scripting.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-scripting.version>
-		<pentaho-reporting-engine-classic-extensions-xpath.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-xpath.version>
-		<pentaho-reporting-engine-classic-extensions-drill-down.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-drill-down.version>
-		<pentaho-reporting-engine-classic-extensions-toc.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-toc.version>
-		<pentaho-reporting-engine-legacy-charts.version>7.1-SNAPSHOT</pentaho-reporting-engine-legacy-charts.version>
-		<pentaho-reporting-engine-legacy-functions.version>7.1-SNAPSHOT</pentaho-reporting-engine-legacy-functions.version>
-		<pentaho-reporting-engine-classic-extensions-cda.version>7.1-SNAPSHOT</pentaho-reporting-engine-classic-extensions-cda.version>
-		<pentaho-reporting-engine-wizard-core.version>7.1-SNAPSHOT</pentaho-reporting-engine-wizard-core.version>
-		<pentaho-report-wizard-core.version>7.1-SNAPSHOT</pentaho-report-wizard-core.version>
-		<libbase.version>7.1-SNAPSHOT</libbase.version>
-		<libdocbundle.version>7.1-SNAPSHOT</libdocbundle.version>
-		<libfonts.version>7.1-SNAPSHOT</libfonts.version>
-		<libformat.version>7.1-SNAPSHOT</libformat.version>
-		<libformula.version>7.1-SNAPSHOT</libformula.version>
-		<libloader.version>7.1-SNAPSHOT</libloader.version>
-		<librepository.version>7.1-SNAPSHOT</librepository.version>
-		<libserializer.version>7.1-SNAPSHOT</libserializer.version>
-		<libxml.version>7.1-SNAPSHOT</libxml.version>
-		<libswing.version>7.1-SNAPSHOT</libswing.version>
-		<flute.version>7.1-SNAPSHOT</flute.version>
-		<itext-rtf.version>2.1.7</itext-rtf.version>
-		<groovy-all.version>2.4.7</groovy-all.version>
-		<mondrian.version>3.14-SNAPSHOT</mondrian.version>
-		<kettle-engine.version>7.1-SNAPSHOT</kettle-engine.version>
-		<kettle-core.version>7.1-SNAPSHOT</kettle-core.version>
-		<kettle-ui-swt.version>7.1-SNAPSHOT</kettle-ui-swt.version>
-		<snmp4j.version>1.9.3d</snmp4j.version>
-		<salesforce-partner.version>24.0</salesforce-partner.version>
-		<rome.version>1.0</rome.version>
-		<georss-rome.version>0.9.8</georss-rome.version>
-		<feed4j.version>1.0</feed4j.version>
-		<nekohtml.version>0.9.5</nekohtml.version>
-		<janino.version>2.5.16</janino.version>
-		<javassist.version>3.20.0-GA</javassist.version>
-		<scannotation.version>1.0.2</scannotation.version>
-		<syslog4j.version>0.9.34</syslog4j.version>
-		<ldapjdk.version>20000524</ldapjdk.version>
-		<trilead-ssh2.version>build213</trilead-ssh2.version>
-		<ftp4che.version>0.7.1</ftp4che.version>
-		<ascsapjco3wrp.version>20100529</ascsapjco3wrp.version>
-		<jcifs.version>1.3.3</jcifs.version>
-		<jsch.version>0.1.46</jsch.version>
-		<jzlib.version>1.0.7</jzlib.version>
-		<edtftpj.version>2.1.0</edtftpj.version>
-		<jdom.version>1.0</jdom.version>
-		<javadbf.version>20081125</javadbf.version>
-		<ini4j.version>0.5.1</ini4j.version>
-		<jxl.version>2.6.12</jxl.version>
-		<secondstring.version>20060615</secondstring.version>
-		<commons-validator.version>1.3.1</commons-validator.version>
-		<jackcess.version>1.2.4</jackcess.version>
-		<postgresql.version>9.3-1102-jdbc4</postgresql.version>
-		<hsqldb.version>2.3.2</hsqldb.version>
-		<h2.version>1.2.131</h2.version>
-		<infobright-core.version>3.4</infobright-core.version>
-		<jt400.version>6.1</jt400.version>
-		<sqlite-jdbc.version>3.7.2</sqlite-jdbc.version>
-		<jaybird.version>2.1.6</jaybird.version>
-		<sapdbc.version>7.4.4</sapdbc.version>
-		<monetdb-jdbc.version>2.1</monetdb-jdbc.version>
-		<LucidDbClient-minimal.version>0.9.4</LucidDbClient-minimal.version>
-		<pdi-dataservice-client-plugin.version>7.1-SNAPSHOT</pdi-dataservice-client-plugin.version>
-		<kfs.version>0.3</kfs.version>
-		<xmlenc.version>0.52</xmlenc.version>
-		<jackson-core-asl.version>1.9.3</jackson-core-asl.version>
-		<jackson-mapper-asl.version>1.9.3</jackson-mapper-asl.version>
-		<odfdom-java.version>0.8.6</odfdom-java.version>
-		<poi.version>3.12</poi.version>
-		<poi-ooxml.version>3.12</poi-ooxml.version>
-		<poi-ooxml-schemas.version>3.12</poi-ooxml-schemas.version>
-		<snakeyaml.version>1.7</snakeyaml.version>
-		<json-simple.version>1.1</json-simple.version>
-		<jsonpath.version>1.0</jsonpath.version>
-		<knowledge-api.version>6.4.0.Final</knowledge-api.version>
-		<drools-compiler.version>6.4.0.Final</drools-compiler.version>
-		<drools-core.version>6.4.0.Final</drools-core.version>
-		<mvel2.version>2.0.10</mvel2.version>
-		<gdata-analytics.version>2.1</gdata-analytics.version>
-		<gdata-analytics-meta.version>2.1</gdata-analytics-meta.version>
-		<gdata-client.version>1.41.4</gdata-client.version>
-		<gdata-client-meta.version>1.0</gdata-client-meta.version>
-		<gdata-core.version>1.41.4</gdata-core.version>
-		<jsr305.version>1.3.9</jsr305.version>
-		<pentaho-connections.version>7.1-SNAPSHOT</pentaho-connections.version>
-		<pentaho-xul-core.version>7.1-SNAPSHOT</pentaho-xul-core.version>
-		<pentaho-xul-html.version>7.1-SNAPSHOT</pentaho-xul-html.version>
-		<pentaho-versionchecker.version>7.1-SNAPSHOT</pentaho-versionchecker.version>
-		<pentaho-actionsequence-dom.version>7.1-SNAPSHOT</pentaho-actionsequence-dom.version>
-		<pentaho-metadata.version>7.1-SNAPSHOT</pentaho-metadata.version>
-		<pentaho-platform-api.version>7.1-SNAPSHOT</pentaho-platform-api.version>
-		<pentaho-platform-core.version>7.1-SNAPSHOT</pentaho-platform-core.version>
-		<pentaho-platform-repository.version>7.1-SNAPSHOT</pentaho-platform-repository.version>
-		<pentaho-platform-scheduler.version>7.1-SNAPSHOT</pentaho-platform-scheduler.version>
-		<pentaho-platform-build-utils.version>7.1-SNAPSHOT</pentaho-platform-build-utils.version>
-		<annogen.version>0.1.0</annogen.version>
-		<httpcore.version>4.0-beta3</httpcore.version>
-		<neethi.version>2.0.1</neethi.version>
-		<wstx-asl.version>3.2.4</wstx-asl.version>
-		<XmlSchema.version>1.4.2</XmlSchema.version>
-		<org.apache.karaf.main.version>3.0.3</org.apache.karaf.main.version>
-		<org.apache.karaf.jaas.boot.version>2.4.2</org.apache.karaf.jaas.boot.version>
-		<org.apache.karaf.jaas.modules.version>2.4.2</org.apache.karaf.jaas.modules.version>
-		<org.apache.felix.http.proxy.version>2.3.0</org.apache.felix.http.proxy.version>
-		<org.apache.felix.main.version>4.2.1</org.apache.felix.main.version>
-		<org.apache.felix.http.base.version>2.3.0</org.apache.felix.http.base.version>
-		<dumbster.version>1.6.0</dumbster.version>
-		<jmockit.version>1.8</jmockit.version>
-		<jmock-junit4.version>2.5.1</jmock-junit4.version>
-		<hamcrest-all.version>1.3</hamcrest-all.version>
-		<hamcrest-core.version>1.3</hamcrest-core.version>
+		<!--  properties override -->
 		<hamcrest-library.version>1.1</hamcrest-library.version>
-		<powermock-module-junit4.version>1.6.3</powermock-module-junit4.version>
-		<powermock-api-mockito.version>1.6.3</powermock-api-mockito.version>
-		<bean-matchers.version>0.9</bean-matchers.version>
-		<mockito-all.version>1.10.19</mockito-all.version>
-		<mockito-core.version>1.10.19</mockito-core.version>
-		<pentaho-platform-core-test.version>7.1-SNAPSHOT</pentaho-platform-core-test.version>
-		<pentaho-platform-repository-test.version>7.1-SNAPSHOT</pentaho-platform-repository-test.version>
-		<pentaho-platform-scheduler-test.version>7.1-SNAPSHOT</pentaho-platform-scheduler-test.version>
-		<hsqldb.version>2.3.2</hsqldb.version>
-		<simple-jndi.version>1.0.0</simple-jndi.version>
-		<commons-beanutils.version>1.8.0</commons-beanutils.version>
-		<jetty-webapp.version>8.1.15.v20140411</jetty-webapp.version>
-		<mockrunner-servlet.version>0.3.7</mockrunner-servlet.version>
-		<mockrunner.version>0.3.1</mockrunner.version>
-		<json-unit.version>1.5.5</json-unit.version>
-		<xmlunit.version>1.6</xmlunit.version>
-		<urlrewrite.version>3.2.0</urlrewrite.version>
-		<spring-security-core-tests.version>2.0.5.RELEASE</spring-security-core-tests.version>
-		<spring-ldap-core.version>2.1.0.RELEASE</spring-ldap-core.version>
-		<mina-core.version>2.0.0-M6</mina-core.version>
-		<apacheds-core.version>1.5.5</apacheds-core.version>
-		<apacheds-core-avl.version>1.5.5</apacheds-core-avl.version>
-		<apacheds-bootstrap-extract.version>1.5.5</apacheds-bootstrap-extract.version>
-		<apacheds-bootstrap-partition.version>1.5.5</apacheds-bootstrap-partition.version>
-		<apacheds-xdbm-search.version>1.5.5</apacheds-xdbm-search.version>
-		<apacheds-core-entry.version>1.5.5</apacheds-core-entry.version>
-		<apacheds-core-shared.version>1.5.5</apacheds-core-shared.version>
-		<apacheds-schema-registries.version>1.5.5</apacheds-schema-registries.version>
-		<apacheds-schema-bootstrap.version>1.5.5</apacheds-schema-bootstrap.version>
-		<apacheds-jdbm-store.version>1.5.5</apacheds-jdbm-store.version>
-		<apacheds-jdbm.version>1.5.5</apacheds-jdbm.version>
-		<apacheds-xdbm-base.version>1.5.5</apacheds-xdbm-base.version>
-		<apacheds-protocol-ldap.version>1.5.5</apacheds-protocol-ldap.version>
-		<apacheds-protocol-shared.version>1.5.5</apacheds-protocol-shared.version>
-		<apacheds-utils.version>1.5.5</apacheds-utils.version>
-		<shared-ldap.version>0.9.15</shared-ldap.version>
-		<shared-ldap-constants.version>0.9.15</shared-ldap-constants.version>
-		<shared-cursor.version>0.9.15</shared-cursor.version>
-		<shared-asn1.version>0.9.15</shared-asn1.version>
-		<shared-asn1-codec.version>0.9.15</shared-asn1-codec.version>
-		<apacheds-server-jndi.version>1.5.5</apacheds-server-jndi.version>
-		<jersey-test-framework-core.version>1.19.1</jersey-test-framework-core.version>
-		<jersey-test-framework-grizzly.version>1.19.1</jersey-test-framework-grizzly.version>
-		<grizzly-framework.version>1.9.45</grizzly-framework.version>
-		<grizzly-lzma.version>1.9.45</grizzly-lzma.version>
-		<grizzly-portunif.version>1.9.45</grizzly-portunif.version>
-		<grizzly-rcm.version>1.9.45</grizzly-rcm.version>
-		<grizzly-servlet-webserver.version>1.9.45</grizzly-servlet-webserver.version>
-		<grizzly-utils.version>1.9.45</grizzly-utils.version>
-		<grizzly-http.version>1.9.45</grizzly-http.version>
-		<grizzly-http-servlet.version>1.9.45</grizzly-http-servlet.version>
-		<jersey-multipart.version>1.19.1</jersey-multipart.version>
-		<spring-test.version>4.3.2.RELEASE</spring-test.version>
-		<spring-web.version>4.3.2.RELEASE</spring-web.version>
-		<wadl-resourcedoc-doclet.version>1.19.1</wadl-resourcedoc-doclet.version>
-		<guava.version>17.0</guava.version>
-		<jackrabbit-core.version>2.10.0</jackrabbit-core.version>
-		<jackrabbit-data.version>2.10.0</jackrabbit-data.version>
+		<jaxen.version>1.1.1</jaxen.version>
+		<jstl.version>1.0.5</jstl.version>
+		<nekohtml.version>0.9.5</nekohtml.version>
+		<asm-attrs.version>1.5.3</asm-attrs.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -477,7 +211,7 @@
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-awt-util</artifactId>
-			<version>${batik-awt-util.version}</version>
+			<version>${batik.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -489,7 +223,7 @@
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-dom</artifactId>
-			<version>${batik-dom.version}</version>
+			<version>${batik.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -501,7 +235,7 @@
 		<dependency>
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>batik-svggen</artifactId>
-			<version>${batik-svggen.version}</version>
+			<version>${batik.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -513,7 +247,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>${spring-beans.version}</version>
+			<version>${spring.framework.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -525,7 +259,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${spring-context.version}</version>
+			<version>${spring.framework.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -537,7 +271,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring-core.version}</version>
+			<version>${spring.framework.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -597,7 +331,7 @@
 		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon-dom</artifactId>
-			<version>${saxon-dom.version}</version>
+			<version>${saxon.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -663,7 +397,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>${json.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -759,7 +493,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${spring-security-core.version}</version>
+			<version>${spring.security.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -771,7 +505,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring-security-web.version}</version>
+			<version>${spring.security.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -783,13 +517,13 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${spring-security-config.version}</version>
+			<version>${spring.security.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-ldap</artifactId>
-			<version>${spring-security-ldap.version}</version>
+			<version>${spring.security.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -909,7 +643,7 @@
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
-			<version>${cglib-nodep.version}</version>
+			<version>${cglib.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -945,7 +679,7 @@
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-adb</artifactId>
-			<version>${axis2-adb.version}</version>
+			<version>${axis2.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -957,7 +691,7 @@
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-codegen</artifactId>
-			<version>${axis2-codegen.version}</version>
+			<version>${axis2.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -969,7 +703,7 @@
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-java2wsdl</artifactId>
-			<version>${axis2-java2wsdl.version}</version>
+			<version>${axis2.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -981,7 +715,7 @@
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-kernel</artifactId>
-			<version>${axis2-kernel.version}</version>
+			<version>${axis2.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -993,7 +727,7 @@
 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-transport-http</artifactId>
-			<version>${axis2-transport-http.version}</version>
+			<version>${axis2.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1005,7 +739,7 @@
 		<dependency>
 			<groupId>org.apache.ws.commons.axiom</groupId>
 			<artifactId>axiom-api</artifactId>
-			<version>${axiom-api.version}</version>
+			<version>${axiom.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1017,7 +751,7 @@
 		<dependency>
 			<groupId>org.apache.ws.commons.axiom</groupId>
 			<artifactId>axiom-dom</artifactId>
-			<version>${axiom-dom.version}</version>
+			<version>${axiom.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1029,7 +763,7 @@
 		<dependency>
 			<groupId>org.apache.ws.commons.axiom</groupId>
 			<artifactId>axiom-impl</artifactId>
-			<version>${axiom-impl.version}</version>
+			<version>${axiom.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1113,7 +847,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-multipart</artifactId>
-			<version>${jersey-multipart.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1137,7 +871,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-apache-client</artifactId>
-			<version>${jersey-apache-client.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1149,7 +883,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-spring</artifactId>
-			<version>${jersey-spring.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1161,7 +895,7 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-core</artifactId>
-			<version>${jersey-core.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1173,7 +907,7 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-bundle</artifactId>
-			<version>${jersey-bundle.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1185,7 +919,7 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
-			<version>${jersey-json.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1197,7 +931,7 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>${jersey-client.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1209,7 +943,7 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>${jersey-server.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1221,7 +955,7 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
-			<version>${jersey-servlet.version}</version>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1318,19 +1052,19 @@
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-core</artifactId>
-			<version>${pentaho-reporting-engine-classic-core.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-kettle</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-kettle.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1342,19 +1076,19 @@
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-mondrian</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-mondrian.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-olap4j</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-olap4j.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-pmd</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-pmd.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1366,55 +1100,55 @@
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-reportdesigner-parser</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-reportdesigner-parser.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-sampledata</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-sampledata.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-scripting</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-scripting.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-xpath</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-xpath.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-drill-down</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-drill-down.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-toc</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-toc.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-legacy-charts</artifactId>
-			<version>${pentaho-reporting-engine-legacy-charts.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-legacy-functions</artifactId>
-			<version>${pentaho-reporting-engine-legacy-functions.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-classic-extensions-cda</artifactId>
-			<version>${pentaho-reporting-engine-classic-extensions-cda.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1426,7 +1160,7 @@
 		<dependency>
 			<groupId>pentaho-reporting-engine</groupId>
 			<artifactId>pentaho-reporting-engine-wizard-core</artifactId>
-			<version>${pentaho-reporting-engine-wizard-core.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1438,13 +1172,13 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-report-wizard-core</artifactId>
-			<version>${pentaho-report-wizard-core.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libbase</artifactId>
-			<version>${libbase.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1456,7 +1190,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libdocbundle</artifactId>
-			<version>${libdocbundle.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1468,7 +1202,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libfonts</artifactId>
-			<version>${libfonts.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1480,7 +1214,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libformat</artifactId>
-			<version>${libformat.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1492,7 +1226,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libformula</artifactId>
-			<version>${libformula.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1504,7 +1238,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libloader</artifactId>
-			<version>${libloader.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1516,7 +1250,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>librepository</artifactId>
-			<version>${librepository.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1528,7 +1262,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libserializer</artifactId>
-			<version>${libserializer.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1540,7 +1274,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libxml</artifactId>
-			<version>${libxml.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1552,7 +1286,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>libswing</artifactId>
-			<version>${libswing.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1564,7 +1298,7 @@
 		<dependency>
 			<groupId>pentaho-library</groupId>
 			<artifactId>flute</artifactId>
-			<version>${flute.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -1620,19 +1354,19 @@
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-engine</artifactId>
-			<version>${kettle-engine.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-core</artifactId>
-			<version>${kettle-core.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
 			<artifactId>kettle-ui-swt</artifactId>
-			<version>${kettle-ui-swt.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -2052,7 +1786,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pdi-dataservice-client-plugin</artifactId>
-			<version>${pdi-dataservice-client-plugin.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -2082,12 +1816,12 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
-			<version>${jackson-core-asl.version}</version>
+			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>${jackson-mapper-asl.version}</version>
+			<version>${jackson.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -2118,7 +1852,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>${poi-ooxml.version}</version>
+			<version>${poi.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -2130,7 +1864,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml-schemas</artifactId>
-			<version>${poi-ooxml-schemas.version}</version>
+			<version>${poi.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -2191,7 +1925,7 @@
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-compiler</artifactId>
-			<version>${drools-compiler.version}</version>
+			<version>${drools.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -2203,7 +1937,7 @@
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-core</artifactId>
-			<version>${drools-core.version}</version>
+			<version>${drools.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -2300,67 +2034,67 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-connections</artifactId>
-			<version>${pentaho-connections.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-xul-core</artifactId>
-			<version>${pentaho-xul-core.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-xul-html</artifactId>
-			<version>${pentaho-xul-html.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-versionchecker</artifactId>
-			<version>${pentaho-versionchecker.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-actionsequence-dom</artifactId>
-			<version>${pentaho-actionsequence-dom.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-metadata</artifactId>
-			<version>${pentaho-metadata.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-api</artifactId>
-			<version>${pentaho-platform-api.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-core</artifactId>
-			<version>${pentaho-platform-core.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-repository</artifactId>
-			<version>${pentaho-platform-repository.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-scheduler</artifactId>
-			<version>${pentaho-platform-scheduler.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-build-utils</artifactId>
-			<version>${pentaho-platform-build-utils.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -2426,19 +2160,19 @@
 		<dependency>
 			<groupId>org.apache.karaf.jaas</groupId>
 			<artifactId>org.apache.karaf.jaas.boot</artifactId>
-			<version>${org.apache.karaf.jaas.boot.version}</version>
+			<version>${org.apache.karaf.jaas.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.karaf.jaas</groupId>
 			<artifactId>org.apache.karaf.jaas.modules</artifactId>
-			<version>${org.apache.karaf.jaas.modules.version}</version>
+			<version>${org.apache.karaf.jaas.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.http.proxy</artifactId>
-			<version>${org.apache.felix.http.proxy.version}</version>
+			<version>${org.apache.felix.http.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -2450,7 +2184,7 @@
 		<dependency>
 			<groupId>org.apache.felix</groupId>
 			<artifactId>org.apache.felix.http.base</artifactId>
-			<version>${org.apache.felix.http.base.version}</version>
+			<version>${org.apache.felix.http.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -2498,13 +2232,13 @@
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>${powermock-module-junit4.version}</version>
+			<version>${powermock.version}</version>
 
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
-			<version>${powermock-api-mockito.version}</version>
+			<version>${powermock.version}</version>
 
 		</dependency>
 		<dependency>
@@ -2529,7 +2263,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-core-test</artifactId>
-			<version>${pentaho-platform-core-test.version}</version>
+			<version>${project.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2541,7 +2275,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-repository-test</artifactId>
-			<version>${pentaho-platform-repository-test.version}</version>
+			<version>${project.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2553,7 +2287,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-scheduler-test</artifactId>
-			<version>${pentaho-platform-scheduler-test.version}</version>
+			<version>${project.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2667,7 +2401,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core</artifactId>
-			<version>${apacheds-core.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2679,7 +2413,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core-avl</artifactId>
-			<version>${apacheds-core-avl.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2691,7 +2425,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-bootstrap-extract</artifactId>
-			<version>${apacheds-bootstrap-extract.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2703,7 +2437,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-bootstrap-partition</artifactId>
-			<version>${apacheds-bootstrap-partition.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2715,7 +2449,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-xdbm-search</artifactId>
-			<version>${apacheds-xdbm-search.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2727,7 +2461,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core-entry</artifactId>
-			<version>${apacheds-core-entry.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2739,7 +2473,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core-shared</artifactId>
-			<version>${apacheds-core-shared.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2751,7 +2485,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-schema-registries</artifactId>
-			<version>${apacheds-schema-registries.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2763,7 +2497,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-schema-bootstrap</artifactId>
-			<version>${apacheds-schema-bootstrap.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2775,7 +2509,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-jdbm-store</artifactId>
-			<version>${apacheds-jdbm-store.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2787,7 +2521,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-jdbm</artifactId>
-			<version>${apacheds-jdbm.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2799,7 +2533,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-xdbm-base</artifactId>
-			<version>${apacheds-xdbm-base.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2811,7 +2545,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-protocol-ldap</artifactId>
-			<version>${apacheds-protocol-ldap.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2823,7 +2557,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-protocol-shared</artifactId>
-			<version>${apacheds-protocol-shared.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2835,7 +2569,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-utils</artifactId>
-			<version>${apacheds-utils.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2847,7 +2581,7 @@
 		<dependency>
 			<groupId>org.apache.directory.shared</groupId>
 			<artifactId>shared-ldap</artifactId>
-			<version>${shared-ldap.version}</version>
+			<version>${shared.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2859,7 +2593,7 @@
 		<dependency>
 			<groupId>org.apache.directory.shared</groupId>
 			<artifactId>shared-ldap-constants</artifactId>
-			<version>${shared-ldap-constants.version}</version>
+			<version>${shared.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2871,7 +2605,7 @@
 		<dependency>
 			<groupId>org.apache.directory.shared</groupId>
 			<artifactId>shared-cursor</artifactId>
-			<version>${shared-cursor.version}</version>
+			<version>${shared.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2883,7 +2617,7 @@
 		<dependency>
 			<groupId>org.apache.directory.shared</groupId>
 			<artifactId>shared-asn1</artifactId>
-			<version>${shared-asn1.version}</version>
+			<version>${shared.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2895,7 +2629,7 @@
 		<dependency>
 			<groupId>org.apache.directory.shared</groupId>
 			<artifactId>shared-asn1-codec</artifactId>
-			<version>${shared-asn1-codec.version}</version>
+			<version>${shared.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2907,7 +2641,7 @@
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-server-jndi</artifactId>
-			<version>${apacheds-server-jndi.version}</version>
+			<version>${apacheds.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2919,7 +2653,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.jersey-test-framework</groupId>
 			<artifactId>jersey-test-framework-core</artifactId>
-			<version>${jersey-test-framework-core.version}</version>
+			<version>${jersey.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2931,7 +2665,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.jersey-test-framework</groupId>
 			<artifactId>jersey-test-framework-grizzly</artifactId>
-			<version>${jersey-test-framework-grizzly.version}</version>
+			<version>${jersey.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2943,7 +2677,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-framework</artifactId>
-			<version>${grizzly-framework.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2955,7 +2689,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-lzma</artifactId>
-			<version>${grizzly-lzma.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2967,7 +2701,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-portunif</artifactId>
-			<version>${grizzly-portunif.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2979,7 +2713,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-rcm</artifactId>
-			<version>${grizzly-rcm.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -2991,7 +2725,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-servlet-webserver</artifactId>
-			<version>${grizzly-servlet-webserver.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -3003,7 +2737,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-utils</artifactId>
-			<version>${grizzly-utils.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -3015,7 +2749,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-http</artifactId>
-			<version>${grizzly-http.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -3027,7 +2761,7 @@
 		<dependency>
 			<groupId>com.sun.grizzly</groupId>
 			<artifactId>grizzly-http-servlet</artifactId>
-			<version>${grizzly-http-servlet.version}</version>
+			<version>${grizzly.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -3039,7 +2773,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-multipart</artifactId>
-			<version>${jersey-multipart.version}</version>
+			<version>${jersey.version}</version>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
@@ -3051,14 +2785,14 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring-test.version}</version>
+			<version>${spring.framework.version}</version>
 			<optional>true</optional>
 
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${spring-web.version}</version>
+			<version>${spring.framework.version}</version>
 
 		</dependency>
         <dependency>
@@ -3082,13 +2816,13 @@
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-core</artifactId>
-			<version>${jackrabbit-core.version}</version>
+			<version>${jackrabbit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-data</artifactId>
-			<version>${jackrabbit-data.version}</version>
+			<version>${jackrabbit.version}</version>
 			<scope>test</scope>
 			<exclusions>
 			</exclusions>
@@ -3096,7 +2830,7 @@
         <dependency>
             <groupId>pentaho</groupId>
             <artifactId>pentaho-chartbeans</artifactId>
-            <version>${pentaho-chartbeans.version}</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
