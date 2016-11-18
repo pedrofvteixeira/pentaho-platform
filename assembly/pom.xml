@@ -13,7 +13,7 @@
     <groupId>pentaho</groupId>
     <artifactId>pentaho-platform-ce-parent</artifactId>
        <relativePath>../pom.xml</relativePath>
-    <version>7.1-SNAPSHOT</version>
+    <version>${project.version}</version>
   </parent>
 
   <artifactId>pentaho-platform-assembly</artifactId>
@@ -345,7 +345,7 @@
                                 <artifactItem>
                                     <groupId>pentaho</groupId>
                                     <artifactId>common-ui</artifactId>
-                                    <version>7.1-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                     <type>zip</type>
                                     <outputDirectory>${plugins.dir}</outputDirectory>
                                 </artifactItem>
@@ -368,7 +368,7 @@
                                     <groupId>pentaho-reporting-engine</groupId>
                                     <artifactId>pentaho-reporting-engine-classic-core-platform-plugin-package
                                     </artifactId>
-                                    <version>7.1-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                     <type>zip</type>
                                     <outputDirectory>${plugins.dir}</outputDirectory>
                                 </artifactItem>
