@@ -22,7 +22,7 @@
     <module>scheduler</module>
     <module>extensions</module>
     <module>build-utils</module>
-    <!-- <module>user-console</module> -->
+    <module>user-console</module>
     <!-- <module>assembly</module> -->
 
   </modules>

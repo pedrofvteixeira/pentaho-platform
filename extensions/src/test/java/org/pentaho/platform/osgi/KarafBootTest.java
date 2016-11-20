@@ -46,6 +46,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
+import java.util.Locale;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
@@ -183,7 +184,21 @@ public class KarafBootTest {
       // can't see if it started since we aren't actually starting up karaf, return value will be false
       assertFalse( startup );
       File karafHome = new File( System.getProperty( "karaf.home" ) );
-      assertEquals( tempDirectory, karafHome );
+
+      try {
+        assertEquals( tempDirectory, karafHome );
+      } catch ( AssertionError ae ) {
+        // don't throw an assertion error just yet; OSX likes to add its own files/folders into
+        // a folder ( think .DS_Store file or .Trash folder ), and also has its saying on the
+        // paths we can use ( think /private/var or /private/tmp instead of /var or /tmp )
+
+        if ( isOSX() ) {
+          assertEquals( ( "/private" + tempDirectory.getAbsolutePath() ), karafHome.getAbsolutePath() );
+        } else {
+          throw ae;
+        }
+      }
+
       assertTrue( new File( karafHome, "system" ).exists() );
       assertFalse( new File( karafHome, "caches" ).exists() );
     } finally {
@@ -341,6 +356,22 @@ public class KarafBootTest {
     config.load( new FileInputStream( configFile ) );
     assertEquals( "false", config.getProperty( "org.pentaho.clean.karaf.cache" ) );
 
+  }
+
+  private boolean isOSX() {
+
+    final String MAC_OS_BASE_NAME = "mac";
+
+    try {
+      String osName = System.getProperty( "os.name", "unknown" /* fallback value */ ).toLowerCase( Locale.ENGLISH );
+      return osName.startsWith( MAC_OS_BASE_NAME ); // osName is NPE-safe
+    } catch ( Throwable t ) {
+      // do not propagate any errors upwards; this is a quick-&-simple helper method,
+      // solely due to the fact that OSX likes to add its own files/folders into a folder
+      // ( think .DS_Store or .Trash ), and also has its saying on the paths we can use
+      // ( think /private/var or /private/tmp instead of /var or /tmp )
+    }
+    return false;
   }
 
 }
