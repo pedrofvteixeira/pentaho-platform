@@ -46,7 +46,6 @@
     <tomcat.version>${tomcat.major.version}.${tomcat.minor.version}</tomcat.version>
 	<tomcat.dir>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</tomcat.dir>
     <prep.pentaho.war.dir>${tomcat.dir}/webapps/pentaho</prep.pentaho.war.dir>
-	<package.res.dir>package-res</package.res.dir>
 	<prep.pentaho.war.dir>${target.pentaho-server.dir}/tomcat/webapps/pentaho</prep.pentaho.war.dir>
 	<prep.pentaho.war.lib.dir>${prep.pentaho.war.dir}/WEB-INF/lib</prep.pentaho.war.lib.dir>
 	<container.lib.dir>${target.pentaho-server.dir}/tomcat/lib</container.lib.dir>
@@ -97,47 +96,6 @@
 
   <build>
     <plugins>
-
-      <!-- [START] copy package-res and package-res-merged-server configuration 
-        files into assembly/target/pentaho-server -->
-      <!--   
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>${maven-resources-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-            -->
-              <!-- assembly/target -->
-              <!-- 
-              <outputDirectory>${target.pentaho-server.dir}</outputDirectory> 
-              <resources>
-                <resource>
-                -->
-                <!-- copy from package-res/biserver --> 
-                <!-- 
-                  <directory>${basedir}/package-res/biserver</directory> 
-                </resource>
-                <resource>
-                -->
-                <!-- copy from package-res-merged-server/biserver -->
-                <!-- 
-                  <directory>${basedir}/package-res-merged-server/biserver</directory> 
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-       -->
-      <!-- [END] copy package-res and package-res-merged-server configuration 
-        files into assembly/target/pentaho-server -->
-
       <!-- [START] unpack platform-plugins, kettle-plugins and pentaho-samples 
         into the proper locations -->
       <plugin>
@@ -543,13 +501,13 @@
           </execution>
         </executions>
       </plugin>
-            
-  
 
     <plugin>
       <artifactId>maven-resources-plugin</artifactId>
       <version>3.0.1</version>
       <executions>
+        <!-- [START] copy package-res and package-res-merged-server configuration
+        files into assembly/target/pentaho-server -->
         <execution>
           <id>assemble-pentaho-webapp</id>
           <phase>package</phase>
@@ -558,9 +516,11 @@
           </goals>
           <configuration>
             <outputDirectory>${target.pentaho-server.dir}</outputDirectory>
+            <overwrite>true</overwrite>
             <resources>
               <resource>
-                <directory>${package.res.dir}/biserver</directory>
+                 <!--  Copy from package-res/biserver -->
+                <directory>${basedir}/package-res/biserver</directory>
                 <excludes>
                   <exclude>**/WEB-INF/default-object.xml</exclude>
                   <exclude>**/WEB-INF/jboss-app.xml</exclude>
@@ -569,9 +529,18 @@
                   <exclude>**/WEB-INF/portlet-instances.xml</exclude>
                 </excludes>
               </resource>
+              <resource>
+                 <!--  Copy from package-res-merged-server/biserver -->
+                <directory>${basedir}/package-res-merged-server/biserver</directory>
+                <includes>**/**</includes>
+                
+              </resource>
             </resources>
           </configuration>
         </execution>
+        <!-- [END] copy package-res and package-res-merged-server configuration
+        files into assembly/target/pentaho-server -->
+
         <execution>
           <id>prepare-war-lib-dir</id>
           <phase>package</phase>
