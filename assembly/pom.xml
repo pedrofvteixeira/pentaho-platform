@@ -32,16 +32,26 @@
     <target.pentaho-server.plugins.dir>${target.pentaho-server.system.dir}</target.pentaho-server.plugins.dir> 
     <target.pentaho-server.kettle.plugins.dir>${target.pentaho-server.system.dir}/kettle/plugins</target.pentaho-server.kettle.plugins.dir> 
 
-    <target.pentaho-server.tomcat.dir>${subfloor.resources.dir}/apache-tomcat-${tomcat.version}</target.pentaho-server.tomcat.dir>
-
-    <!-- Subfloor related parameters (get rid of these?) -->
-    <subfloor.resources.dir>${user.home}/.subfloor</subfloor.resources.dir>
-    <subfloor.tmp.dir>${subfloor.resources.dir}/tmp</subfloor.tmp.dir>
+    <pentaho.resolve.repo>http://nexus.pentaho.org/content/groups/omni</pentaho.resolve.repo>
+    <plugins.dir>plugins</plugins.dir>
+    <!-- 
+	<stage.dir>${project.build.directory}/stage</stage.dir>
+    <stage.dir.server>${stage.dir}/${package.id}</stage.dir.server>
+    <stage.dir.solutions>${stage.dir.server}/pentaho-solutions</stage.dir.solutions>
+     -->
+	<lib.dir>${project.build.directory}/lib</lib.dir>
 
     <tomcat.major.version>8</tomcat.major.version>
     <tomcat.minor.version>0.37</tomcat.minor.version>
     <tomcat.version>${tomcat.major.version}.${tomcat.minor.version}</tomcat.version>
-
+	<tomcat.dir>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</tomcat.dir>
+    <prep.pentaho.war.dir>${tomcat.dir}/webapps/pentaho</prep.pentaho.war.dir>
+	<package.res.dir>package-res</package.res.dir>
+	<prep.pentaho.war.dir>${target.pentaho-server.dir}/tomcat/webapps/pentaho</prep.pentaho.war.dir>
+	<prep.pentaho.war.lib.dir>${prep.pentaho.war.dir}/WEB-INF/lib</prep.pentaho.war.lib.dir>
+	<container.lib.dir>${target.pentaho-server.dir}/tomcat/lib</container.lib.dir>
+	<solution.archives.dir>${project.build.directory}/solution-archives</solution.archives.dir>
+	
     <axis.version>1.4</axis.version>
     <batik-bridge.version>1.7</batik-bridge.version>
     <bsf.version>2.4.0</bsf.version>
@@ -85,349 +95,515 @@
     <xalan.version>2.7.1</xalan.version>
   </properties>
 
-    <build>
-        <plugins>
+  <build>
+    <plugins>
+
+      <!-- [START] copy package-res and package-res-merged-server configuration 
+        files into assembly/target/pentaho-server -->
+      <!--   
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+            -->
+              <!-- assembly/target -->
+              <!-- 
+              <outputDirectory>${target.pentaho-server.dir}</outputDirectory> 
+              <resources>
+                <resource>
+                -->
+                <!-- copy from package-res/biserver --> 
+                <!-- 
+                  <directory>${basedir}/package-res/biserver</directory> 
+                </resource>
+                <resource>
+                -->
+                <!-- copy from package-res-merged-server/biserver -->
+                <!-- 
+                  <directory>${basedir}/package-res-merged-server/biserver</directory> 
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+       -->
+      <!-- [END] copy package-res and package-res-merged-server configuration 
+        files into assembly/target/pentaho-server -->
+
+      <!-- [START] unpack platform-plugins, kettle-plugins and pentaho-samples 
+        into the proper locations -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+
+            <configuration>
+              <artifactItems>
+
+                <!-- [START] unpack platform-plugins into /pentaho-solutions/system -->
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>pdi-pur-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-cdf</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>cgg</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>cda</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-cdf-dd</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>sparkl</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-jpivot-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-karaf-assembly</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                  <classifier>server</classifier>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>common-ui</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>data-access-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-pdi-platform-plugin-package</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-reporting-engine</groupId>
+                  <artifactId>pentaho-reporting-engine-classic-core-platform-plugin-package</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <!-- [END] unpack platform-plugins into /pentaho-solutions/system -->
+
+                <!-- [START] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-big-data-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-cassandra-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-cassandra-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pdi-teradata-tpt-plugin-package</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pdi-platform-utils-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>pdi-pur-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-json-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-xml-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-sap-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>pdi-google-analytics-plugin-ce</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>pdi-salesforce-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>VerticaBulkLoader</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-s3csvinput-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-hl7-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>gp-bulk-loader-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-gpload-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>elasticsearch-bulk-insert-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-openerp-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-palo-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-shapefilereader-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>lucid-db-streaming-loader-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>kettle-drools5-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho-kettle</groupId>
+                  <artifactId>ms-access-bulk-loader-plugin</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem>
+                
+                 <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-big-data-plugin-samples</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                </artifactItem> 
+              
+                <!-- [END] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
+
+                <!-- [START] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-cdf-samples</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>cda-samples</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-cdf-dd-solution</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
+                </artifactItem>
+                <!-- [END] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
+           
+
+              </artifactItems>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+            </configuration>
+          </execution>
+          <!-- [END] unpack platform-plugins, kettle-plugins and pentaho-samples 
+            into the proper locations -->
+          <!--  Downloading Tomcat -->  
+          <execution>
+            <id>unpack-tomcat</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>tomcat-windows-x64</artifactId>
+                  <version>8.0.37</version>
+                  <type>zip</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${target.pentaho-server.dir}</outputDirectory>
+                  <excludes>**/webapps/docs/**,**/webapps/examples/**,**/webapps/host-manager/**,**/webapps/manager/**,**/webapps/ROOT/**</excludes>
+                </artifactItem>
+                <!-- unpack user console zip -->
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>pentaho-user-console-package</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${prep.pentaho.war.dir}</outputDirectory>
+                </artifactItem>
+                <!-- OSS Licenses file -->
+                <artifactItem>
+                  <groupId>pentaho</groupId>
+                  <artifactId>oss-licenses</artifactId>
+                  <version>${project.version}</version>
+                  <type>zip</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${target.pentaho-server.dir}/licenses</outputDirectory>
+                  <includes>PentahoServer_OSS_Licenses.html</includes>
+                </artifactItem>
+                
+              </artifactItems>
+            </configuration>
+          </execution>
+          <!-- Datasource Libraries -->
+          <execution>
+            <id>copy-Datasource-libraries</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>commons-logging</groupId>
+                  <artifactId>commons-logging</artifactId>
+                  <version>${commons-logging.version}</version>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${container.lib.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.hsqldb</groupId>
+                  <artifactId>hsqldb</artifactId>
+                  <version>${hsqldb.version}</version>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${container.lib.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>mysql</groupId>
+                  <artifactId>mysql-connector-java</artifactId>
+                  <version>${mysql-connector-java.version}</version>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${container.lib.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.h2database</groupId>
+                  <artifactId>h2</artifactId>
+                  <version>${h2.version}</version>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${container.lib.dir}</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+
+          <!-- Copy the dependency into lib folder -->
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
             
-            <!-- [START] copy package-res and package-res-merged-server configuration files into assembly/target/pentaho-server -->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources-plugin.version}</version>
-                <executions>
-                  <execution>
-                    <id>copy-resources</id>
-                    <phase>validate</phase>
-                    <goals>
-                      <goal>copy-resources</goal>
-                    </goals>
-                    <configuration>
-                      <outputDirectory>${target.pentaho-server.dir}</outputDirectory> <!-- assembly/target -->
-                      <resources>
-                        <resource>
-                          <directory>${basedir}/package-res/biserver</directory> <!-- copy from package-res/biserver -->
-                        </resource>
-                        <resource>
-                          <directory>${basedir}/package-res-merged-server/biserver</directory> <!-- copy from package-res-merged-server/biserver -->
-                        </resource>
-                      </resources>              
-                    </configuration>            
-                  </execution>
-                </executions>
-            </plugin>
-            <!-- [END] copy package-res and package-res-merged-server configuration files into assembly/target/pentaho-server -->
+  
 
-            <!-- [START] unpack platform-plugins, kettle-plugins and pentaho-samples into the proper locations -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
+    <plugin>
+      <artifactId>maven-resources-plugin</artifactId>
+      <version>3.0.1</version>
+      <executions>
+        <execution>
+          <id>assemble-pentaho-webapp</id>
+          <phase>package</phase>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>${target.pentaho-server.dir}</outputDirectory>
+            <resources>
+              <resource>
+                <directory>${package.res.dir}/biserver</directory>
+                <excludes>
+                  <exclude>**/WEB-INF/default-object.xml</exclude>
+                  <exclude>**/WEB-INF/jboss-app.xml</exclude>
+                  <exclude>**/WEB-INF/jboss-portlet.xml</exclude>
+                  <exclude>**/WEB-INF/jboss-web.xml</exclude>
+                  <exclude>**/WEB-INF/portlet-instances.xml</exclude>
+                </excludes>
+              </resource>
+            </resources>
+          </configuration>
+        </execution>
+        <execution>
+          <id>prepare-war-lib-dir</id>
+          <phase>package</phase>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>${prep.pentaho.war.lib.dir}</outputDirectory>
+            <resources>
+              <resource>
+                <directory>${lib.dir}</directory>
+                <excludes>
+                  <exclude>*servlet-api-*.jar</exclude>
+                  <exclude>gwt-user-*.jar</exclude>
+                  <exclude>mysql-connector-*.jar</exclude>
+                  <exclude>postgres*.jar</exclude>
+                  <exclude>jtds-*.jar</exclude>
+                  <exclude>h2-*.jar</exclude>
+                  <exclude>hsqldb-*.jar</exclude>
+                  <exclude>*-sources.jar</exclude>
+                  <!-- TODO: Remove the line below when we fix the circular
+                    dependency between kettle-engine and metadata -->
+                  <exclude>hibernate-3.2.6.ga.jar</exclude>
+                </excludes>
+              </resource>
+            </resources>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
 
-                        <configuration>
-                            <artifactItems>
-
-                                <!-- [START] unpack platform-plugins into /pentaho-solutions/system -->
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>pdi-pur-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-cdf</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>cgg</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>cda</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-cdf-dd</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>sparkl</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-jpivot-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-karaf-assembly</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                    <classifier>server</classifier>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>common-ui</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>data-access-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-pdi-platform-plugin-package</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-reporting-engine</groupId>
-                                    <artifactId>pentaho-reporting-engine-classic-core-platform-plugin-package</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <!-- [END] unpack platform-plugins into /pentaho-solutions/system -->
-
-                                <!-- [START] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-big-data-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-cassandra-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-cassandra-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pdi-teradata-tpt-plugin-package</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pdi-platform-utils-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>pdi-pur-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-json-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-xml-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-sap-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>pdi-google-analytics-plugin-ce</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>pdi-salesforce-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>VerticaBulkLoader</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-s3csvinput-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-hl7-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>gp-bulk-loader-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-gpload-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>elasticsearch-bulk-insert-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-openerp-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-palo-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-shapefilereader-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>lucid-db-streaming-loader-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>kettle-drools5-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho-kettle</groupId>
-                                    <artifactId>ms-access-bulk-loader-plugin</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-big-data-plugin-samples</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                                </artifactItem> 
-                                <!-- [END] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
-
-                                <!-- [START] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-cdf-samples</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>cda-samples</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-cdf-dd-solution</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
-                                </artifactItem>
-                                <!-- [END] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
-                                
-                            </artifactItems>
-
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- [END] unpack platform-plugins, kettle-plugins and pentaho-samples into the proper locations -->
-
-
-            
-      <!--
+    <!--
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>${maven-assembly-plugin.version}</version>
@@ -494,6 +670,7 @@
         </executions>
       </plugin>
 
+        
       <plugin>
         <id>plugin</id>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -680,6 +857,7 @@
 
     <!--  Reporting -->
     <!-- NOTE: this reporting plugin jar will be removed once the reporting plugin is 3.5 plugin compliant -->
+    
     <dependency>
       <groupId>pentaho-reporting-engine</groupId>
       <artifactId>pentaho-reporting-engine-classic-core-platform-plugin</artifactId>
@@ -712,6 +890,7 @@
         </exclusion>
       </exclusions>
     </dependency>
+    
     <dependency>
       <groupId>pentaho-reporting-engine</groupId>
       <artifactId>pentaho-reporting-engine-classic-core</artifactId>
@@ -748,7 +927,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-
+  
     <!-- Miscellaneous -->
     <dependency>
       <groupId>org.owasp.esapi</groupId>
@@ -834,42 +1013,8 @@
       <version>${commons-logging.version}</version>
       <scope>compile</scope>
     </dependency>
-
-    <!--  OSS Licenses file -->
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>oss-licenses</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-    </dependency>
-
-    <!-- Datasource libraries -->
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>${hsqldb.version}</version>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>${mysql-connector-java.version}</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>${h2.version}</version>
-      <optional>true</optional>
-    </dependency>
-
+        
+   
     <!-- Metro -->
     <dependency>
       <groupId>org.glassfish.metro</groupId>
@@ -1005,7 +1150,8 @@
       <version>${slf4j-log4j12.version}</version>
       <scope>compile</scope>
     </dependency>
-
+    
+    
     <!-- Saxon -->
     <dependency>
       <groupId>net.sourceforge.saxon</groupId>
@@ -1091,534 +1237,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-
-    <!-- Platform plugins -->
-    <dependency>
-      <groupId>pentaho-reporting-engine</groupId>
-      <artifactId>pentaho-reporting-engine-classic-core-platform-plugin-package</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>data-access-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>common-ui</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-pdi-platform-plugin-package</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>pdi-pur-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-cdf</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>cgg</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>cda</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-cdf-dd</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>sparkl</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-jpivot-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-karaf-assembly</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <classifier>server</classifier>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- Solutions bundles -->
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-cdf-samples</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>cda-samples</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-cdf-dd-solution</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- Other archive resources -->
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-user-console-package</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- Kettle plugins -->
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-big-data-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-big-data-plugin-samples</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-cassandra-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pdi-teradata-tpt-plugin-package</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pdi-platform-utils-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-json-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-xml-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-sap-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>pdi-google-analytics-plugin-ce</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>pdi-salesforce-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>VerticaBulkLoader</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-s3csvinput-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-hl7-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>gp-bulk-loader-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-gpload-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>elasticsearch-bulk-insert-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-openerp-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-palo-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-shapefilereader-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>lucid-db-streaming-loader-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>kettle-drools5-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>pentaho-kettle</groupId>
-      <artifactId>ms-access-bulk-loader-plugin</artifactId>
-      <version>${project.version}</version>
-      <type>zip</type>
-      <optional>true</optional>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>xalan</artifactId>
-      <version>${xalan.version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>serializer</artifactId>
-      <version>${xalan.version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
+    
     <!-- Karaf dependencies -->
     <dependency>
       <groupId>org.apache.karaf</groupId>
@@ -1770,15 +1389,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-
-    <!-- Tomcat -->
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>tomcat</artifactId>
-      <version>${tomcat.version}</version>
-      <type>zip</type>
-    </dependency>
-         
 
     <!-- wkhtmltoimage -->
     <!--
