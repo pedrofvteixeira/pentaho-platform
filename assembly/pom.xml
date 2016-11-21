@@ -34,23 +34,24 @@
 
     <plugins.dir>plugins</plugins.dir>
     <!-- 
-	<stage.dir>${project.build.directory}/stage</stage.dir>
+    <stage.dir>${project.build.directory}/stage</stage.dir>
     <stage.dir.server>${stage.dir}/${package.id}</stage.dir.server>
     <stage.dir.solutions>${stage.dir.server}/pentaho-solutions</stage.dir.solutions>
      -->
-	<lib.dir>${project.build.directory}/lib</lib.dir>
+    <lib.dir>${project.build.directory}/lib</lib.dir>
 
+    <replacer.version>1.5.2</replacer.version>
     <tomcat.major.version>8</tomcat.major.version>
     <tomcat.minor.version>0.37</tomcat.minor.version>
     <tomcat.version>${tomcat.major.version}.${tomcat.minor.version}</tomcat.version>
-	<tomcat.dir>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</tomcat.dir>
-    <prep.pentaho.war.dir>${tomcat.dir}/webapps/pentaho</prep.pentaho.war.dir>
+    <tomcat.dir>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</tomcat.dir>
 	<prep.pentaho.war.dir>${target.pentaho-server.dir}/tomcat/webapps/pentaho</prep.pentaho.war.dir>
 	<prep.pentaho.war.lib.dir>${prep.pentaho.war.dir}/WEB-INF/lib</prep.pentaho.war.lib.dir>
 	<container.lib.dir>${target.pentaho-server.dir}/tomcat/lib</container.lib.dir>
 	<solution.archives.dir>${project.build.directory}/solution-archives</solution.archives.dir>
 	
     <commons-cli.version>1.0</commons-cli.version>
+
     <rhino.js.version>1.7R1</rhino.js.version>
     <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
     <wkhtmltoimage.version>0.10.0_rc2-static</wkhtmltoimage.version>
@@ -751,7 +752,169 @@
         </executions>
       </plugin>
       -->
-
+      
+      <!-- Tomcat -->
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unzip-tomcat</id>
+            <phase>package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>tomcat</artifactId>
+                  <version>${tomcat.version}</version>
+                  <type>zip</type>  
+                  <outputDirectory>${target.pentaho-server.dir}</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-tomcat-libs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+              <includeArtifactIds>jsp-api,postgresql</includeArtifactIds>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-tomcat-server-libs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}/server/lib</outputDirectory>
+              <includeArtifactIds>cglib-nodep,jaxen</includeArtifactIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>relocate-tomcat</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${target.pentaho-server.dir}/tomcat</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}/</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>${replacer.version}</version>
+        <executions>
+          <execution>
+            <id>replace-tomcat-tokens-server-xml</id>
+            <phase>package</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+            <configuration>
+              <file>${target.pentaho-server.dir}/tomcat/conf/server.xml</file>
+              <token>&lt;Connector</token>
+              <value>&lt;Connector URIEncoding=&quot;UTF-8&quot;</value>
+            </configuration>
+          </execution>
+          <execution>
+            <id>replace-tomcat-regex-context-xml</id>
+            <phase>package</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+            <configuration>
+              <file>${target.pentaho-server.dir}/tomcat/conf/context.xml</file>
+              <token>\&lt;!--[ \r\n\t]*(\&lt;Manager[ ]*pathname=.*)[ \r\n\t]*--\&gt;</token>
+              <value>\1</value>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>remove-default-tomcat-dir</id>
+            <phase>package</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+              <filesets>
+                <fileset>
+                  <directory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</directory>
+                </fileset>
+                <fileset>
+                  <directory>${target.pentaho-server.dir}/tomcat/webapps/docs</directory>
+                </fileset>
+                <fileset>
+                  <directory>${target.pentaho-server.dir}/tomcat/webapps/examples</directory>
+                </fileset>
+                <fileset>
+                  <directory>${target.pentaho-server.dir}/tomcat/webapps/host-manager</directory>
+                </fileset>
+                <fileset>
+                  <directory>${target.pentaho-server.dir}/tomcat/webapps/manager</directory>
+                </fileset>
+                <fileset>
+                  <directory>${target.pentaho-server.dir}/tomcat/webapps/ROOT</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>replace-tomcat-tokens</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <task>
+                <replace file="${stage.dir.server}/tomcat/conf/server.xml"
+                token="&lt;Connector"
+                value="&lt;Connector URIEncoding=&quot;UTF-8&quot;" />
+                </task>
+                <task>
+                <replaceregexp
+                file="${stage.dir.server}/tomcat/conf/context.xml"
+                BE SURE TO REMOVES SPACES BETWEEN DOUBLE HYPHENS TO RUN PROPERLY
+                match="\&lt;!- -[ \r\n\t]*(\&lt;Manager[ ]*pathname=.*)[ \r\n\t]*- -\&gt;"
+                replace="\1" />
+                </task>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      -->
     </plugins>
   </build>
 
@@ -1327,6 +1490,60 @@
       <artifactId>pdm-ce</artifactId>
       <version>${weka.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- Tomcat -->
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat</artifactId>
+      <version>${tomcat.version}</version>
+      <type>zip</type>
+    </dependency>
+    
+    <!-- Tomcat dependencies -->
+    <dependency>
+      <groupId>cglib</groupId>
+      <artifactId>cglib-nodep</artifactId>
+      <version>${cglib.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>${jaxen.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>${jsp-api.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
