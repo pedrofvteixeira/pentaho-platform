@@ -381,6 +381,13 @@
                                     <type>zip</type>
                                     <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>pentaho</groupId>
+                                    <artifactId>pentaho-big-data-plugin-samples</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>zip</type>
+                                    <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
+                                </artifactItem> 
                                 <!-- [END] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
 
                                 <!-- [START] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
@@ -406,19 +413,6 @@
                                     <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
                                 </artifactItem>
                                 <!-- [END] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
-
-                                
-                                <!-- [START][TODO] -->
-                                <!-- 
-                                <artifactItem>
-                                    <groupId>pentaho</groupId>
-                                    <artifactId>pentaho-big-data-plugin-samples</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>zip</type>
-                                    <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
-                                </artifactItem> 
-                                -->
-                                <!-- [END][TODO] -->
                                 
                             </artifactItems>
 
