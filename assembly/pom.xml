@@ -32,7 +32,6 @@
     <target.pentaho-server.plugins.dir>${target.pentaho-server.system.dir}</target.pentaho-server.plugins.dir> 
     <target.pentaho-server.kettle.plugins.dir>${target.pentaho-server.system.dir}/kettle/plugins</target.pentaho-server.kettle.plugins.dir> 
 
-    <pentaho.resolve.repo>http://nexus.pentaho.org/content/groups/omni</pentaho.resolve.repo>
     <plugins.dir>plugins</plugins.dir>
     <!-- 
 	<stage.dir>${project.build.directory}/stage</stage.dir>
@@ -52,47 +51,12 @@
 	<container.lib.dir>${target.pentaho-server.dir}/tomcat/lib</container.lib.dir>
 	<solution.archives.dir>${project.build.directory}/solution-archives</solution.archives.dir>
 	
-    <axis.version>1.4</axis.version>
-    <batik-bridge.version>1.7</batik-bridge.version>
-    <bsf.version>2.4.0</bsf.version>
-    <bsh.version>1.3.0</bsh.version>
-    <commons-beanutils.version>1.8.0</commons-beanutils.version>
     <commons-cli.version>1.0</commons-cli.version>
-    <commons-digester.version>1.8</commons-digester.version>
-    <commons-discovery.version>0.4</commons-discovery.version>
-    <commons-jxpath.version>1.2</commons-jxpath.version>
-    <commons-logging.version>1.1.3</commons-logging.version>
-    <commons-math.version>1.1</commons-math.version>
-    <esapi.version>2.0.1</esapi.version>
-    <h2.version>1.2.131</h2.version>
-    <hsqldb.version>2.3.2</hsqldb.version>
-    <icu4j.version>54.1.1</icu4j.version>
-    <jakarta-regexp.version>1.2</jakarta-regexp.version>
-    <jaxrpc-api.version>1.1</jaxrpc-api.version>
-    <jcommon-logging-log4jlog.version>1.0.2</jcommon-logging-log4jlog.version>
-    <joda-time.version>1.6</joda-time.version>
-    <mdrjdbc.version>1.4.2</mdrjdbc.version>
-    <mysql-connector-java.version>5.1.17</mysql-connector-java.version>
-    <ognl.version>2.6.9</ognl.version>
-    <org.apache.felix.fileinstall.version>3.4.2</org.apache.felix.fileinstall.version>
-    <org.apache.felix.framework.version>4.4.1</org.apache.felix.framework.version>
-    <org.apache.felix.http.version>2.3.0</org.apache.felix.http.version>
-    <org.apache.felix.main.version>4.2.1</org.apache.felix.main.version>
-    <org.apache.karaf.jaas.version>2.4.2</org.apache.karaf.jaas.version>
-    <org.apache.karaf.main.version>3.0.3</org.apache.karaf.main.version>
-    <org.apache.karaf.management.boot.version>3.0.3</org.apache.karaf.management.boot.version>
-    <org.osgi.compendium.version>5.0.0</org.osgi.compendium.version>
-    <quartz-oracle.version>1.7.2</quartz-oracle.version>
     <rhino.js.version>1.7R1</rhino.js.version>
-    <saxon.version>9.1.0.8</saxon.version>
     <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
-    <soap.version>2.3</soap.version>
-    <webservices.version>2.1</webservices.version>
-    <weka.version>3.8.0.1</weka.version>
     <wkhtmltoimage.version>0.10.0_rc2-static</wkhtmltoimage.version>
     <wkhtmltox.version>0.10.0_rc2</wkhtmltox.version>
     <wsdl4j.version>1.5.0</wsdl4j.version>
-    <xalan.version>2.7.1</xalan.version>
   </properties>
 
   <build>
@@ -838,6 +802,14 @@
           <groupId>pentaho-reporting-engine</groupId>
           <artifactId>pentaho-reporting-engine-classic-core-test</artifactId>
         </exclusion>
+        <exclusion>
+        	<groupId>javax.servlet</groupId>
+        	<artifactId>servlet-api</artifactId>
+        </exclusion>
+        <exclusion>
+        	<groupId>javax.servlet</groupId>
+        	<artifactId>javax.servlet-api</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
 
@@ -887,6 +859,10 @@
         <exclusion>
           <groupId>pentaho</groupId>
           <artifactId>pentaho-platform-repository</artifactId>
+        </exclusion>
+        <exclusion>
+        	<groupId>javax.servlet</groupId>
+        	<artifactId>servlet-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -950,7 +926,7 @@
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
       <artifactId>batik-bridge</artifactId>
-      <version>${batik-bridge.version}</version>
+      <version>${batik.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
