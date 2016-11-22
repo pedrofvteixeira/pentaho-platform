@@ -39,12 +39,24 @@
     <tomcat.major.version>8</tomcat.major.version>
     <tomcat.minor.version>0.37</tomcat.minor.version>
     <tomcat.version>${tomcat.major.version}.${tomcat.minor.version}</tomcat.version>
-    <tomcat.dir>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</tomcat.dir>
-	<prep.pentaho.war.dir>${target.pentaho-server.dir}/tomcat/webapps/pentaho</prep.pentaho.war.dir>
+	<tomcat.dir>${target.dir}/apache-tomcat-${tomcat.version}</tomcat.dir>
+    <prep.pentaho.war.dir>${target.pentaho-server.dir}/tomcat/webapps/pentaho</prep.pentaho.war.dir>
 	<prep.pentaho.war.lib.dir>${prep.pentaho.war.dir}/WEB-INF/lib</prep.pentaho.war.lib.dir>
 	<container.lib.dir>${target.pentaho-server.dir}/tomcat/lib</container.lib.dir>
 	<solution.archives.dir>${project.build.directory}/solution-archives</solution.archives.dir>
-	
+    <datasource.res.dir>${basedir}/package-res/appserver/tomcat/res/datasources</datasource.res.dir>
+    <!-- Default database for open assembly is hsqldb -->
+    <rdbms>hsqldb</rdbms>
+
+	<!-- the impl properties are used to create the manifest file -->
+    <impl.title>Pentaho BI Platform Community Edition</impl.title>
+    <impl.vendor>Pentaho Corporation</impl.vendor>
+
+    <axis.version>1.4</axis.version>
+    <batik-bridge.version>1.7</batik-bridge.version>
+    <bsf.version>2.4.0</bsf.version>
+    <bsh.version>1.3.0</bsh.version>
+    <commons-beanutils.version>1.8.0</commons-beanutils.version>
     <commons-cli.version>1.0</commons-cli.version>
     <rhino.js.version>1.7R1</rhino.js.version>
     <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
@@ -330,7 +342,6 @@
                   <type>zip</type>
                   <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
                 </artifactItem> 
-              
                 <!-- [END] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
 
                 <!-- [START] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
@@ -379,8 +390,8 @@
                   <artifactId>tomcat-windows-x64</artifactId>
                   <version>8.0.37</version>
                   <type>zip</type>
-                  <overWrite>false</overWrite>
-                  <outputDirectory>${target.pentaho-server.dir}</outputDirectory>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${target.dir}</outputDirectory>
                   <excludes>**/webapps/docs/**,**/webapps/examples/**,**/webapps/host-manager/**,**/webapps/manager/**,**/webapps/ROOT/**</excludes>
                 </artifactItem>
                 <!-- unpack user console zip -->
@@ -458,6 +469,7 @@
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
             </configuration>
           </execution>
+          <!-- Copying to tomcat/lib -->
           <execution>
             <id>copy-tomcat-libs</id>
             <phase>package</phase>
@@ -465,10 +477,11 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}/lib</outputDirectory>
+              <outputDirectory>${target.pentaho-server.dir}/tomcat/lib</outputDirectory>
               <includeArtifactIds>jsp-api,postgresql</includeArtifactIds>
             </configuration>
           </execution>
+          <!-- Copying to tomcat/server/lib -->
           <execution>
             <id>copy-tomcat-server-libs</id>
             <phase>package</phase>
@@ -476,7 +489,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}/server/lib</outputDirectory>
+              <outputDirectory>${target.pentaho-server.dir}/tomcat/server/lib</outputDirectory>
               <includeArtifactIds>cglib-nodep,jaxen</includeArtifactIds>
             </configuration>
           </execution>
@@ -487,6 +500,23 @@
       <artifactId>maven-resources-plugin</artifactId>
       <version>3.0.1</version>
       <executions>
+        <!-- Copy content of tomcat to pentaho-server dir -->
+        <execution>
+          <id>copy-tomcat</id>
+          <phase>package</phase>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>${target.pentaho-server.dir}/tomcat</outputDirectory>
+            <overwrite>true</overwrite>
+            <resources>
+              <resource>
+                <directory>${tomcat.dir}</directory>
+              </resource>
+            </resources>
+          </configuration>
+        </execution>
         <!-- [START] copy package-res and package-res-merged-server configuration
         files into assembly/target/pentaho-server -->
         <execution>
@@ -513,9 +543,9 @@
               <resource>
                  <!--  Copy from package-res-merged-server/biserver -->
                 <directory>${basedir}/package-res-merged-server/biserver</directory>
-                <includes>**/**</includes>
-                
+  
               </resource>
+
             </resources>
           </configuration>
         </execution>
@@ -550,30 +580,71 @@
             </resources>
           </configuration>
         </execution>
+        <!--  Copy context.xml to target/resources -->
         <execution>
-          <id>relocate-tomcat</id>
+          <id>copy-rdbms-context</id>
           <phase>package</phase>
           <goals>
             <goal>copy-resources</goal>
           </goals>
           <configuration>
-            <outputDirectory>${target.pentaho-server.dir}/tomcat</outputDirectory>
+            <outputDirectory>${target.dir}/resources/META-INF</outputDirectory>
+            <overwrite>true</overwrite>
             <resources>
               <resource>
-                <directory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}/</directory>
+                <directory>${datasource.res.dir}/${rdbms}</directory>
+                <include>**/context.xml</include>
               </resource>
             </resources>
           </configuration>
-        </execution>
+          </execution>
       </executions>
     </plugin>
-      
-      <!-- Tomcat replacement -->
+
+    <!--  Creating pentaho war -->
+    <plugin>
+      <artifactId>maven-war-plugin</artifactId>
+      <version>2.6</version>
+      <executions>
+        <execution>
+            <id>pentaho-war</id>
+            <phase>package</phase>
+            <goals>
+               <goal>war</goal>
+            </goals>
+            <configuration>
+               <webResources>
+                  <resource>
+                    <directory>${target.dir}/resources</directory>
+                  </resource>
+                </webResources>
+                <archive>
+                <manifest>
+                    <!-- addDefaultImplementationEntries>true</addDefaultImplementationEntries -->
+                </manifest>
+                <!--
+                  <manifestEntries>
+                    <Implementation-Title>${impl.title}</Implementation-Title>
+                    <Implementation-Version>${project.version}</Implementation-Version>
+                    <Implementation-Vendor>${impl.vendor}</Implementation-Vendor>
+                  </manifestEntries>
+                   -->
+                </archive>
+                 <warName>pentaho</warName>
+                 <webXml>${prep.pentaho.war.dir}/WEB-INF/web.xml</webXml>
+                 <webappDirectory>${prep.pentaho.war.dir}</webappDirectory>
+                 <outputDirectory>${target.dir}</outputDirectory>
+              </configuration>
+           </execution>
+         </executions>
+    </plugin>
+
       <plugin>
         <groupId>com.google.code.maven-replacer-plugin</groupId>
         <artifactId>replacer</artifactId>
         <version>${replacer.version}</version>
         <executions>
+        <!-- modify tomcat/conf/server.xml for UTF-8 support -->
           <execution>
             <id>replace-tomcat-tokens-server-xml</id>
             <phase>package</phase>
@@ -586,6 +657,7 @@
               <value>&lt;Connector URIEncoding=&quot;UTF-8&quot;</value>
             </configuration>
           </execution>
+          <!-- modify the tomcat/conf/context.xml to disable session persistence between restarts -->
           <execution>
             <id>replace-tomcat-regex-context-xml</id>
             <phase>package</phase>
@@ -600,43 +672,7 @@
           </execution>
         </executions>
       </plugin>
-	  
-      <!-- Tomcat clean -->
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>remove-default-tomcat-dir</id>
-            <phase>package</phase>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-            <configuration>
-              <excludeDefaultDirectories>true</excludeDefaultDirectories>
-              <filesets>
-                <fileset>
-                  <directory>${target.pentaho-server.dir}/apache-tomcat-${tomcat.version}</directory>
-                </fileset>
-                <fileset>
-                  <directory>${target.pentaho-server.dir}/tomcat/webapps/docs</directory>
-                </fileset>
-                <fileset>
-                  <directory>${target.pentaho-server.dir}/tomcat/webapps/examples</directory>
-                </fileset>
-                <fileset>
-                  <directory>${target.pentaho-server.dir}/tomcat/webapps/host-manager</directory>
-                </fileset>
-                <fileset>
-                  <directory>${target.pentaho-server.dir}/tomcat/webapps/manager</directory>
-                </fileset>
-                <fileset>
-                  <directory>${target.pentaho-server.dir}/tomcat/webapps/ROOT</directory>
-                </fileset>
-              </filesets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+     
     </plugins>
   </build>
 
