@@ -37,15 +37,16 @@ import org.pentaho.platform.api.scheduler2.Job.JobState;
 import org.pentaho.platform.api.scheduler2.SchedulerException;
 import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.engine.core.system.boot.PlatformInitializationException;
+import org.pentaho.platform.engine.security.SecurityHelper;
+import org.pentaho.platform.scheduler2.quartz.QuartzScheduler;
 import org.pentaho.platform.scheduler2.quartz.test.StubUserRoleListService;
-import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceIT.TestQuartzScheduler;
 import org.pentaho.platform.web.http.api.resources.JobScheduleRequest;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
 
 public class SolutionImportHandlerIT extends Assert {
 
   private IScheduler scheduler;
-
+  static final String TEST_USER = "TestUser";
   @Before
   public void init() throws PlatformInitializationException, SchedulerException {
 
@@ -105,6 +106,14 @@ public class SolutionImportHandlerIT extends Assert {
   public static class TestAction implements IAction {
     @Override
     public void execute() throws Exception {
+    }
+  }
+
+  public static class TestQuartzScheduler extends QuartzScheduler {
+    @Override
+    protected String getCurrentUser() {
+      SecurityHelper.getInstance().becomeUser( TEST_USER );
+      return super.getCurrentUser();
     }
   }
 }

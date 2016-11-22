@@ -37,6 +37,7 @@
 		<jstl.version>1.0.5</jstl.version>
 		<nekohtml.version>0.9.5</nekohtml.version>
 		<asm-attrs.version>1.5.3</asm-attrs.version>
+		<commons-httpclient.version>3.0.1</commons-httpclient.version>
 	</properties>
 
 	<dependencies>
