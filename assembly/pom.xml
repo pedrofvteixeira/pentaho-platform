@@ -67,6 +67,7 @@
   <modules>
 
     <module>pentaho-server-manual</module>
+    <module>pentaho-server</module>
 
     <!-- <module>assembly</module> -->
 
