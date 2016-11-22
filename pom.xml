@@ -14,18 +14,6 @@
   <name>${project.artifactId}</name>
   <description>Parent pom for pentaho-platform projects</description>
   <url>http://www.pentaho.com</url>
-  <modules>
-
-    <module>api</module>
-    <module>core</module>
-    <module>repository</module>
-    <module>scheduler</module>
-    <module>extensions</module>
-    <module>build-utils</module>
-    <module>user-console</module>
-    <!-- <module>assembly</module> -->
-
-  </modules>
   
   <scm>
     <connection>scm:git:git@github.com:pentaho/pentaho-platform.git</connection>
@@ -339,4 +327,39 @@
     </plugins>
 
   </build>  
+
+  <profiles>
+    <profile>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <id>base</id>
+      <modules>
+        <module>api</module>
+        <module>core</module>
+        <module>repository</module>
+        <module>scheduler</module>
+        <module>extensions</module>
+        <module>build-utils</module>
+      </modules>
+    </profile>
+    <profile>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <id>user-console</id>
+      <modules>
+        <module>user-console</module>
+      </modules>
+    </profile>
+    <profile>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <id>assembly</id>
+      <modules>
+        <module>assembly</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>
