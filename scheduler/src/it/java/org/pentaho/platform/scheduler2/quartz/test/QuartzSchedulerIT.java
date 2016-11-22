@@ -45,7 +45,7 @@ import org.pentaho.platform.scheduler2.quartz.QuartzSchedulerAvailability;
 import org.pentaho.platform.scheduler2.recur.IncrementalRecurrence;
 import org.pentaho.platform.scheduler2.recur.RecurrenceList;
 import org.pentaho.platform.scheduler2.recur.SequentialRecurrence;
-import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceIT.TestQuartzScheduler;
+import org.pentaho.platform.scheduler2.ws.test.TestQuartzScheduler;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
