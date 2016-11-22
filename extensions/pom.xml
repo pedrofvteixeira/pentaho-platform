@@ -13,7 +13,7 @@
 		<version>7.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.pentaho</groupId>
+	<groupId>pentaho</groupId>
 	<artifactId>pentaho-platform-extensions</artifactId>
 	<packaging>jar</packaging>
 
