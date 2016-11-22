@@ -37,6 +37,7 @@
 		<jstl.version>1.0.5</jstl.version>
 		<nekohtml.version>0.9.5</nekohtml.version>
 		<asm-attrs.version>1.5.3</asm-attrs.version>
+		<commons-httpclient.version>3.0.1</commons-httpclient.version>
 	</properties>
 
 	<dependencies>
@@ -2093,6 +2094,50 @@
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
+      <artifactId>pentaho-platform-core</artifactId>
+      <version>${project.version}</version>
+
+      <classifier>tests</classifier>
+			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-platform-repository</artifactId>
+      <version>${project.version}</version>
+
+      <classifier>tests</classifier>
+			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-platform-scheduler</artifactId>
+      <version>${project.version}</version>
+      <classifier>tests</classifier>
+			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
+    </dependency>
+		<dependency>
+			<groupId>pentaho</groupId>
 			<artifactId>pentaho-platform-build-utils</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
@@ -2258,43 +2303,6 @@
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito-core.version}</version>
 			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>pentaho-platform-core-test</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>*</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>pentaho-platform-repository-test</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>*</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>pentaho</groupId>
-			<artifactId>pentaho-platform-scheduler-test</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
-			<exclusions>
-				<exclusion>
-					<groupId>*</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
