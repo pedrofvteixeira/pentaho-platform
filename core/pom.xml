@@ -570,12 +570,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-    <dependency>
+<!-- //TODO: For now, kettle-core is a transitive dependency through pentaho-metadata, need to clean it up.
+     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-    </dependency>
+    </dependency> -->
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-engine</artifactId>
