@@ -15,6 +15,10 @@
       <source>target/${data.archive.name}.zip</source>
       <outputDirectory>/</outputDirectory>
     </file>
+    <file>
+      <source>../target/pentaho-server/tomcat/webapps/pentaho/META-INF/MANIFEST.MF</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
   </files>
   <fileSets>
     <fileSet>
