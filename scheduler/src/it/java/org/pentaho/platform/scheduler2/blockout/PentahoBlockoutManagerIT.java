@@ -43,7 +43,7 @@ import org.pentaho.platform.engine.core.system.PentahoSystem;
 import org.pentaho.platform.scheduler2.blockout.BlockoutManagerUtil.TIME;
 import org.pentaho.platform.scheduler2.quartz.test.StubUserDetailsService;
 import org.pentaho.platform.scheduler2.quartz.test.StubUserRoleListService;
-import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceIT.TestQuartzScheduler;
+import org.pentaho.platform.scheduler2.ws.test.TestQuartzScheduler;
 import org.pentaho.platform.scheduler2.ws.test.JaxWsSchedulerServiceIT.TstPluginManager;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
 import org.springframework.security.core.userdetails.UserDetailsService;

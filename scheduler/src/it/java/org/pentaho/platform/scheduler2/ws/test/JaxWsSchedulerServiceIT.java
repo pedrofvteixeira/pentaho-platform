@@ -54,6 +54,7 @@ import org.pentaho.platform.scheduler2.ws.ListParamValue;
 import org.pentaho.platform.scheduler2.ws.MapParamValue;
 import org.pentaho.platform.scheduler2.ws.ParamValue;
 import org.pentaho.platform.scheduler2.ws.StringParamValue;
+import org.pentaho.platform.scheduler2.ws.test.TestQuartzScheduler;
 import org.pentaho.test.platform.engine.core.MicroPlatform;
 import org.pentaho.test.platform.engine.core.PluginManagerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -331,7 +332,7 @@ public class JaxWsSchedulerServiceIT {
       return stringParam;
     }
   }
-
+/*
   public static class TestQuartzScheduler extends QuartzScheduler {
     @Override
     protected String getCurrentUser() {
@@ -339,6 +340,7 @@ public class JaxWsSchedulerServiceIT {
       return super.getCurrentUser();
     }
   }
+*/
 
   @Test( timeout = 1000 * 5 * 60 )
   public void testUpdateComplexJob() throws SchedulerException {
