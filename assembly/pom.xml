@@ -45,12 +45,14 @@
 	<container.lib.dir>${target.pentaho-server.dir}/tomcat/lib</container.lib.dir>
 	<solution.archives.dir>${project.build.directory}/solution-archives</solution.archives.dir>
     <datasource.res.dir>${basedir}/package-res/appserver/tomcat/res/datasources</datasource.res.dir>
+    <prep.pentaho.style.war.dir>${target.pentaho-server.dir}/tomcat/webapps/pentaho-style</prep.pentaho.style.war.dir>
     <!-- Default database for open assembly is hsqldb -->
     <rdbms>hsqldb</rdbms>
 
 	<!-- the impl properties are used to create the manifest file -->
     <impl.title>Pentaho BI Platform Community Edition</impl.title>
     <impl.vendor>Pentaho Corporation</impl.vendor>
+    <impl.version>${project.version}</impl.version>
 
     <axis.version>1.4</axis.version>
     <batik-bridge.version>1.7</batik-bridge.version>
@@ -343,14 +345,13 @@
                   <type>zip</type>
                   <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
                 </artifactItem>
-                
                  <artifactItem>
                   <groupId>pentaho</groupId>
                   <artifactId>pentaho-big-data-plugin-samples</artifactId>
                   <version>${project.version}</version>
                   <type>zip</type>
                   <outputDirectory>${target.pentaho-server.kettle.plugins.dir}</outputDirectory>
-                </artifactItem> 
+                </artifactItem>
                 <!-- [END] unpack kettle-plugins into /pentaho-solutions/system/kettle/plugins -->
 
                 <!-- [START] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
@@ -611,6 +612,31 @@
       </executions>
     </plugin>
 
+    <!--  Creating manifest file -->
+    <plugin>
+      <artifactId>maven-antrun-plugin</artifactId>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <configuration>
+            <target>
+              <!-- Add manifest -->
+              <mkdir dir="${prep.pentaho.war.dir}/META-INF" />
+              <manifest file="${prep.pentaho.war.dir}/META-INF/MANIFEST.MF">
+                <attribute name="Implementation-Title" value="${impl.title}" />
+                <attribute name="Implementation-Version" value="${project.version}" />
+                <attribute name="Implementation-Vendor" value="${impl.vendor}" />
+              </manifest>
+            </target>
+          </configuration>
+          <goals>
+            <goal>run</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+
     <!--  Creating pentaho war -->
     <plugin>
       <artifactId>maven-war-plugin</artifactId>
@@ -627,24 +653,36 @@
                <webResources>
                   <resource>
                     <directory>${target.dir}/resources</directory>
+                    <includes>
+                      <include>**/context.xml</include>
+                    </includes>
                   </resource>
                 </webResources>
                 <archive>
-                <manifest>
-                    <!-- addDefaultImplementationEntries>true</addDefaultImplementationEntries -->
-                </manifest>
-                <!--
-                  <manifestEntries>
-                    <Implementation-Title>${impl.title}</Implementation-Title>
-                    <Implementation-Version>${project.version}</Implementation-Version>
-                    <Implementation-Vendor>${impl.vendor}</Implementation-Vendor>
-                  </manifestEntries>
-                   -->
+                  <addMavenDescriptor>false</addMavenDescriptor>
+                  <manifestFile>${prep.pentaho.war.dir}/META-INF/MANIFEST.MF</manifestFile>
                 </archive>
-                 <warName>pentaho</warName>
-                 <webXml>${prep.pentaho.war.dir}/WEB-INF/web.xml</webXml>
-                 <webappDirectory>${prep.pentaho.war.dir}</webappDirectory>
-                 <outputDirectory>${target.dir}</outputDirectory>
+                <warName>pentaho</warName>
+                <webXml>${prep.pentaho.war.dir}/WEB-INF/web.xml</webXml>
+                <webappDirectory>${prep.pentaho.war.dir}</webappDirectory>
+                <outputDirectory>${target.dir}</outputDirectory>
+              </configuration>
+           </execution>
+           <!--  Creating pentahostyle war -->
+           <execution>
+            <id>pentaho-style-war</id>
+            <phase>package</phase>
+            <goals>
+               <goal>war</goal>
+            </goals>
+            <configuration>
+                <archive>
+                  <addMavenDescriptor>false</addMavenDescriptor>
+                </archive>
+                <warName>pentaho-style</warName>
+                <webXml>${prep.pentaho.style.war.dir}/WEB-INF/web.xml</webXml>
+                <webappDirectory>${prep.pentaho.style.war.dir}</webappDirectory>
+                <outputDirectory>${target.dir}</outputDirectory>
               </configuration>
            </execution>
          </executions>
