@@ -467,7 +467,47 @@
               </artifactItems>
             </configuration>
           </execution>
-
+          <!-- Copy third party tools  wkhtmltoimage -->
+          <execution>
+            <id>copy-third-party-tools</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                   <groupId>wkhtmltopdf</groupId>
+                   <artifactId>wkhtmltoimage-amd64</artifactId>
+                  <version>${wkhtmltoimage.version}</version>
+                  <type>tar.bz2</type>
+                  <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                 <groupId>wkhtmltopdf</groupId>
+                 <artifactId>wkhtmltoimage-OSX</artifactId>
+                 <version>${wkhtmltoimage.version}</version>
+                 <type>tar.bz2</type>
+                  <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>wkhtmltopdf</groupId>
+                  <artifactId>wkhtmltoimage-i386</artifactId>
+                  <version>${wkhtmltoimage.version}</version>
+                  <type>tar.bz2</type>
+                  <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>wkhtmltopdf</groupId>
+                  <artifactId>wkhtmltox</artifactId>
+                  <version>${wkhtmltox.version}</version>
+                  <classifier>installer</classifier>
+                  <type>exe</type>
+                  <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
           <!-- Copy the dependency into lib folder -->
           <execution>
             <id>copy-dependencies</id>
@@ -1359,27 +1399,5 @@
         </exclusion>
       </exclusions>
     </dependency>
-
-    <!-- wkhtmltoimage -->
-    <!--
-    <dependency>
-      <groupId>wkhtmltopdf</groupId>
-      <artifactId>wkhtmltoimage-amd64</artifactId>
-      <version>${wkhtmltoimage.version}</version>
-      <type>tar.bz2</type>
-    </dependency>
-    <dependency>
-      <groupId>wkhtmltopdf</groupId>
-      <artifactId>wkhtmltoimage-OSX</artifactId>
-      <version>${wkhtmltoimage.version}</version>
-      <type>tar.bz2</type>
-    </dependency>
-    <dependency>
-      <groupId>wkhtmltopdf</groupId>
-      <artifactId>wkhtmltox</artifactId>
-      <version>${wkhtmltox.version}</version>
-      <type>tar.bz2</type>
-    </dependency>
-    -->
   </dependencies>
 </project>
