@@ -649,6 +649,23 @@
             </resources>
           </configuration>
           </execution>
+
+        <!-- Copy karaf to pentaho-solutions/system/karaf -->
+        <execution>
+          <id>copy-karaf</id>
+          <phase>package</phase>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <configuration>
+            <resources>
+              <resource>
+                <directory>${project.build.directory}/temp/pentaho-karaf-assembly</directory>
+              </resource>
+            </resources>
+            <outputDirectory>${target.pentaho-server.system.dir}/karaf</outputDirectory>
+          </configuration>
+        </execution>
       </executions>
     </plugin>
 
