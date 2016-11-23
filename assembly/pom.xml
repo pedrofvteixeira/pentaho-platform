@@ -508,7 +508,7 @@
               </artifactItems>
             </configuration>
           </execution>
-          <!-- Copy the dependency into lib folder -->
+          <!-- Copy all the dependency defined with dependency tag into lib folder -->
           <execution>
             <id>copy-dependencies</id>
             <phase>package</phase>
@@ -1363,14 +1363,6 @@
       </exclusions>
     </dependency>
 
-    <!-- Tomcat -->
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>tomcat</artifactId>
-      <version>${tomcat.version}</version>
-      <type>zip</type>
-    </dependency>
-    
     <!-- Tomcat dependencies -->
     <dependency>
       <groupId>cglib</groupId>
