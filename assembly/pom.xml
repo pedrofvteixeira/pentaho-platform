@@ -589,6 +589,7 @@
                   <exclude>**/WEB-INF/jboss-portlet.xml</exclude>
                   <exclude>**/WEB-INF/jboss-web.xml</exclude>
                   <exclude>**/WEB-INF/portlet-instances.xml</exclude>
+                  <exclude>/pentaho-solutions/system/default-content/samples/</exclude>                  
                 </excludes>
               </resource>
               <resource>
@@ -779,6 +780,44 @@
           </execution>
         </executions>
       </plugin>
+      
+    <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <version>${maven-assembly-plugin.version}</version>
+      <inherited>false</inherited>
+      <executions>
+        <execution>
+          <id>distribute-pentaho-plugin-samples</id>
+          <phase>package</phase>
+          <goals>
+            <goal>single</goal>
+          </goals>
+          <configuration>
+            <descriptors>
+              <descriptor>src/main/descriptors/zip-plugin-samples.xml</descriptor>
+            </descriptors>
+            <finalName>plugin-samples</finalName>
+            <appendAssemblyId>false</appendAssemblyId>
+            <outputDirectory>${target.pentaho-server.plugins.dir}/default-content</outputDirectory>                      
+          </configuration>            
+        </execution>
+        <execution>
+          <id>distribute-pentaho-samples</id>
+          <phase>package</phase>
+          <goals>
+            <goal>single</goal>
+          </goals>
+          <configuration>
+            <descriptors>
+              <descriptor>src/main/descriptors/zip-samples.xml</descriptor>
+            </descriptors>
+            <finalName>samples</finalName>
+            <appendAssemblyId>false</appendAssemblyId>
+            <outputDirectory>${target.pentaho-server.plugins.dir}/default-content</outputDirectory>                      
+          </configuration>            
+        </execution>          
+      </executions>      
+    </plugin>      
      
     </plugins>
   </build>
