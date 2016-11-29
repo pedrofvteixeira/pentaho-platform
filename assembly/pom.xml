@@ -59,8 +59,13 @@
     <bsf.version>2.4.0</bsf.version>
     <bsh.version>1.3.0</bsh.version>
     <commons-beanutils.version>1.8.0</commons-beanutils.version>
+    <jettison.version>1.3.3</jettison.version>
+    <monetdb-jdbc.version>2.8</monetdb-jdbc.version>
     <rhino.js.version>1.7R1</rhino.js.version>
-    <slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
+    <nekohtml.version>1.9.15</nekohtml.version>
+    <slf4j-api.version>1.7.7</slf4j-api.version>
+    <slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
+    <snakeyaml.version>1.13</snakeyaml.version>
     <wkhtmltoimage.version>0.10.0_rc2-static</wkhtmltoimage.version>
     <wkhtmltox.version>0.10.0_rc2</wkhtmltox.version>
     <wsdl4j.version>1.5.0</wsdl4j.version>
@@ -1514,6 +1519,31 @@
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-core-asl</artifactId>
         <version>${jackson.core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.jettison</groupId>
+        <artifactId>jettison</artifactId>
+        <version>${jettison.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>monetdb</groupId>
+        <artifactId>monetdb-jdbc</artifactId>
+        <version>${monetdb-jdbc.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sourceforge.nekohtml</groupId>
+        <artifactId>nekohtml</artifactId>
+        <version>${nekohtml.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j-api.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>${snakeyaml.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
