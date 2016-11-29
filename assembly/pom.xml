@@ -68,7 +68,7 @@
     <snakeyaml.version>1.13</snakeyaml.version>
     <wkhtmltoimage.version>0.10.0_rc2-static</wkhtmltoimage.version>
     <wkhtmltox.version>0.10.0_rc2</wkhtmltox.version>
-    <wsdl4j.version>1.5.0</wsdl4j.version>
+    <wsdl4j.version>1.6.2</wsdl4j.version>
     <jackson.core.version>1.9.13</jackson.core.version>
     <jackson.mapper.version>${jackson.core.version}</jackson.mapper.version>
     <jaxen.version>1.1.6</jaxen.version>
@@ -76,6 +76,7 @@
     <commons-io.version>2.2</commons-io.version>
     <geronimo-stax-api_1.0_spec.version>1.0.1</geronimo-stax-api_1.0_spec.version>
     <jackcess.version>1.2.6</jackcess.version>
+    <mail.version>1.4.7</mail.version>
   </properties>
   <modules>
 
@@ -1519,6 +1520,21 @@
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-core-asl</artifactId>
         <version>${jackson.core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.thoughtworks.xstream</groupId>
+        <artifactId>xstream</artifactId>
+        <version>${xstream.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>${mail.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.jettison</groupId>
