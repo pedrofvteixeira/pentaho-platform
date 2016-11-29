@@ -64,6 +64,13 @@
     <wkhtmltoimage.version>0.10.0_rc2-static</wkhtmltoimage.version>
     <wkhtmltox.version>0.10.0_rc2</wkhtmltox.version>
     <wsdl4j.version>1.5.0</wsdl4j.version>
+    <jackson.core.version>1.9.13</jackson.core.version>
+    <jackson.mapper.version>${jackson.core.version}</jackson.mapper.version>
+    <jaxen.version>1.1.6</jaxen.version>
+    <jcl-over-slf4j.version>1.7.4</jcl-over-slf4j.version>
+    <commons-io.version>2.2</commons-io.version>
+    <geronimo-stax-api_1.0_spec.version>1.0.1</geronimo-stax-api_1.0_spec.version>
+    <jackcess.version>1.2.6</jackcess.version>
   </properties>
   <modules>
 
@@ -1453,6 +1460,61 @@
             <artifactId>asm-attrs</artifactId>
             <version>${asm-attrs.version}</version>
         </dependency>
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>${jackson.mapper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.xml.bind</groupId>
+        <artifactId>jaxb-impl</artifactId>
+        <version>${jaxb-impl.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>jaxen</groupId>
+        <artifactId>jaxen</artifactId>
+        <version>${jaxen.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${jcl-over-slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>rhino</groupId>
+        <artifactId>js</artifactId>
+        <version>${js.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>${commons-httpclient.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons-io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>${commons-lang.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.geronimo.specs</groupId>
+        <artifactId>geronimo-stax-api_1.0_spec</artifactId>
+        <version>${geronimo-stax-api_1.0_spec.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.healthmarketscience.jackcess</groupId>
+        <artifactId>jackcess</artifactId>
+        <version>${jackcess.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-core-asl</artifactId>
+        <version>${jackson.core.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 </project>
