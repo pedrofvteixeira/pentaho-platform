@@ -519,7 +519,7 @@
               </artifactItems>
             </configuration>
           </execution>
-          <!-- Copy all the dependency defined with dependency tag into lib folder -->
+          <!-- Copy all the dependency defined with dependency tag into WEB-INF/lib folder -->
           <execution>
             <id>copy-dependencies</id>
             <phase>package</phase>
@@ -527,7 +527,10 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <outputDirectory>${prep.pentaho.war.lib.dir}</outputDirectory>
+              <excludeArtifactIds>gwt-user,postgresql,jtds,h2,hsqldb,mysql-connector-java</excludeArtifactIds>
+              <excludeGroupIds>com.h2database</excludeGroupIds>
+              <prependGroupId>false</prependGroupId>
             </configuration>
           </execution>
           <!-- Copying to tomcat/lib -->
@@ -554,7 +557,7 @@
               <includeArtifactIds>cglib-nodep,jaxen</includeArtifactIds>
             </configuration>
           </execution>
-        </executions>
+         </executions>
       </plugin>
 
     <plugin>
@@ -614,35 +617,6 @@
         </execution>
         <!-- [END] copy package-res and package-res-merged-server configuration
         files into assembly/target/pentaho-server -->
-
-        <execution>
-          <id>prepare-war-lib-dir</id>
-          <phase>package</phase>
-          <goals>
-            <goal>copy-resources</goal>
-          </goals>
-          <configuration>
-            <outputDirectory>${prep.pentaho.war.lib.dir}</outputDirectory>
-            <resources>
-              <resource>
-                <directory>${lib.dir}</directory>
-                <excludes>
-                  <exclude>*servlet-api-*.jar</exclude>
-                  <exclude>gwt-user-*.jar</exclude>
-                  <exclude>mysql-connector-*.jar</exclude>
-                  <exclude>postgres*.jar</exclude>
-                  <exclude>jtds-*.jar</exclude>
-                  <exclude>h2-*.jar</exclude>
-                  <exclude>hsqldb-*.jar</exclude>
-                  <exclude>*-sources.jar</exclude>
-                  <!-- TODO: Remove the line below when we fix the circular
-                    dependency between kettle-engine and metadata -->
-                  <exclude>hibernate-3.2.6.ga.jar</exclude>
-                </excludes>
-              </resource>
-            </resources>
-          </configuration>
-        </execution>
         <!--  Copy context.xml to target/resources -->
         <execution>
           <id>copy-rdbms-context</id>

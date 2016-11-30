@@ -1674,7 +1674,7 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -1686,7 +1686,7 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<version>${hsqldb.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -1698,7 +1698,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>infobright</groupId>

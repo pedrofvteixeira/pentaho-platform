@@ -154,7 +154,6 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${aspectjrt.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -328,7 +327,6 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-xc</artifactId>
 			<version>${jackson.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -340,7 +338,6 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jackson.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -424,7 +421,6 @@
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>${activation.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -520,7 +516,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
 			<version>${hibernate-ehcache.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -556,7 +551,6 @@
 			<groupId>asm</groupId>
 			<artifactId>asm-attrs</artifactId>
 			<version>${asm-attrs.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -604,7 +598,6 @@
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-core</artifactId>
 			<version>${jackrabbit.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
@@ -616,7 +609,6 @@
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-data</artifactId>
 			<version>${jackrabbit.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
