@@ -388,8 +388,6 @@
                   <outputDirectory>${target.pentaho-server.samples.dir}</outputDirectory>
                 </artifactItem>
                 <!-- [END] unpack pentaho-samples into /pentaho-solutions/plugin-samples -->
-           
-
               </artifactItems>
               <overWriteReleases>false</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
@@ -529,8 +527,6 @@
             <configuration>
               <outputDirectory>${prep.pentaho.war.lib.dir}</outputDirectory>
               <excludeArtifactIds>gwt-user,postgresql,jtds,h2,hsqldb,mysql-connector-java</excludeArtifactIds>
-              <excludeGroupIds>com.h2database</excludeGroupIds>
-              <prependGroupId>false</prependGroupId>
             </configuration>
           </execution>
           <!-- Copying to tomcat/lib -->
@@ -830,6 +826,18 @@
         <exclusion>
         	<groupId>javax.servlet</groupId>
         	<artifactId>javax.servlet-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.safehaus.jug</groupId>
+          <artifactId>jug-lgpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scannotation</groupId>
+          <artifactId>scannotation</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>jcifs</groupId>
+          <artifactId>jcifs</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -1150,18 +1158,6 @@
     
     
     <!-- Saxon -->
-    <dependency>
-      <groupId>net.sourceforge.saxon</groupId>
-      <artifactId>saxon</artifactId>
-      <version>${saxon.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon-dom</artifactId>
-      <version>${saxon.version}</version>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>saxon-jdom</artifactId>
