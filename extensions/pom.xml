@@ -2243,24 +2243,27 @@
 			<artifactId>jmockit</artifactId>
 			<version>${jmockit.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
 			<version>${jmock-junit4.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-all</artifactId>
 			<version>${hamcrest-all.version}</version>
-
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -2278,13 +2281,13 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
 			<version>${powermock.version}</version>
-
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>${powermock.version}</version>
-
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.bean-matchers</groupId>
@@ -2297,12 +2300,14 @@
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito-all.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito-core.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -2345,24 +2350,28 @@
 			<artifactId>mockrunner-servlet</artifactId>
 			<version>${mockrunner-servlet.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner</artifactId>
 			<version>${mockrunner.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.javacrumbs.json-unit</groupId>
 			<artifactId>json-unit</artifactId>
 			<version>${json-unit.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>xmlunit</groupId>
 			<artifactId>xmlunit</artifactId>
 			<version>${xmlunit.version}</version>
 			<optional>true</optional>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.tuckey</groupId>
@@ -2374,6 +2383,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core-tests</artifactId>
 			<version>${spring-security-core-tests.version}</version>
+			<scope>test</scope>
 			<optional>true</optional>
 			<exclusions>
 				<exclusion>
