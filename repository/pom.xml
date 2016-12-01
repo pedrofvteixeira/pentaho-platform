@@ -740,7 +740,6 @@
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
 			<version>${aopalliance.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
