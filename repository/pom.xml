@@ -243,7 +243,6 @@
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>jsr311-api</artifactId>
 			<version>${jsr311-api.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -255,7 +254,6 @@
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-multipart</artifactId>
 			<version>${jersey.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -397,7 +395,6 @@
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>${jaxb-api.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -602,7 +599,6 @@
 			<groupId>pentaho</groupId>
 			<artifactId>pentaho-concurrent</artifactId>
 			<version>${pentaho-concurrent.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
@@ -690,7 +686,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.framework.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -702,7 +697,6 @@
 			<groupId>org.springframework.webflow</groupId>
 			<artifactId>spring-binding</artifactId>
 			<version>${spring-binding.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -726,7 +720,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.security.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -761,7 +754,6 @@
 			<groupId>org.fontbox</groupId>
 			<artifactId>fontbox</artifactId>
 			<version>${fontbox.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -773,7 +765,6 @@
 			<groupId>org.jempbox</groupId>
 			<artifactId>jempbox</artifactId>
 			<version>${jempbox.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -904,7 +895,6 @@
 			<groupId>org.pentaho</groupId>
 			<artifactId>pentaho-vfs</artifactId>
 			<version>${pentaho-vfs.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>pentaho</groupId>
@@ -1020,7 +1010,6 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 			<version>${aspectjweaver.version}</version>
-			<optional>true</optional>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -281,11 +281,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.webflow</groupId>
-			<artifactId>spring-binding</artifactId>
-			<version>${spring-binding.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -972,9 +967,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16 -->
 		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcprov-jdk16</artifactId>
-			<version>${bcprov-jdk16.version}</version>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk14</artifactId>
+			<version>${bcprov-jdk14.version}</version>
 		</dependency>
 
 		<dependency>
@@ -1298,7 +1293,7 @@
 		<dependency>
 			<groupId>com.lowagie</groupId>
 			<artifactId>itext-rtf</artifactId>
-			<version>${itext-rtf.version}</version>
+			<version>${itext.version}</version>
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
@@ -2219,6 +2214,22 @@
 			<version>${org.apache.felix.http.version}</version>
 			<scope>compile</scope>
 		</dependency>
+        <dependency>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>org.apache.felix.utils</artifactId>
+          <version>${org.apache.felix.utils.version}</version>
+          <scope>compile</scope>
+          <exclusions>
+              <exclusion>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+              </exclusion>
+              <exclusion>
+                 <groupId>org.osgi</groupId>
+                 <artifactId>org.osgi.compendium</artifactId>
+              </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>com.dumbster</groupId>
 			<artifactId>dumbster</artifactId>
@@ -2843,5 +2854,16 @@
             <version>${pentaho-vfs.version}</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.springframework.webflow</groupId>
+            <artifactId>spring-binding</artifactId>
+            <version>${spring-binding.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>opensymphony</groupId>
+                <artifactId>ognl</artifactId>
+              </exclusion>
+            </exclusions>
+        </dependency>
+  </dependencies>
 </project>
