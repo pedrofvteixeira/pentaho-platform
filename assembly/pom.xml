@@ -74,9 +74,9 @@
     <jaxen.version>1.1.6</jaxen.version>
     <jcl-over-slf4j.version>1.7.4</jcl-over-slf4j.version>
     <commons-io.version>2.2</commons-io.version>
-    <geronimo-stax-api_1.0_spec.version>1.0.1</geronimo-stax-api_1.0_spec.version>
     <jackcess.version>1.2.6</jackcess.version>
     <mail.version>1.4.7</mail.version>
+    <hibernate-ehcache.version>3.6.9.Final</hibernate-ehcache.version>
   </properties>
   <modules>
 
@@ -1530,6 +1530,16 @@
         <groupId>org.yaml</groupId>
         <artifactId>snakeyaml</artifactId>
         <version>${snakeyaml.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-ehcache</artifactId>
+        <version>${hibernate-ehcache.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-expression</artifactId>
+        <version>${spring.framework.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
