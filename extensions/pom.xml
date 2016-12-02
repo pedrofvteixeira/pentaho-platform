@@ -507,7 +507,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.security.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -2263,7 +2262,6 @@
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 			<version>${hamcrest-library.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
