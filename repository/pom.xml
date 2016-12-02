@@ -409,7 +409,6 @@
 			<groupId>javax.xml.stream</groupId>
 			<artifactId>stax-api</artifactId>
 			<version>${stax-api.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -656,7 +655,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.framework.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
@@ -823,7 +821,6 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-scratchpad</artifactId>
 			<version>${poi.version}</version>
-			<optional>true</optional>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>
