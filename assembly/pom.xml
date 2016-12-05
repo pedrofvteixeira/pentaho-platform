@@ -967,9 +967,9 @@
   
     <!-- Miscellaneous -->
     <dependency>
-      <groupId>org.owasp.esapi</groupId>
-      <artifactId>esapi</artifactId>
-      <version>${esapi.version}</version>
+      <groupId>org.owasp.encoder</groupId>
+      <artifactId>encoder</artifactId>
+      <version>${owasp.encoder.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>

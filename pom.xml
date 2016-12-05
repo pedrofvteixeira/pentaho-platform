@@ -83,7 +83,7 @@
   <ehcache-core.version>2.5.1</ehcache-core.version>
   <elasticsearch.version>0.16.3</elasticsearch.version>
   <enunciate-jersey-rt.version>1.27</enunciate-jersey-rt.version>
-  <esapi.version>2.0.1</esapi.version>
+  <owasp.encoder.version>1.2</owasp.encoder.version>
   <feed4j.version>1.0</feed4j.version>
 
   <fontbox.version>0.1.0</fontbox.version>
@@ -352,7 +352,7 @@
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-      <id>base</id>
+      <id>platform-base</id>
       <modules>
         <module>api</module>
         <module>core</module>
@@ -366,7 +366,7 @@
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-      <id>user-console</id>
+      <id>platform-user-console</id>
       <modules>
         <module>user-console</module>
       </modules>
@@ -375,7 +375,7 @@
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
-      <id>assembly</id>
+      <id>platform-assemble</id>
       <modules>
         <module>assembly</module>
       </modules>
