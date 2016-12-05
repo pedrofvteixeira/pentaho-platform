@@ -933,6 +933,10 @@
         	<groupId>javax.servlet</groupId>
         	<artifactId>servlet-api</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>javax.ws.rs-api</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     
@@ -1723,6 +1727,17 @@
           </exclusion>
       </exclusions>
      </dependency>
+
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libpixie</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>pentaho-library</groupId>
+      <artifactId>libsparkline</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
