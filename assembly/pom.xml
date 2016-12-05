@@ -434,7 +434,7 @@
               </artifactItems>
             </configuration>
           </execution>
-          <!-- Datasource Libraries -->
+          <!-- Copy Datasource Libraries to tomcat/lib  -->
           <execution>
             <id>copy-Datasource-libraries</id>
             <phase>package</phase>
@@ -469,6 +469,18 @@
                   <artifactId>h2</artifactId>
                   <version>${h2.version}</version>
                   <overWrite>false</overWrite>
+                  <outputDirectory>${container.lib.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>javax.servlet.jsp</groupId>
+                  <artifactId>jsp-api</artifactId>
+                  <version>${jsp-api.version}</version>
+                  <outputDirectory>${container.lib.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.postgresql</groupId>
+                  <artifactId>postgresql</artifactId>
+                  <version>${postgresql.version}</version>
                   <outputDirectory>${container.lib.dir}</outputDirectory>
                 </artifactItem>
               </artifactItems>
@@ -524,20 +536,8 @@
             </goals>
             <configuration>
               <outputDirectory>${prep.pentaho.war.lib.dir}</outputDirectory>
-              <excludeArtifactIds>gwt-user,postgresql,jtds,h2,hsqldb,mysql-connector-java,jsp-api</excludeArtifactIds>
+              <excludeArtifactIds>gwt-user,jtds,h2,hsqldb,mysql-connector-java</excludeArtifactIds>
               <includeArtifactIds>barcode4j</includeArtifactIds>
-            </configuration>
-          </execution>
-          <!-- Copying to tomcat/lib -->
-          <execution>
-            <id>copy-tomcat-libs</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${target.pentaho-server.dir}/tomcat/lib</outputDirectory>
-              <includeArtifactIds>jsp-api,postgresql</includeArtifactIds>
             </configuration>
           </execution>
           <!-- Copying to tomcat/server/lib -->
@@ -831,16 +831,12 @@
           <artifactId>jug-lgpl</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>net.sf.scannotation</groupId>
+          <groupId>org.scannotation</groupId>
           <artifactId>scannotation</artifactId>
         </exclusion>
         <exclusion>
           <groupId>jcifs</groupId>
           <artifactId>jcifs</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.xmlgraphics</groupId>
-          <artifactId>batik-transcoder</artifactId>
         </exclusion>
         <exclusion>
           <groupId>concurrent</groupId>
@@ -875,10 +871,6 @@
           <groupId>javax.validation</groupId>
           <artifactId>validation-api</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>javax.ws.rs</groupId>
-          <artifactId>javax.ws.rs-api</artifactId>
-       </exclusion>
       </exclusions>
     </dependency>
 
@@ -932,6 +924,10 @@
         <exclusion>
         	<groupId>javax.servlet</groupId>
         	<artifactId>servlet-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>javax.ws.rs-api</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -1474,28 +1470,6 @@
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
       <version>${jaxen.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>${jsp-api.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${postgresql.version}</version>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
