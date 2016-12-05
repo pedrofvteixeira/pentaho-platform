@@ -1382,6 +1382,12 @@
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.utils</artifactId>
       <version>${org.apache.felix.utils.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
