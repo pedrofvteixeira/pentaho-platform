@@ -831,10 +831,6 @@
           <artifactId>jug-lgpl</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.scannotation</groupId>
-          <artifactId>scannotation</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>jcifs</groupId>
           <artifactId>jcifs</artifactId>
         </exclusion>
@@ -1697,7 +1693,6 @@
           </exclusion>
       </exclusions>
      </dependency>
-
     <dependency>
       <groupId>pentaho-library</groupId>
       <artifactId>libpixie</artifactId>
@@ -1713,8 +1708,30 @@
       <artifactId>kettle5-log4j-plugin</artifactId>
       <version>${project.version}</version>
     </dependency>
+     <dependency>
+        <groupId>xalan</groupId>
+        <artifactId>serializer</artifactId>
+        <version>${xalan.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+      </exclusions>
+     </dependency>
+     <dependency>
+        <groupId>xalan</groupId>
+        <artifactId>xalan</artifactId>
+        <version>${xalan.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+          </exclusion>
+      </exclusions>
+     </dependency>
   </dependencies>
-
+  
   <dependencyManagement>
     <dependencies>
         <dependency>
