@@ -501,6 +501,7 @@
                   <version>${wkhtmltoimage.version}</version>
                   <type>tar.bz2</type>
                   <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                  <destFileName>wkhtmltoimage_linux_amd64.tar.bz2</destFileName>
                 </artifactItem>
                 <artifactItem>
                  <groupId>wkhtmltopdf</groupId>
@@ -508,6 +509,7 @@
                  <version>${wkhtmltoimage.version}</version>
                  <type>tar.bz2</type>
                   <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                  <destFileName>wkhtmltoimage_mac.tar.bz2</destFileName>
                 </artifactItem>
                 <artifactItem>
                   <groupId>wkhtmltopdf</groupId>
@@ -515,6 +517,7 @@
                   <version>${wkhtmltoimage.version}</version>
                   <type>tar.bz2</type>
                   <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                  <destFileName>wkhtmltoimage_linux_i386.tar.bz2</destFileName>
                 </artifactItem>
                 <artifactItem>
                   <groupId>wkhtmltopdf</groupId>
@@ -523,6 +526,7 @@
                   <classifier>installer</classifier>
                   <type>exe</type>
                   <outputDirectory>${target.pentaho-server.dir}/third-party-tools/wkhtmltoimage</outputDirectory>
+                  <destFileName>wkhtmltoimage_windows_installer.exe</destFileName>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -550,6 +554,25 @@
             <configuration>
               <outputDirectory>${target.pentaho-server.dir}/tomcat/server/lib</outputDirectory>
               <includeArtifactIds>cglib-nodep,jaxen</includeArtifactIds>
+            </configuration>
+          </execution>
+            <!-- Copying to pentaho-server/data/lib -->
+          <execution>
+            <id>copy-data-libs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.hsqldb</groupId>
+                  <artifactId>hsqldb</artifactId>
+                  <version>${hsqldb.version}</version>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${target.pentaho-server.dir}/data/lib</outputDirectory>
+                </artifactItem>
+              </artifactItems>
             </configuration>
           </execution>
          </executions>
