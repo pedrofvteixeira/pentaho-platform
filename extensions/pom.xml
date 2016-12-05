@@ -1345,6 +1345,12 @@
 			<artifactId>kettle-core</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>net.sf.scannotation</groupId>
+                <artifactId>scannotation</artifactId>
+              </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>pentaho-kettle</groupId>
@@ -2290,7 +2296,12 @@
 			<groupId>com.google.code.bean-matchers</groupId>
 			<artifactId>bean-matchers</artifactId>
 			<version>${bean-matchers.version}</version>
-			<optional>true</optional>
+            <exclusions>
+              <exclusion>
+                <groupId>*</groupId>
+                <artifactId>*</artifactId>
+              </exclusion>
+            </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
