@@ -1738,6 +1738,11 @@
       <artifactId>libsparkline</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>pentaho-kettle</groupId>
+      <artifactId>kettle5-log4j-plugin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
