@@ -19,6 +19,22 @@
     <fileSet>
       <directory>${project.root.build.directory}/${project.artifactId}</directory><!-- assembly/target/pentaho-server -->
       <outputDirectory>.</outputDirectory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>${project.root.build.directory}/${project.artifactId}/tomcat/bin</directory><!-- assembly/target/pentaho-server -->
+      <outputDirectory>./tomcat/bin</outputDirectory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>${project.root.build.directory}/${project.artifactId}</directory><!-- assembly/target/pentaho-server -->
+      <outputDirectory>.</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>
