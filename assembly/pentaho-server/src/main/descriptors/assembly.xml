@@ -33,6 +33,14 @@
       <fileMode>0755</fileMode>
     </fileSet>
     <fileSet>
+      <directory>${project.root.build.directory}/${project.artifactId}/data</directory><!-- assembly/target/pentaho-server -->
+      <outputDirectory>./data</outputDirectory>
+      <includes>
+        <include>*.sh</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
       <directory>${project.root.build.directory}/${project.artifactId}</directory><!-- assembly/target/pentaho-server -->
       <outputDirectory>.</outputDirectory>
     </fileSet>
