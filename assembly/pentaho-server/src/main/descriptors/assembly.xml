@@ -44,5 +44,12 @@
       <directory>${project.root.build.directory}/${project.artifactId}</directory><!-- assembly/target/pentaho-server -->
       <outputDirectory>.</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>${project.root.build.directory}/${project.artifactId}</directory><!-- assembly/target/pentaho-server -->
+      <outputDirectory>./tomcat/logs</outputDirectory>
+      <excludes>
+        <exclude>**/*</exclude>
+      </excludes>
+    </fileSet>
   </fileSets>
 </assembly>
