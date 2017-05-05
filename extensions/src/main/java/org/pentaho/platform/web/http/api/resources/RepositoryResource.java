@@ -12,7 +12,7 @@
 * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 * See the GNU Lesser General Public License for more details.
 *
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+* Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
 */
 
 package org.pentaho.platform.web.http.api.resources;
@@ -608,22 +608,122 @@ public class RepositoryResource extends AbstractJaxRSResource {
   @Produces ( { APPLICATION_XML, APPLICATION_JSON } )
   @Facet ( name = "Unsupported" )
   public Response getExecutableTypes() {
+    final GenericEntity<List<ExecutableFileTypeDto>> entity =
+        new GenericEntity<List<ExecutableFileTypeDto>>( getAllExecutableTypesOrByExtension( null ) ) {
+      };
+    return Response.ok( entity ).build();
+  }
+
+  private ArrayList<ExecutableFileTypeDto> getAllExecutableTypesOrByExtension( final String extension ) {
+
+    boolean wantParticularExecutableType = ( extension != null && !extension.isEmpty() );
+
     ArrayList<ExecutableFileTypeDto> executableTypes = new ArrayList<ExecutableFileTypeDto>();
     for ( String contentType : pluginManager.getContentTypes() ) {
       IContentInfo contentInfo = pluginManager.getContentTypeInfo( contentType );
+
       ExecutableFileTypeDto executableFileType = new ExecutableFileTypeDto();
       executableFileType.setDescription( contentInfo.getDescription() );
       executableFileType.setExtension( contentInfo.getExtension() );
       executableFileType.setTitle( contentInfo.getTitle() );
       executableFileType.setCanSchedule( hasOperationId( contentInfo.getOperations(), "SCHEDULE_NEW" ) );
       executableFileType.setCanEdit( hasOperationId( contentInfo.getOperations(), "EDIT" ) );
-      executableTypes.add( executableFileType );
+
+      if ( wantParticularExecutableType ) {
+
+        if ( extension.equalsIgnoreCase( contentInfo.getExtension() ) ) {
+          executableTypes.add( executableFileType );
+        }
+
+        // continue
+
+      } else {
+
+        // return all
+        executableTypes.add( executableFileType );
+      }
     }
 
-    final GenericEntity<List<ExecutableFileTypeDto>> entity =
-        new GenericEntity<List<ExecutableFileTypeDto>>( executableTypes ) {
-        };
-    return Response.ok( entity ).build();
+    return executableTypes;
+  }
+
+  @Path ( "/{contextId}/canExecute" )
+  @GET
+  @Produces ( { TEXT_PLAIN } )
+  public String doGetCanExecute( @PathParam ( "contextId" ) String contextId ) throws URISyntaxException {
+
+    if ( contextId == null || contextId.isEmpty() ) {
+      logger.error( MessageFormat.format( "No contextId was provided: [{0}]", contextId ) );
+      return Boolean.toString( false );
+    }
+
+    String extension = resolveExtensionThroughContextId( contextId );
+
+    if ( extension == null || extension.isEmpty() ) {
+      logger.error( MessageFormat.format( "No extension was resolved for contextId: [{0}]", contextId ) );
+      return Boolean.toString( false );
+    }
+
+    ArrayList<ExecutableFileTypeDto> executableTypes = getAllExecutableTypesOrByExtension( extension );
+
+    ctxt( "PluginManager holds [{0}] ExecutableType(s) for contextId [{1}]", executableTypes.size(), contextId ); //$NON-NLS-1$
+    return Boolean.toString( executableTypes.size() > 0 );
+  }
+
+  @Path ( "/{contextId}/canSchedule" )
+  @GET
+  @Produces ( { TEXT_PLAIN } )
+  public String doGetCanSchedule( @PathParam ( "contextId" ) String contextId ) throws URISyntaxException {
+
+    if ( contextId == null || contextId.isEmpty() ) {
+      logger.error( MessageFormat.format( "No contextId was provided: [{0}]", contextId ) );
+      return Boolean.toString( false );
+    }
+
+    String extension = resolveExtensionThroughContextId( contextId );
+
+    if ( extension == null || extension.isEmpty() ) {
+      logger.error( MessageFormat.format( "No extension was resolved for contextId: [{0}]", contextId ) );
+      return Boolean.toString( false );
+    }
+
+    ArrayList<ExecutableFileTypeDto> executableTypes = getAllExecutableTypesOrByExtension( extension );
+
+    ctxt( "PluginManager holds [{0}] ExecutableType(s) for contextId [{1}]", executableTypes.size(), contextId ); //$NON-NLS-1$
+    boolean canSchedule = false;
+    for ( ExecutableFileTypeDto executableType : executableTypes ) {
+      canSchedule |= executableType.isCanSchedule();
+    }
+
+    return Boolean.toString( canSchedule );
+  }
+
+  private String resolveExtensionThroughContextId( final String contextId ) {
+
+    if ( contextId == null || contextId.isEmpty() ) {
+      ctxt( "[{0}] is not a valid contextId", contextId ); //$NON-NLS-1$
+      return null;
+
+    } else if ( contextId.startsWith( ":" ) || contextId.matches( "^[A-z]\t:.*" ) ) { //$NON-NLS-1$
+      ctxt( "[{0}] is a repository file id", contextId ); //$NON-NLS-1$
+
+      final RepositoryFile file = repository.getFile( FileResource.idToPath( contextId ) );
+      if ( file == null ) {
+        logger.error( MessageFormat.format( "Repository file [{0}] not found", contextId ) );
+        return null;
+      }
+      return RepositoryFilenameUtils.getExtension( file.getName() );
+
+    } else {
+      ctxt( "Is [{0}] is a repository file extension?", contextId ); //$NON-NLS-1$
+      String pluginId = pluginManager.getPluginIdForType( contextId );
+      if ( pluginId != null ) {
+        ctxt( "Yep, [{0}] is a repository file extension", contextId ); //$NON-NLS-1$
+        return contextId; // ( i.e. extension )
+      }
+    }
+    // can't resolve
+    return null;
   }
 
   private boolean hasOperationId( final List<IPluginOperation> operations, final String operationId ) {
