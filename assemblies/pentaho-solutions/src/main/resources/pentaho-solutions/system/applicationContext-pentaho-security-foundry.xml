@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--+
+	| Application context containing JDBC UserRoleListService
+	| implementation.
+	+-->
+
+<beans  xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pen="http://www.pentaho.com/schema/pentaho-system"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.pentaho.com/schema/pentaho-system http://www.pentaho.com/schema/pentaho-system.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd"
+        default-lazy-init="true"
+>
+
+  <!-- map ldap role to pentaho security role -->
+  <util:map id="foundryRoleMap">
+    <entry key="Admin" value="Administrator"/>
+  </util:map>
+
+  <bean id="foundryRoleMapper"
+        class="org.pentaho.platform.engine.security.DefaultFoundryRoleMapper">
+    <constructor-arg>
+      <ref bean="foundryRoleMap"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="foundryUserRoleListService"
+        class="org.pentaho.platform.plugin.services.security.userrole.foundry.FoundryUserRoleListService">
+   <!-- <constructor-arg index="0" ref="foundryUserDetailsService" />-->
+
+   <!-- <property name="roleMapper" ref="foundryRoleMapper" />-->
+   <!-- <property name="rolePrefix" value="" />-->
+  </bean>
+
+  <bean id="extraRoleFoundryUserRoleListService" class="org.pentaho.platform.plugin.services.security.userrole.ExtraRolesUserRoleListServiceDecorator">
+    <property name="userRoleListService" ref="foundryUserRoleListService" />
+    <property name="extraRoles" ref="extraRoles" />
+  </bean>
+  <bean class="org.pentaho.platform.plugin.services.security.userrole.CachingUserRoleListServiceDecorator">
+    <constructor-arg ref="extraRoleFoundryUserRoleListService" />
+    <pen:publish as-type="INTERFACES">
+      <pen:attributes>
+        <pen:attr key="providerName" value="foundry"/>
+      </pen:attributes>
+    </pen:publish>
+  </bean>
+
+</beans>

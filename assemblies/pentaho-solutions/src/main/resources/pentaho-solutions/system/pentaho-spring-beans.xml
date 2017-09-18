@@ -61,7 +61,10 @@ http://www.pentaho.com/schema/pentaho-system http://www.pentaho.com/schema/penta
   <import resource="applicationContext-pentaho-security-jdbc.xml" />
   <import resource="applicationContext-spring-security-jdbc.xml" />
 
-  
+  <import resource="applicationContext-spring-security-foundry.xml" />
+  <import resource="applicationContext-pentaho-security-foundry.xml" />
+
+
   <import resource="pentahoObjects.spring.xml" />
   <import resource="GettingStartedDB-spring.xml" /> <!-- Remove this line to unhook the Getting Started DB -->
   <import resource="importExport.xml" />
