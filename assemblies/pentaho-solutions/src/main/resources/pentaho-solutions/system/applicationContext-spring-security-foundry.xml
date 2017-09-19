@@ -13,15 +13,13 @@
        						http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd" default-lazy-init="true">
 
   <bean id="foundryAuthenticationProvider" class="org.pentaho.platform.plugin.services.security.userrole.foundry.FoundryAuthenticationProvider">
-   <!-- <constructor-arg>
-      <ref bean="authenticator" />
-    </constructor-arg>-->
-  <!--  <constructor-arg>
-      <ref bean="populator" />
-    </constructor-arg>-->
-   <!-- <constructor-arg>
-      <ref bean="foundryRoleMapper" />
-    </constructor-arg>-->
+    <property name="isHttps" value="${foundry.useHttps}" />
+    <property name="hostname" value="${foundry.hostname}" />
+    <property name="port" value="${foundry.port}" />
+    <property name="realm" value="${foundry.realm}" />
+    <property name="grantType" value="${foundry.grantType}" />
+    <property name="clientId" value="${foundry.clientId}" />
+    <property name="clientSecret" value="${foundry.clientSecret}" />
   </bean>
 
   <!--
@@ -147,11 +145,11 @@
     </pen:publish>
   </bean>
 
-<!--  <bean class="org.pentaho.platform.config.SolutionPropertiesFileConfiguration">
-    <constructor-arg value="ldap"/>
-    <constructor-arg value="applicationContext-security-ldap.properties"/>
+  <bean class="org.pentaho.platform.config.SolutionPropertiesFileConfiguration">
+    <constructor-arg value="foundry"/>
+    <constructor-arg value="applicationContext-security-foundry.properties"/>
     <pen:publish as-type="INTERFACES"/>
-  </bean>-->
+  </bean>
 
 
 </beans>
