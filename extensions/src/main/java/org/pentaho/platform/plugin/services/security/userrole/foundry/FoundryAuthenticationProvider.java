@@ -32,7 +32,7 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
   private Logger logger = LoggerFactory.getLogger( getClass() );
 
-  private static final String FOUNDRY_AUTHENTICATION_ENDPOINT = "/auth/oauth";
+  private static final String FOUNDRY_AUTHENTICATION_ENDPOINT = "/api/sentinel/security/authenticate";
 
   // required form params
   private static final String FOUNDRY_PARAM_GRANT_TYPE = "grant_type";
@@ -110,6 +110,7 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_CLIENT_ID, getClientId() ) );
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_CLIENT_SECRET, getClientSecret() ) );
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_GRANT_TYPE, getGrantType() ) );
+    postParameters.add( new BasicNameValuePair( "x-ens-auth" , "angularShiro") );
 
     return postParameters;
   }
