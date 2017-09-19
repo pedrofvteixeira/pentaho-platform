@@ -18,6 +18,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationProvider;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
@@ -40,6 +42,8 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
   private static final String FOUNDRY_PARAM_CLIENT_SECRET = "client_secret";
   private static final String FOUNDRY_PARAM_CLIENT_ID = "client_id";
 
+  private Map<String, UserDetails> userMap;
+
   private boolean useHttps = true; // default
   private String hostname;
   private Integer port;
@@ -48,20 +52,22 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
   private String clientSecret;
   private String clientId;
 
+
+  public FoundryAuthenticationProvider( Map<String, UserDetails> userMap ) {
+    setUserMap( userMap );
+  }
+
   @Override
   public Authentication authenticate( Authentication authentication ) throws AuthenticationException {
 
-
-    HttpPost httpPost = null;
-
     try {
 
-      new HttpPost( buildEndpoint().toString() );
+      HttpPost httpPost = new HttpPost( buildEndpoint().toString() );
       httpPost.addHeader( new BasicHeader( HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON ) );
       httpPost.addHeader( new BasicHeader( HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED ) );
 
-      String user = "batman"; // TODO
-      String pass = "Pentaho06"; // TODO
+      String user = authentication.getPrincipal().toString();
+      String pass = authentication.getCredentials().toString();
 
       httpPost.setEntity( new UrlEncodedFormEntity( buildPostParameters( user, pass ), StandardCharsets.UTF_8 ));
 
@@ -82,7 +88,7 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
   @Override
   public boolean supports( Class<?> aClass ) {
-    return UsernamePasswordAuthenticationToken.class.getName().equals( aClass );
+    return aClass != null && UsernamePasswordAuthenticationToken.class.getName().equals( aClass.getName() );
   }
 
   protected URI buildEndpoint() throws URISyntaxException {
@@ -166,5 +172,13 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
   public Logger getLogger() {
     return logger;
+  }
+
+  public Map<String, UserDetails> getUserMap() {
+    return userMap;
+  }
+
+  public void setUserMap(Map<String, UserDetails> userMap) {
+    this.userMap = userMap;
   }
 }
