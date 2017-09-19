@@ -24,12 +24,17 @@
     </constructor-arg>
   </bean>
 
-  <bean id="foundryUserRoleListService"
-        class="org.pentaho.platform.plugin.services.security.userrole.foundry.FoundryUserRoleListService">
-   <!-- <constructor-arg index="0" ref="foundryUserDetailsService" />-->
-
-   <!-- <property name="roleMapper" ref="foundryRoleMapper" />-->
-   <!-- <property name="rolePrefix" value="" />-->
+  <bean id="foundryUserRoleListService" class="org.pentaho.platform.plugin.services.security.userrole.foundry.FoundryUserRoleListService">
+    <property name="userDetailsService">
+      <pen:bean class="org.springframework.security.core.userdetails.UserDetailsService"/>
+    </property>
+    <property name="userNameUtils" >
+      <ref bean="tenantedRoleNameUtils" />
+    </property>
+    <property name="roleComparator">
+      <bean class="org.pentaho.platform.engine.security.DefaultRoleComparator" />
+    </property>
+    <property name="extraRoles" ref="extraRoles" />
   </bean>
 
   <bean id="extraRoleFoundryUserRoleListService" class="org.pentaho.platform.plugin.services.security.userrole.ExtraRolesUserRoleListServiceDecorator">

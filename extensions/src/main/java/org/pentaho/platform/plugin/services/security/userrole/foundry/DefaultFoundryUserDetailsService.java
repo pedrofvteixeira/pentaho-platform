@@ -1,53 +1,39 @@
 package org.pentaho.platform.plugin.services.security.userrole.foundry;
 
-import org.springframework.security.core.GrantedAuthority;
+import org.apache.commons.lang.StringUtils;
+import org.pentaho.platform.repository2.unified.jcr.JcrTenantUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by jchilton on 9/18/2017.
  */
 public class DefaultFoundryUserDetailsService  implements UserDetailsService {
+
+  private Map<String, UserDetails> userMap;
+
+  public DefaultFoundryUserDetailsService( Map<String, UserDetails> userMap ) {
+    setUserMap( userMap );
+  }
+
   @Override
-  public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-    return new UserDetails() {
-      @Override
-      public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-      }
+  public UserDetails loadUserByUsername( String user ) throws UsernameNotFoundException {
 
-      @Override
-      public String getPassword() {
-        return "admin";
-      } //todo my foundry creds from realm = local
+    if( !StringUtils.isEmpty( user ) && getUserMap().containsKey(JcrTenantUtils.getPrincipalName( user, true ) ) ) {
+      return getUserMap().get( user );
+    }
 
-      @Override
-      public String getUsername() {
-        return "admin";
-      }
+    throw new UsernameNotFoundException( null );
+  }
 
-      @Override
-      public boolean isAccountNonExpired() {
-        return true;
-      }
+  public Map<String, UserDetails> getUserMap() {
+    return userMap;
+  }
 
-      @Override
-      public boolean isAccountNonLocked() {
-        return true;
-      }
-
-      @Override
-      public boolean isCredentialsNonExpired() {
-        return false;
-      }
-
-      @Override
-      public boolean isEnabled() {
-        return true;
-      }
-    };
+  public void setUserMap(Map<String, UserDetails> userMap) {
+    this.userMap = userMap;
   }
 }
