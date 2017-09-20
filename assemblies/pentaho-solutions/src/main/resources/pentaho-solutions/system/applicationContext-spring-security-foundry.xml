@@ -18,8 +18,6 @@
     <property name="port" value="${foundry.port}" />
     <property name="realm" value="${foundry.realm}" />
     <property name="grantType" value="${foundry.grantType}" />
-    <property name="clientId" value="${foundry.clientId}" />
-    <property name="clientSecret" value="${foundry.clientSecret}" />
   </bean>
 
   <!--

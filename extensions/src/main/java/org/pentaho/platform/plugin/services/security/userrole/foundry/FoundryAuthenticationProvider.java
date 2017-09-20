@@ -1,7 +1,9 @@
 package org.pentaho.platform.plugin.services.security.userrole.foundry;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -13,19 +15,26 @@ import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationProvider;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class FoundryAuthenticationProvider implements AuthenticationProvider {
@@ -39,14 +48,12 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
   private static final String FOUNDRY_PARAM_USERNAME = "username";
   private static final String FOUNDRY_PARAM_PASSWORD = "password";
   private static final String FOUNDRY_PARAM_REALM = "realm";
-  private static final String FOUNDRY_PARAM_CLIENT_SECRET = "client_secret";
-  private static final String FOUNDRY_PARAM_CLIENT_ID = "client_id";
 
   private Map<String, UserDetails> userMap;
 
   private boolean useHttps = true; // default
   private String hostname;
-  private Integer port;
+  private String port;
   private String realm;
   private String grantType;
   private String clientSecret;
@@ -60,30 +67,49 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
   @Override
   public Authentication authenticate( Authentication authentication ) throws AuthenticationException {
 
+    String username = authentication.getPrincipal().toString();
+    String password = authentication.getCredentials().toString();
+
     try {
 
       HttpPost httpPost = new HttpPost( buildEndpoint().toString() );
       httpPost.addHeader( new BasicHeader( HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON ) );
       httpPost.addHeader( new BasicHeader( HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED ) );
 
-      String user = authentication.getPrincipal().toString();
-      String pass = authentication.getCredentials().toString();
+      httpPost.setEntity( new UrlEncodedFormEntity( buildPostParameters( username, password ), StandardCharsets.UTF_8 ));
 
-      httpPost.setEntity( new UrlEncodedFormEntity( buildPostParameters( user, pass ), StandardCharsets.UTF_8 ));
-
-      getLogger().info( "Sending auth request to {1} for username {2}" , buildEndpoint().toString(), authentication.getPrincipal() );
+      getLogger().info( "Sending auth request to " +  buildEndpoint().toString() + " for username " + authentication.getPrincipal() );
       HttpResponse response = HttpClients.createDefault().execute( httpPost );
       int statusCode = response.getStatusLine().getStatusCode();
-      getLogger().info( "Received auth response of {1}" , statusCode );
+      String responseBody = responseBodyToString( response );
+      getLogger().info( "Received response of " + statusCode + ": with body " + responseBody );
 
-    } catch ( URISyntaxException e ) {
-      getLogger().error( e.getLocalizedMessage(), e );
+      if( statusCode == HttpStatus.SC_OK ) {
 
-    } catch ( IOException e ) {
+        // TODO properly implement this GrantedAuthority part
+        List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
+        auths.add( new SimpleGrantedAuthority( "Authenticated" ) );
+
+
+        UserDetails user = new User(
+                username,
+                "ignored" /* password */,
+                true /* isEnabled */,
+                true /* isAccountNonExpired */,
+                true /* isCredentialsNonExpired */,
+                true /* isAccountNonExpired */,
+                auths );
+
+        getUserMap().put( username, user );
+        return new UsernamePasswordAuthenticationToken( user.getUsername(), user.getPassword(), user.getAuthorities() );
+      }
+
+    } catch ( URISyntaxException | IOException e ) {
       getLogger().error( e.getLocalizedMessage(), e );
+      throw new AuthenticationServiceException( e.getLocalizedMessage(), e );
     }
 
-    return null; // TODO
+    throw new AuthenticationServiceException( "Failed to authenticate user " + username );
   }
 
   @Override
@@ -96,7 +122,7 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     return new URIBuilder()
             .setScheme( isUseHttps() ? "https" : "http" )
             .setHost( getHostname() )
-            .setPort( getPort() )
+            .setPort( Integer.parseInt( getPort() ) )
             .setPath( FOUNDRY_AUTHENTICATION_ENDPOINT )
             .build();
   }
@@ -107,12 +133,26 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_USERNAME, username ) );
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_PASSWORD, password ) );
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_REALM, getRealm() ) );
-    postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_CLIENT_ID, getClientId() ) );
-    postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_CLIENT_SECRET, getClientSecret() ) );
     postParameters.add( new BasicNameValuePair( FOUNDRY_PARAM_GRANT_TYPE, getGrantType() ) );
-    postParameters.add( new BasicNameValuePair( "x-ens-auth" , "angularShiro") );
 
     return postParameters;
+  }
+
+  protected String responseBodyToString( HttpResponse response ) throws IOException {
+
+    InputStream is = null;
+    StringBuilder sb = new StringBuilder();
+
+    try {
+      is = response.getEntity().getContent();
+      for ( String line : IOUtils.readLines( is, StandardCharsets.UTF_8.displayName() ) ){
+        sb.append( line + "\n" );
+      }
+    } finally {
+      IOUtils.closeQuietly( is );
+    }
+
+    return sb.toString();
   }
 
   public boolean isUseHttps() {
@@ -131,11 +171,11 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     this.hostname = hostname;
   }
 
-  public Integer getPort() {
+  public String getPort() {
     return port;
   }
 
-  public void setPort( Integer port ) {
+  public void setPort( String port ) {
     this.port = port;
   }
 
