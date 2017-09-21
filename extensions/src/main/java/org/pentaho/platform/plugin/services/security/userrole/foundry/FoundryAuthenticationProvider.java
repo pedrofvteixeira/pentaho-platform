@@ -24,7 +24,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserCache;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -33,9 +33,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
@@ -49,19 +48,16 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
   private static final String FOUNDRY_PARAM_PASSWORD = "password";
   private static final String FOUNDRY_PARAM_REALM = "realm";
 
-  private Map<String, UserDetails> userMap;
-
   private boolean useHttps = true; // default
   private String hostname;
   private String port;
   private String realm;
   private String grantType;
-  private String clientSecret;
-  private String clientId;
 
+  UserCache userCache;
 
-  public FoundryAuthenticationProvider( Map<String, UserDetails> userMap ) {
-    setUserMap( userMap );
+  public FoundryAuthenticationProvider( UserCache userCache ) {
+    setUserCache( userCache );
   }
 
   @Override
@@ -86,22 +82,13 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
       if( statusCode == HttpStatus.SC_OK ) {
 
-        // TODO properly implement this GrantedAuthority part
-        List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
-        auths.add( new SimpleGrantedAuthority( "Authenticated" ) );
+        // TODO handle authorities list in a proper way - this is a 'hack'
+        List<GrantedAuthority> authorities = Arrays.asList(
+                new SimpleGrantedAuthority( "Anonymous" ), new SimpleGrantedAuthority( "Authenticated" ) );
 
+        getUserCache().putUserInCache( new User( username, "ignored", true, true, true, true, authorities ) );
 
-        UserDetails user = new User(
-                username,
-                "ignored" /* password */,
-                true /* isEnabled */,
-                true /* isAccountNonExpired */,
-                true /* isCredentialsNonExpired */,
-                true /* isAccountNonExpired */,
-                auths );
-
-        getUserMap().put( username, user );
-        return new UsernamePasswordAuthenticationToken( user.getUsername(), user.getPassword(), user.getAuthorities() );
+        return new UsernamePasswordAuthenticationToken( username, "ignored" /* password */, authorities );
       }
 
     } catch ( URISyntaxException | IOException e ) {
@@ -145,7 +132,7 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
 
     try {
       is = response.getEntity().getContent();
-      for ( String line : IOUtils.readLines( is, StandardCharsets.UTF_8.displayName() ) ){
+      for ( String line : IOUtils.readLines( is, StandardCharsets.UTF_8.displayName() ) ) {
         sb.append( line + "\n" );
       }
     } finally {
@@ -159,7 +146,7 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     return useHttps;
   }
 
-  public void setUseHttps(boolean useHttps) {
+  public void setUseHttps( boolean useHttps) {
     this.useHttps = useHttps;
   }
 
@@ -187,27 +174,11 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     this.realm = realm;
   }
 
-  public String getClientSecret() {
-    return clientSecret;
-  }
-
-  public void setClientSecret( String clientSecret ) {
-    this.clientSecret = clientSecret;
-  }
-
-  public String getClientId() {
-    return clientId;
-  }
-
-  public void setClientId( String clientId ) {
-    this.clientId = clientId;
-  }
-
   public String getGrantType() {
     return grantType;
   }
 
-  public void setGrantType(String grantType) {
+  public void setGrantType( String grantType ) {
     this.grantType = grantType;
   }
 
@@ -215,11 +186,11 @@ public class FoundryAuthenticationProvider implements AuthenticationProvider {
     return logger;
   }
 
-  public Map<String, UserDetails> getUserMap() {
-    return userMap;
+  public UserCache getUserCache() {
+    return userCache;
   }
 
-  public void setUserMap(Map<String, UserDetails> userMap) {
-    this.userMap = userMap;
+  public void setUserCache( UserCache userCache ) {
+    this.userCache = userCache;
   }
 }

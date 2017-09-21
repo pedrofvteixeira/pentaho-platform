@@ -5,6 +5,7 @@ import org.pentaho.platform.api.mt.ITenant;
 import org.pentaho.platform.api.mt.ITenantedPrincipleNameResolver;
 import org.pentaho.platform.repository2.unified.jcr.JcrTenantUtils;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -55,17 +56,24 @@ public class FoundryUserRoleListService implements IUserRoleListService {
 
   @Override
   public List<String> getRolesForUser(ITenant tenant, String username) {
+
+    /* Foundry does not provide the means to fetch Roles for a particular user.
+     * Therefore, this method can not do much more that simply assigning the user with whatever
+     * are the 'extraRoles' being set in applicationContext-spring-security */
+
     if ( tenant != null && !tenant.equals( JcrTenantUtils.getDefaultTenant() ) ) {
       throw new UnsupportedOperationException( "only allowed to access to default tenant" );
     }
-    UserDetails user = userDetailsService.loadUserByUsername( userNameUtils.getPrincipleName( username ) );
+
+    UserDetails user = getUserDetailsService().loadUserByUsername( getUserNameUtils().getPrincipleName( username ) );
     Collection<? extends GrantedAuthority> results = user.getAuthorities();
-    Set<String> roles = ( roleComparator != null ) ? new TreeSet<String>( roleComparator ) : new LinkedHashSet<String>( results.size() );
+    Set<String> roles = ( getRoleComparator() != null ) ? new TreeSet<String>( getRoleComparator() ) : new LinkedHashSet<String>( results.size() );
     for ( GrantedAuthority role : results ) {
       roles.add( role.getAuthority() );
     }
+
     // Now add extra role if it does not exist in the list
-    for ( String extraRole : extraRoles ) {
+    for ( String extraRole : getExtraRoles() ) {
       roles.add( extraRole );
     }
 
