@@ -179,4 +179,9 @@ public class DefaultActionInvoker implements IActionInvoker {
   public boolean isSupportedAction( IAction action ) {
     return true; // supports all
   }
+
+  @Override
+  public boolean isSupportedContentType( String contentType ) {
+    return true; // supports all
+  }
 }

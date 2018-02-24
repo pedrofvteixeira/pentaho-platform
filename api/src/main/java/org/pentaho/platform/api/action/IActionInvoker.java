@@ -48,4 +48,14 @@ public interface IActionInvoker {
    * @return true if the {@link IActionInvoker} can handle a given {@link IAction}
    */
   boolean isSupportedAction( IAction action );
+
+  /**
+   * Predicate that tells whether an {@link IActionInvoker} can handle a given content type
+   *
+   * @param contentType The content type to be handled
+   * @return true if the {@link IActionInvoker} can handle a given content type
+   */
+  default boolean isSupportedContentType( String contentType ) {
+    return false; // default
+  }
 }
